@@ -1,1 +1,2396 @@
-[]
+[
+    {
+        "id": "cf7eaad9a22ee83d",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "9b14d8fa4e4d8265",
+        "type": "tab",
+        "label": "Video Wall V0",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "88c8fdd21ce1d881",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "page",
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 1,
+        "showDisconnectNotification": true,
+        "allowInstall": false
+    },
+    {
+        "id": "fdabdb9d9c30c2bd",
+        "type": "ui-theme",
+        "name": "Default Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094CE",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    },
+    {
+        "id": "2998d7d0a5101c7c",
+        "type": "ui-page",
+        "name": "Wall Overview",
+        "ui": "88c8fdd21ce1d881",
+        "path": "/page2",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "fdabdb9d9c30c2bd",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "a43da85b9c3d42f3",
+        "type": "ui-group",
+        "name": "Wall Overview",
+        "page": "2998d7d0a5101c7c",
+        "width": 6,
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "bc5eef628c603338",
+        "type": "ui-group",
+        "name": "Edit Display",
+        "page": "2998d7d0a5101c7c",
+        "width": 6,
+        "height": 1,
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "a8900dcb3ccf6d17",
+        "type": "ui-group",
+        "name": "Current State",
+        "page": "2998d7d0a5101c7c",
+        "width": 6,
+        "height": 1,
+        "order": 3,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "e4640d07a8b6787b",
+        "type": "ui-group",
+        "name": "Presets",
+        "page": "2998d7d0a5101c7c",
+        "width": 6,
+        "height": 1,
+        "order": 4,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "4091bce8e5b7d2b9",
+        "type": "ui-page",
+        "name": "Config",
+        "ui": "88c8fdd21ce1d881",
+        "path": "/page3",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "fdabdb9d9c30c2bd",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 2,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "9c62e76fc2e63680",
+        "type": "ui-group",
+        "name": "Monitor Select",
+        "page": "4091bce8e5b7d2b9",
+        "width": 6,
+        "height": 1,
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "649e961e5ac18723",
+        "type": "ui-group",
+        "name": "Wall Management",
+        "page": "4091bce8e5b7d2b9",
+        "width": 6,
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "8873d83114a83a85",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false,
+        "alpnprotocol": ""
+    },
+    {
+        "id": "12d45e53c85cf190",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false,
+        "alpnprotocol": ""
+    },
+    {
+        "id": "87ef541174c4ed8d",
+        "type": "ui-text",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "Edit Display",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "style": true,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 970,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "9fbd3ca2fe0ce690",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "name": "",
+        "label": "Layout",
+        "tooltip": "",
+        "order": 2,
+        "width": "3",
+        "height": "1",
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "Full Screen",
+                "value": "1",
+                "type": "str"
+            },
+            {
+                "label": "2-Way",
+                "value": "2",
+                "type": "str"
+            },
+            {
+                "label": "3-Way",
+                "value": "3",
+                "type": "str"
+            },
+            {
+                "label": "Quad",
+                "value": "4",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 950,
+        "y": 400,
+        "wires": [
+            [
+                "a744b9a456dfe144"
+            ]
+        ]
+    },
+    {
+        "id": "bb9c4cda462b307f",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "name": "",
+        "label": "Window 1",
+        "tooltip": "",
+        "order": 3,
+        "width": "3",
+        "height": "1",
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "",
+                "value": "",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 960,
+        "y": 460,
+        "wires": [
+            [
+                "194c5f5b9adb1e40"
+            ]
+        ]
+    },
+    {
+        "id": "385ce5013bf1d3f9",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "name": "",
+        "label": "Window 2",
+        "tooltip": "",
+        "order": 4,
+        "width": "3",
+        "height": "1",
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "",
+                "value": "",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 960,
+        "y": 500,
+        "wires": [
+            [
+                "361468f360a6cb05"
+            ]
+        ]
+    },
+    {
+        "id": "5de081ef1fccc736",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "name": "",
+        "label": "Window 3",
+        "tooltip": "",
+        "order": 5,
+        "width": "3",
+        "height": "1",
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "",
+                "value": "",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 960,
+        "y": 540,
+        "wires": [
+            [
+                "ca1c190fcb92e9be"
+            ]
+        ]
+    },
+    {
+        "id": "7e8d7c035ef9eda1",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "name": "",
+        "label": "Window 4",
+        "tooltip": "",
+        "order": 6,
+        "width": "3",
+        "height": "1",
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "",
+                "value": "",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 960,
+        "y": 580,
+        "wires": [
+            [
+                "9da7ea0271fa9697"
+            ]
+        ]
+    },
+    {
+        "id": "af77bad795fcf34c",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Load Display State",
+        "func": "if (typeof msg.payload !== \"string\") {\n    return null;\n}\n\nconst display = msg.payload;\nflow.set(\"selectedDisplay\", display);\n\nconst wallState = flow.get(\"wallState\") || {};\nconst state = wallState[display] || {\n    layout: \"1\",\n    window1: \"-1\",\n    window2: \"-1\",\n    window3: \"-1\",\n    window4: \"-1\"\n};\n\n// keep edit context in sync with what is shown on screen\nflow.set(\"editLayout\", String(state.layout));\nflow.set(\"editWindow1\", String(state.window1));\nflow.set(\"editWindow2\", String(state.window2));\nflow.set(\"editWindow3\", String(state.window3));\nflow.set(\"editWindow4\", String(state.window4));\n\nconst msgLabel = {\n    payload: `Editing ${display}`,\n    display: display\n};\n\nconst msgLayout = {\n    payload: String(state.layout)\n};\n\nconst msgW1 = { payload: String(state.window1) };\nconst msgW2 = { payload: String(state.window2) };\nconst msgW3 = { payload: String(state.window3) };\nconst msgW4 = { payload: String(state.window4) };\n\nconst msgRefreshPreview = { payload: \"refresh\" };\n\nreturn [msgLabel, msgLayout, msgW1, msgW2, msgW3, msgW4, msgRefreshPreview];",
+        "outputs": 7,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 380,
+        "wires": [
+            [
+                "87ef541174c4ed8d"
+            ],
+            [
+                "9fbd3ca2fe0ce690"
+            ],
+            [
+                "bb9c4cda462b307f"
+            ],
+            [
+                "385ce5013bf1d3f9"
+            ],
+            [
+                "5de081ef1fccc736"
+            ],
+            [
+                "7e8d7c035ef9eda1"
+            ],
+            [
+                "45e880a1702f75dd"
+            ]
+        ]
+    },
+    {
+        "id": "1ffb8064e5647690",
+        "type": "csv",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "\\r\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 370,
+        "y": 740,
+        "wires": [
+            [
+                "1e6d776f05630e4e"
+            ]
+        ]
+    },
+    {
+        "id": "9316c13f28de7da3",
+        "type": "inject",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "startup",
+        "payloadType": "msg",
+        "x": 70,
+        "y": 740,
+        "wires": [
+            [
+                "d9e93fb4fe73aa3f"
+            ]
+        ]
+    },
+    {
+        "id": "1e6d776f05630e4e",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Channel Load",
+        "func": "const rows = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\n\nconst options = rows\n    .filter(r => r[\"Channel #\"] && r[\"Name\"])\n    .map(r => ({\n        label: `${r[\"Channel #\"]} - ${r[\"Name\"]}`,\n        value: String(r[\"Channel #\"])\n    }))\n    .sort((a,b) => Number(a.value) - Number(b.value));\n\noptions.unshift({\n    label: \"Empty\",\n    value: \"-1\"\n});\n\nflow.set(\"channelOptions\", options);\n\nconst channelMap = {};\noptions.forEach(opt => {\n    channelMap[String(opt.value)] = opt.label;\n});\nflow.set(\"channelLabelMap\", channelMap);\n\nmsg.ui_update = { options };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 740,
+        "wires": [
+            [
+                "bb9c4cda462b307f",
+                "385ce5013bf1d3f9",
+                "5de081ef1fccc736",
+                "7e8d7c035ef9eda1"
+            ]
+        ]
+    },
+    {
+        "id": "d9e93fb4fe73aa3f",
+        "type": "http request",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://foxmatv.com/Ch_Guide_Export.csv",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 230,
+        "y": 740,
+        "wires": [
+            [
+                "1ffb8064e5647690"
+            ]
+        ]
+    },
+    {
+        "id": "1fac16d5a9ab045a",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "name": "Manual Reload",
+        "label": "Reload",
+        "order": 8,
+        "width": "3",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 80,
+        "y": 880,
+        "wires": [
+            [
+                "d9e93fb4fe73aa3f",
+                "45e880a1702f75dd"
+            ]
+        ]
+    },
+    {
+        "id": "c8c3f078b41699a2",
+        "type": "inject",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 270,
+        "y": 1020,
+        "wires": [
+            [
+                "7a976e82f53a0671"
+            ]
+        ]
+    },
+    {
+        "id": "7a976e82f53a0671",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Initialize Prototype Wall State",
+        "func": "const wallState = {\n    \"Display 1\": {\n        layout: \"4\",\n        window1: \"2\",\n        window2: \"13\",\n        window3: \"-1\",\n        window4: \"21\"\n    },\n    \"Display 2\": {\n        layout: \"1\",\n        window1: \"104\",\n        window2: \"-1\",\n        window3: \"-1\",\n        window4: \"-1\"\n    },\n    \"Display 3\": {\n        layout: \"2\",\n        window1: \"13\",\n        window2: \"21\",\n        window3: \"-1\",\n        window4: \"-1\"\n    },\n    \"Display 4\": {\n        layout: \"4\",\n        window1: \"201\",\n        window2: \"202\",\n        window3: \"203\",\n        window4: \"204\"\n    },\n    \"Display 5\": {\n        layout: \"1\",\n        window1: \"501\",\n        window2: \"-1\",\n        window3: \"-1\",\n        window4: \"-1\"\n    },\n    \"Display 6\": {\n        layout: \"2\",\n        window1: \"601\",\n        window2: \"602\",\n        window3: \"-1\",\n        window4: \"-1\"\n    }\n};\n\nflow.set(\"wallState\", wallState);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1020,
+        "wires": [
+            [
+                "45e880a1702f75dd"
+            ]
+        ]
+    },
+    {
+        "id": "a744b9a456dfe144",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Edit Layout",
+        "func": "flow.set(\"editLayout\", msg.payload);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "194c5f5b9adb1e40",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Edit Window 1",
+        "func": "flow.set(\"editWindow1\", msg.payload);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1160,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "361468f360a6cb05",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Edit Window 2",
+        "func": "flow.set(\"editWindow2\", msg.payload);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1160,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ca1c190fcb92e9be",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Edit Window 3",
+        "func": "flow.set(\"editWindow3\", msg.payload);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1160,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9da7ea0271fa9697",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Edit Window 4",
+        "func": "flow.set(\"editWindow4\", msg.payload);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1160,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "df55fcb2d35246e4",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "name": "",
+        "label": "Apply",
+        "order": 7,
+        "width": "3",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 570,
+        "y": 800,
+        "wires": [
+            [
+                "3bb3b7f5ba5ff9fd"
+            ]
+        ]
+    },
+    {
+        "id": "3bb3b7f5ba5ff9fd",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Save Display State",
+        "func": "const selectedDisplay = flow.get(\"selectedDisplay\");\nif (!selectedDisplay) {\n    msg.payload = \"No display selected\";\n    return msg;\n}\n\nlet wallState = flow.get(\"wallState\") || {};\n\nwallState[selectedDisplay] = {\n    layout: String(flow.get(\"editLayout\") || \"1\"),\n    window1: String(flow.get(\"editWindow1\") || \"-1\"),\n    window2: String(flow.get(\"editWindow2\") || \"-1\"),\n    window3: String(flow.get(\"editWindow3\") || \"-1\"),\n    window4: String(flow.get(\"editWindow4\") || \"-1\")\n};\n\nflow.set(\"wallState\", wallState);\n\nmsg.payload = `Applied changes to ${selectedDisplay}`;\nmsg.wallState = wallState;\nmsg.display = selectedDisplay;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 800,
+        "wires": [
+            [
+                "45e880a1702f75dd"
+            ]
+        ]
+    },
+    {
+        "id": "45e880a1702f75dd",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Wall Preview",
+        "func": "const wallState = flow.get(\"wallState\") || {};\nconst channelLabelMap = flow.get(\"channelLabelMap\") || {};\nconst selectedDisplay = flow.get(\"selectedDisplay\") || \"\";\n\nmsg.payload = {\n    wallState,\n    channelLabelMap,\n    selectedDisplay\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 990,
+        "y": 800,
+        "wires": [
+            [
+                "adeffbac5d818df8"
+            ]
+        ]
+    },
+    {
+        "id": "adeffbac5d818df8",
+        "type": "ui-template",
+        "z": "9b14d8fa4e4d8265",
+        "group": "a43da85b9c3d42f3",
+        "page": "",
+        "ui": "",
+        "name": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <div class=\"wall-grid\">\n    <div\n      v-for=\"(display, name) in msg.payload.wallState\"\n      :key=\"name\"\n      class=\"display-card\"\n      :class=\"{ selected: name === msg.payload.selectedDisplay }\"\n      @click=\"selectDisplay(name)\"\n    >\n      <div class=\"display-header\">\n        <div class=\"display-title\">{{ name }}</div>\n        <div class=\"display-layout\">{{ layoutLabel(display.layout) }}</div>\n      </div>\n\n      <div\n        class=\"display-screen\"\n        :class=\"screenClass(display.layout)\"\n      >\n        <div v-if=\"showWindow(display.layout, 1)\" class=\"window\">\n          {{ channelLabel(display.window1) }}\n        </div>\n        <div v-if=\"showWindow(display.layout, 2)\" class=\"window\">\n          {{ channelLabel(display.window2) }}\n        </div>\n        <div v-if=\"showWindow(display.layout, 3)\" class=\"window\">\n          {{ channelLabel(display.window3) }}\n        </div>\n        <div v-if=\"showWindow(display.layout, 4)\" class=\"window\">\n          {{ channelLabel(display.window4) }}\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  methods: {\n    selectDisplay(name) {\n      this.send({ payload: name });\n    },\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n      return map[String(layout)] || `layout ${layout}`;\n    },\n    screenClass(layout) {\n      const l = String(layout);\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n      if (l === \"3\") return \"layout-3\";\n      return \"layout-4\";\n    },\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    },\n    channelLabel(value) {\n      const v = String(value);\n      if (v === \"-1\") return \"Empty\";\n      return this.msg.payload.channelLabelMap?.[v] || v;\n    }\n  }\n}\n</script>\n\n<style>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(3, minmax(220px, 1fr));\n  gap: 16px;\n}\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n}\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  margin-bottom: 10px;\n}\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n.display-screen.layout-3,\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n.window {\n  background: #1f2937;\n  color: #f9fafb;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n  font-weight: 500;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n  border-color: #94a3b8;\n}\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n</style>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1240,
+        "y": 800,
+        "wires": [
+            [
+                "5a09839690048525"
+            ]
+        ]
+    },
+    {
+        "id": "5a09839690048525",
+        "type": "switch",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "istype",
+                "v": "string",
+                "vt": "string"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1390,
+        "y": 820,
+        "wires": [
+            [
+                "af77bad795fcf34c"
+            ]
+        ]
+    },
+    {
+        "id": "aa3dcec58a029635",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "e4640d07a8b6787b",
+        "name": "Preset Select",
+        "label": "Select Preset",
+        "tooltip": "",
+        "order": 1,
+        "width": "3",
+        "height": "1",
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "",
+                "value": "",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 970,
+        "y": 1220,
+        "wires": [
+            [
+                "56108c34c3e82e43"
+            ]
+        ]
+    },
+    {
+        "id": "33aaffc3e9b5e074",
+        "type": "ui-text-input",
+        "z": "9b14d8fa4e4d8265",
+        "group": "e4640d07a8b6787b",
+        "name": "Preset Name",
+        "label": "Preset Name",
+        "order": 3,
+        "width": "3",
+        "height": "1",
+        "topic": "topic",
+        "topicType": "msg",
+        "mode": "text",
+        "tooltip": "",
+        "delay": 300,
+        "passthru": true,
+        "sendOnDelay": false,
+        "sendOnBlur": true,
+        "sendOnEnter": true,
+        "className": "",
+        "clearable": false,
+        "sendOnClear": false,
+        "icon": "",
+        "iconPosition": "left",
+        "iconInnerPosition": "inside",
+        "x": 290,
+        "y": 1400,
+        "wires": [
+            [
+                "b092d59b63c0c72e"
+            ]
+        ]
+    },
+    {
+        "id": "a55b57f7e58ab71e",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "e4640d07a8b6787b",
+        "name": "Preset Run",
+        "label": "Run Preset",
+        "order": 2,
+        "width": "3",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 450,
+        "y": 1080,
+        "wires": [
+            [
+                "6efb865d3255eaef"
+            ]
+        ]
+    },
+    {
+        "id": "b249eaa9b9eea886",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Preset Options",
+        "func": "const presets = flow.get(\"presets\") || {};\nconst options = Object.keys(presets)\n    .sort()\n    .map(name => ({\n        label: name,\n        value: name\n    }));\n\nmsg.ui_update = { options };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 1220,
+        "wires": [
+            [
+                "aa3dcec58a029635"
+            ]
+        ]
+    },
+    {
+        "id": "6efb865d3255eaef",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Run Preset",
+        "func": "const selectedPreset = flow.get(\"selectedPreset\");\nconst presets = flow.get(\"presets\") || {};\n\nif (!selectedPreset || !presets[selectedPreset]) {\n    msg.payload = \"No preset selected\";\n    return msg;\n}\n\nconst preset = presets[selectedPreset];\n\n// deep copy so later edits do not modify the preset itself\nconst wallState = JSON.parse(JSON.stringify(preset));\n\nflow.set(\"wallState\", wallState);\n\nmsg.payload = `Loaded preset: ${selectedPreset}`;\nmsg.wallState = wallState;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 1080,
+        "wires": [
+            [
+                "45e880a1702f75dd"
+            ]
+        ]
+    },
+    {
+        "id": "b092d59b63c0c72e",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Preset Name",
+        "func": "flow.set(\"presetNameInput\", msg.payload);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5702903ff351ccd1",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "e4640d07a8b6787b",
+        "name": "Preset Save",
+        "label": "Save Current",
+        "order": 4,
+        "width": "3",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 290,
+        "y": 1340,
+        "wires": [
+            [
+                "f3b622047d77f180"
+            ]
+        ]
+    },
+    {
+        "id": "56108c34c3e82e43",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Selected Preset",
+        "func": "flow.set(\"selectedPreset\", msg.payload);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1200,
+        "y": 1220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5e122c01bf32a58c",
+        "type": "inject",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Preset Load",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 290,
+        "y": 1220,
+        "wires": [
+            [
+                "0533be0fdb437ed7"
+            ]
+        ]
+    },
+    {
+        "id": "0533be0fdb437ed7",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Load Preset",
+        "func": "const presets = {\n    \"News Wall\": {\n        \"Display 1\": { layout: \"4\", window1: \"2\", window2: \"13\", window3: \"-1\", window4: \"21\" },\n        \"Display 2\": { layout: \"1\", window1: \"104\", window2: \"-1\", window3: \"-1\", window4: \"-1\" },\n        \"Display 3\": { layout: \"2\", window1: \"13\", window2: \"21\", window3: \"-1\", window4: \"-1\" },\n        \"Display 4\": { layout: \"4\", window1: \"201\", window2: \"202\", window3: \"203\", window4: \"204\" },\n        \"Display 5\": { layout: \"1\", window1: \"300\", window2: \"-1\", window3: \"-1\", window4: \"-1\" },\n        \"Display 6\": { layout: \"2\", window1: \"401\", window2: \"402\", window3: \"-1\", window4: \"-1\" }\n    },\n    \"Sports Wall\": {\n        \"Display 1\": { layout: \"4\", window1: \"30\", window2: \"31\", window3: \"32\", window4: \"33\" },\n        \"Display 2\": { layout: \"1\", window1: \"40\", window2: \"-1\", window3: \"-1\", window4: \"-1\" },\n        \"Display 3\": { layout: \"2\", window1: \"41\", window2: \"42\", window3: \"-1\", window4: \"-1\" },\n        \"Display 4\": { layout: \"4\", window1: \"50\", window2: \"51\", window3: \"52\", window4: \"53\" },\n        \"Display 5\": { layout: \"1\", window1: \"60\", window2: \"-1\", window3: \"-1\", window4: \"-1\" },\n        \"Display 6\": { layout: \"2\", window1: \"70\", window2: \"71\", window3: \"-1\", window4: \"-1\" }\n    }\n};\n\nflow.set(\"presets\", presets);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 1220,
+        "wires": [
+            [
+                "b249eaa9b9eea886"
+            ]
+        ]
+    },
+    {
+        "id": "f3b622047d77f180",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Save Preset",
+        "func": "const presetName = (flow.get(\"presetNameInput\") || \"\").trim();\nif (!presetName) {\n    msg.payload = \"Enter a preset name\";\n    return msg;\n}\n\nconst wallState = flow.get(\"wallState\") || {};\nconst presets = flow.get(\"presets\") || {};\n\n// deep copy current wall\npresets[presetName] = JSON.parse(JSON.stringify(wallState));\n\nflow.set(\"presets\", presets);\nflow.set(\"selectedPreset\", presetName);\n\nmsg.payload = `Saved preset: ${presetName}`;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 1340,
+        "wires": [
+            [
+                "b249eaa9b9eea886"
+            ]
+        ]
+    },
+    {
+        "id": "32435ef3466aa0f9",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Monitor Select Load",
+        "func": "const rows = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\n\nconst endpointDetailsById = {};\n\nconst options = rows\n    .filter(r => r[\"Id\"] && (r[\"Description\"] || r[\"Name\"]))\n    .map(r => {\n        const id = String(r[\"Id\"]).trim();\n        const name = String(r[\"Name\"] || \"\").trim();\n        const description = String(r[\"Description\"] || \"\").trim();\n        const location = String(r[\"Location\"] || \"\").trim();\n\n        const operatorLabel = description || name;\n\n        endpointDetailsById[id] = {\n            id,\n            name,\n            description,\n            operatorLabel,\n            location,\n            ipAddress: String(r[\"IP Address\"] || r[\"IPAddress\"] || \"\").trim()\n        };\n\n        return {\n            label: operatorLabel,\n            value: id\n        };\n    })\n    .sort((a, b) => a.label.localeCompare(b.label));\n\noptions.unshift({\n    label: \"Unassigned\",\n    value: \"\"\n});\n\nflow.set(\"endpointOptions\", options);\nflow.set(\"endpointDetailsById\", endpointDetailsById);\n\nmsg.ui_update = { options };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 1680,
+        "wires": [
+            [
+                "71cb3505808773ec"
+            ]
+        ]
+    },
+    {
+        "id": "3a0921567a54d848",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "9c62e76fc2e63680",
+        "name": "Manual Reload",
+        "label": "Reload",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 80,
+        "y": 1820,
+        "wires": [
+            [
+                "33fdcbddf33e067a"
+            ]
+        ]
+    },
+    {
+        "id": "33fdcbddf33e067a",
+        "type": "http request",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://foxmatv.com/Endpoints 2026_05_10.csv",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 230,
+        "y": 1680,
+        "wires": [
+            [
+                "86ae05031f0ddf99"
+            ]
+        ]
+    },
+    {
+        "id": "86ae05031f0ddf99",
+        "type": "csv",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "\\r\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 450,
+        "y": 1680,
+        "wires": [
+            [
+                "32435ef3466aa0f9"
+            ]
+        ]
+    },
+    {
+        "id": "adbc1d08bc749f31",
+        "type": "ui-text-input",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Wall Name input",
+        "label": "Wall Name:",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "topic": "topic",
+        "topicType": "msg",
+        "mode": "text",
+        "tooltip": "",
+        "delay": 300,
+        "passthru": false,
+        "sendOnDelay": false,
+        "sendOnBlur": true,
+        "sendOnEnter": true,
+        "className": "",
+        "clearable": false,
+        "sendOnClear": false,
+        "icon": "",
+        "iconPosition": "left",
+        "iconInnerPosition": "inside",
+        "x": 260,
+        "y": 1940,
+        "wires": [
+            [
+                "c15d580d81c83932"
+            ]
+        ]
+    },
+    {
+        "id": "696df90a66d38fba",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Save Wall button",
+        "label": "Save Wall",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 270,
+        "y": 2080,
+        "wires": [
+            [
+                "a43f48f7774aa15f"
+            ]
+        ]
+    },
+    {
+        "id": "a43f48f7774aa15f",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Save Wall function",
+        "func": "let walls = flow.get(\"walls\") || {};\n\nlet selectedWallId = flow.get(\"selectedWallId\") || \"\";\nconst wallName = (flow.get(\"editWallName\") || \"\").trim();\nconst displayCount = Number(flow.get(\"editWallDisplayCount\") || 0);\n\nif (!wallName || displayCount < 1) {\n    msg.payload = \"Wall name and display count are required\";\n    return msg;\n}\n\nfunction makeWallId(name) {\n    return name\n        .toLowerCase()\n        .replace(/[^a-z0-9]+/g, \"-\")\n        .replace(/^-|-$/g, \"\");\n}\n\nfunction makeDisplay(slot) {\n    return {\n        slot,\n        label: `Display ${slot}`,\n        endpointId: \"\",\n        endpointLabel: \"Unassigned\",\n        endpointName: \"\",\n        endpointDescription: \"\",\n        endpointLocation: \"\",\n        layout: \"1\",\n        windows: [\"-1\", \"-1\", \"-1\", \"-1\"]\n    };\n}\n\nlet wall;\n\n// update existing wall\nif (selectedWallId && walls[selectedWallId]) {\n    wall = walls[selectedWallId];\n    wall.wallName = wallName;\n\n    const oldCount = wall.displays.length;\n\n    if (displayCount > oldCount) {\n        for (let i = oldCount + 1; i <= displayCount; i++) {\n            wall.displays.push(makeDisplay(i));\n        }\n    } else if (displayCount < oldCount) {\n        wall.displays = wall.displays.slice(0, displayCount);\n    }\n\n    wall.displayCount = displayCount;\n\n    msg.payload = `Saved wall: ${wall.wallName}`;\n}\n// create new wall\nelse {\n    const wallId = makeWallId(wallName);\n\n    if (walls[wallId]) {\n        msg.payload = \"A wall with that name already exists\";\n        return msg;\n    }\n\n    const displays = [];\n    for (let i = 1; i <= displayCount; i++) {\n        displays.push(makeDisplay(i));\n    }\n\n    wall = {\n        wallId,\n        wallName,\n        displayCount,\n        displays\n    };\n\n    walls[wallId] = wall;\n    selectedWallId = wallId;\n    flow.set(\"selectedWallId\", wallId);\n\n    msg.payload = `Added wall: ${wall.wallName}`;\n}\n\nflow.set(\"walls\", walls);\n\n// useful for downstream nodes\nmsg.wallId = selectedWallId;\nmsg.wall = wall;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 2080,
+        "wires": [
+            [
+                "28d0a5d5e5c90419"
+            ]
+        ]
+    },
+    {
+        "id": "110d865ac7e24137",
+        "type": "ui-number-input",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Display Count input",
+        "label": "Display Count:",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "tooltip": "",
+        "delay": 300,
+        "passthru": false,
+        "sendOnDelay": false,
+        "sendOnBlur": true,
+        "sendOnEnter": true,
+        "className": "",
+        "clearable": false,
+        "icon": "",
+        "iconPosition": "left",
+        "iconInnerPosition": "inside",
+        "spinner": "default",
+        "x": 270,
+        "y": 2020,
+        "wires": [
+            [
+                "d1e50132f17d4f1a",
+                "87d634190085bb62"
+            ]
+        ]
+    },
+    {
+        "id": "c15d580d81c83932",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Wall Name",
+        "func": "flow.set(\"editWallName\", msg.payload);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1940,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d1e50132f17d4f1a",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Display Count",
+        "func": "flow.set(\"editWallDisplayCount\", Number(msg.payload));\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 2020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "28d0a5d5e5c90419",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Wall Options function",
+        "func": "const walls = flow.get(\"walls\") || {};\nconst selectedWallId = flow.get(\"selectedWallId\") || \"\";\n\nlet options = Object.values(walls)\n    .sort((a, b) => a.wallName.localeCompare(b.wallName))\n    .map(wall => ({\n        label: wall.wallName,\n        value: wall.wallId\n    }));\n\nif (options.length === 0) {\n    options = [\n        {\n            label: \"No walls configured\",\n            value: \"\"\n        }\n    ];\n}\n\nmsg.ui_update = { options };\nmsg.payload = selectedWallId || \"\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 2080,
+        "wires": [
+            [
+                "412892f1a9974505",
+                "36a979d52758e07c"
+            ]
+        ]
+    },
+    {
+        "id": "412892f1a9974505",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Wall Selector dropdown",
+        "label": "Wall Selector",
+        "tooltip": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "",
+                "value": "",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 1190,
+        "y": 2120,
+        "wires": [
+            [
+                "36a979d52758e07c"
+            ]
+        ]
+    },
+    {
+        "id": "873032798d5983ee",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Delete Wall function",
+        "func": "const wallId = flow.get(\"selectedWallId\");\nlet walls = flow.get(\"walls\") || {};\n\nif (!wallId || !walls[wallId]) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst deletedName = walls[wallId].wallName;\ndelete walls[wallId];\n\nconst remainingIds = Object.keys(walls).sort((a, b) =>\n    walls[a].wallName.localeCompare(walls[b].wallName)\n);\n\nconst nextWallId = remainingIds[0] || \"\";\n\nflow.set(\"walls\", walls);\nflow.set(\"selectedWallId\", nextWallId);\n\nmsg.payload = `Deleted wall: ${deletedName}`;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 2120,
+        "wires": [
+            [
+                "28d0a5d5e5c90419"
+            ]
+        ]
+    },
+    {
+        "id": "16687dcd7316172a",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Delete Wall button",
+        "label": "Delete Wall",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 270,
+        "y": 2120,
+        "wires": [
+            [
+                "873032798d5983ee"
+            ]
+        ]
+    },
+    {
+        "id": "e09f7a474d41fae0",
+        "type": "ui-text",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "name": "Status text",
+        "label": "text",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 1330,
+        "y": 2280,
+        "wires": []
+    },
+    {
+        "id": "36a979d52758e07c",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Load Selected Wall function",
+        "func": "const wallId = msg.payload || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    flow.set(\"selectedWallId\", \"\");\n    flow.set(\"editWallName\", \"\");\n    flow.set(\"editWallDisplayCount\", 1);\n    flow.set(\"selectedSlot\", \"\");\n    flow.set(\"selectedEndpointId\", \"\");\n\n    return [\n        { payload: \"\" },\n        { payload: 1 },\n        { payload: \"No wall selected\" },\n        { payload: \"\" }\n    ];\n}\n\nflow.set(\"selectedWallId\", wallId);\nflow.set(\"editWallName\", wall.wallName);\nflow.set(\"editWallDisplayCount\", wall.displayCount);\n\n// default to first display whenever a wall is selected\nconst firstDisplay = wall.displays?.[0];\nconst firstSlot = firstDisplay ? String(firstDisplay.slot) : \"\";\n\nflow.set(\"selectedSlot\", firstSlot);\nflow.set(\"selectedEndpointId\", firstDisplay?.endpointId || \"\");\n\nreturn [\n    { payload: wall.wallName },\n    { payload: wall.displayCount },\n    { payload: `Selected wall: ${wall.wallName}` },\n    { payload: firstSlot }\n];",
+        "outputs": 4,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1480,
+        "y": 2080,
+        "wires": [
+            [
+                "adbc1d08bc749f31"
+            ],
+            [
+                "110d865ac7e24137"
+            ],
+            [
+                "e09f7a474d41fae0"
+            ],
+            [
+                "87d634190085bb62"
+            ]
+        ]
+    },
+    {
+        "id": "e60d20544d4ec6b7",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "New Wall button",
+        "label": "New Wall",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 280,
+        "y": 2180,
+        "wires": [
+            [
+                "a962716c5562c725"
+            ]
+        ]
+    },
+    {
+        "id": "a962716c5562c725",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "New Wall function",
+        "func": "flow.set(\"selectedWallId\", \"\");\nflow.set(\"editWallName\", \"\");\nflow.set(\"editWallDisplayCount\", 1);\nflow.set(\"selectedSlot\", \"\");\nflow.set(\"selectedEndpointId\", \"\");\n\nconst msgName = { payload: \"\" };\nconst msgCount = { payload: 1 };\nconst msgStatus = {\n    payload: \"New wall: enter a name and display count, then click Save Wall\"\n};\n\n// triggers Build Display/Slot Options to clear slot/endpoint controls\nconst msgBuildSlots = { payload: \"\" };\n\nreturn [msgName, msgCount, msgStatus, msgBuildSlots];",
+        "outputs": 4,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 2180,
+        "wires": [
+            [
+                "adbc1d08bc749f31"
+            ],
+            [
+                "110d865ac7e24137"
+            ],
+            [
+                "e09f7a474d41fae0"
+            ],
+            [
+                "87d634190085bb62"
+            ]
+        ]
+    },
+    {
+        "id": "185fce46aa88aaa9",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Initialize",
+        "func": "// initialize wall registry if missing\nlet walls = flow.get(\"walls\");\n\nif (!walls) {\n    walls = {};\n    flow.set(\"walls\", walls);\n}\n\n// selected wall\nif (flow.get(\"selectedWallId\") === undefined) {\n    flow.set(\"selectedWallId\", \"\");\n}\n\n// wall edit form defaults\nif (flow.get(\"editWallName\") === undefined) {\n    flow.set(\"editWallName\", \"\");\n}\n\nif (flow.get(\"editWallDisplayCount\") === undefined) {\n    flow.set(\"editWallDisplayCount\", 6);\n}\n\n// optional future structures\nif (!flow.get(\"endpointOptions\")) {\n    flow.set(\"endpointOptions\", []);\n}\n\nif (!flow.get(\"endpointDetailsById\")) {\n    flow.set(\"endpointDetailsById\", {});\n}\n\nif (!flow.get(\"channelOptions\")) {\n    flow.set(\"channelOptions\", []);\n}\n\nif (!flow.get(\"channelLabelMap\")) {\n    flow.set(\"channelLabelMap\", {});\n}\n\nif (!flow.get(\"wallPresets\")) {\n    flow.set(\"wallPresets\", {});\n}\n\nmsg.payload = \"Wall controller initialized\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 2340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "140764b91e727618",
+        "type": "inject",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 2340,
+        "wires": [
+            [
+                "185fce46aa88aaa9"
+            ]
+        ]
+    },
+    {
+        "id": "6bf7c679733246b5",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Initalize",
+        "label": "Initialize",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 200,
+        "y": 2420,
+        "wires": [
+            [
+                "185fce46aa88aaa9"
+            ]
+        ]
+    },
+    {
+        "id": "443c90a1b0988fb5",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "9c62e76fc2e63680",
+        "name": "Display/Slot dropdown",
+        "label": "Select Display",
+        "tooltip": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "",
+                "value": "",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 480,
+        "y": 1900,
+        "wires": [
+            [
+                "6824d4abf3bda03d"
+            ]
+        ]
+    },
+    {
+        "id": "71cb3505808773ec",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "9c62e76fc2e63680",
+        "name": "Endpoint dropdown",
+        "label": "Assign Display:",
+        "tooltip": "",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "",
+                "value": "",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 1050,
+        "y": 1800,
+        "wires": [
+            [
+                "bc4cc4c367f1013f"
+            ]
+        ]
+    },
+    {
+        "id": "09ab0985536d5071",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "9c62e76fc2e63680",
+        "name": "Save Assignment button",
+        "label": "Save Assignment",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 1070,
+        "y": 1860,
+        "wires": [
+            [
+                "ad7a539b2ec284e5"
+            ]
+        ]
+    },
+    {
+        "id": "0f98e87bbfe8c914",
+        "type": "ui-text",
+        "z": "9b14d8fa4e4d8265",
+        "group": "9c62e76fc2e63680",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "Assignmnet Summary text",
+        "label": "Assignment Summary",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 1490,
+        "y": 1940,
+        "wires": []
+    },
+    {
+        "id": "87d634190085bb62",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Display/Slot Options",
+        "func": "const walls = flow.get(\"walls\") || {};\nconst selectedWallId = flow.get(\"selectedWallId\") || \"\";\nconst wall = walls[selectedWallId];\n\nif (!wall || !Array.isArray(wall.displays) || wall.displays.length === 0) {\n    msg.ui_update = {\n        options: [{ label: \"No displays configured\", value: \"\" }]\n    };\n    msg.payload = \"\";\n    return msg;\n}\n\nconst options = wall.displays.map(d => ({\n    label: `${wall.wallName} - ${d.label}`,\n    value: String(d.slot)\n}));\n\nlet selectedSlot = String(flow.get(\"selectedSlot\") || \"\");\n\n// if selected slot is blank or not valid for this wall, use first display\nif (!options.some(o => o.value === selectedSlot)) {\n    selectedSlot = options[0].value;\n    flow.set(\"selectedSlot\", Number(selectedSlot));\n\n    const display = wall.displays.find(d => String(d.slot) === selectedSlot);\n    flow.set(\"selectedEndpointId\", display?.endpointId || \"\");\n}\n\nmsg.ui_update = { options };\nmsg.payload = selectedSlot;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 1860,
+        "wires": [
+            [
+                "443c90a1b0988fb5",
+                "6824d4abf3bda03d"
+            ]
+        ]
+    },
+    {
+        "id": "6824d4abf3bda03d",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Load Slot Assignment function",
+        "func": "const slot = Number(msg.payload);\nconst walls = flow.get(\"walls\") || {};\nconst selectedWallId = flow.get(\"selectedWallId\") || \"\";\nconst wall = walls[selectedWallId];\n\nif (!wall || !slot) {\n    flow.set(\"selectedSlot\", \"\");\n    flow.set(\"selectedEndpointId\", \"\");\n\n    return [\n        { payload: \"\" },\n        { payload: \"No display selected\" }\n    ];\n}\n\nconst display = wall.displays.find(d => d.slot === slot);\n\nif (!display) {\n    return [\n        { payload: \"\" },\n        { payload: `Display ${slot} not found` }\n    ];\n}\n\nflow.set(\"selectedSlot\", slot);\nflow.set(\"selectedEndpointId\", display.endpointId || \"\");\n\nreturn [\n    { payload: display.endpointId || \"\" },\n    { payload: `Editing ${display.label || `Display ${slot}`}` }\n];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 1860,
+        "wires": [
+            [
+                "71cb3505808773ec"
+            ],
+            [
+                "e09f7a474d41fae0"
+            ]
+        ]
+    },
+    {
+        "id": "bc4cc4c367f1013f",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Selected Endpoint",
+        "func": "flow.set(\"selectedEndpointId\", msg.payload || \"\");\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1430,
+        "y": 1800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ad7a539b2ec284e5",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Save Endpoint Assignment button",
+        "func": "const wallId = flow.get(\"selectedWallId\");\nconst slot = Number(flow.get(\"selectedSlot\"));\nconst selectedEndpointId = flow.get(\"selectedEndpointId\") || \"\";\n\nlet walls = flow.get(\"walls\") || {};\nconst endpointDetailsById = flow.get(\"endpointDetailsById\") || {};\n\nconst wall = walls[wallId];\n\nif (!wall) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst display = wall.displays.find(d => d.slot === slot);\n\nif (!display) {\n    msg.payload = \"No display selected\";\n    return msg;\n}\n\nif (!selectedEndpointId) {\n    display.endpointId = \"\";\n    display.endpointLabel = \"Unassigned\";\n    display.endpointName = \"\";\n    display.endpointDescription = \"\";\n    display.endpointLocation = \"\";\n} else {\n    const ep = endpointDetailsById[selectedEndpointId];\n\n    if (!ep) {\n        msg.payload = \"Selected endpoint not found\";\n        return msg;\n    }\n\n    display.endpointId = ep.id;\n    display.endpointLabel = ep.operatorLabel;\n    display.endpointName = ep.name;\n    display.endpointDescription = ep.description;\n    display.endpointLocation = ep.location;\n}\n\nflow.set(\"walls\", walls);\n\nmsg.payload = `Assigned ${display.endpointLabel} to ${wall.wallName} ${display.label}`;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1460,
+        "y": 1860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e1c6287efc48e50f",
+        "type": "inject",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 2520,
+        "wires": [
+            [
+                "fb8bad43016adeeb"
+            ]
+        ]
+    },
+    {
+        "id": "fb8bad43016adeeb",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build EZTV Login Request",
+        "func": "msg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = JSON.stringify({\n    username: \"admin@dss-internal\",\n    password: \"1qaz!QAZ\",\n    customerPlatform: \"STB\"\n});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 2520,
+        "wires": [
+            [
+                "cabea7cb5181bff1"
+            ]
+        ]
+    },
+    {
+        "id": "cabea7cb5181bff1",
+        "type": "http request",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://10.187.138.16/eztv/api/login/ ",
+        "tls": "8873d83114a83a85",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 610,
+        "y": 2520,
+        "wires": [
+            [
+                "42f2d67ee3481038",
+                "bfb3c155863eed1b"
+            ]
+        ]
+    },
+    {
+        "id": "42f2d67ee3481038",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Token",
+        "func": "let body = msg.payload;\n\nif (typeof body === \"string\") {\n    body = JSON.parse(body);\n}\n\nconst token =\n    body.tokenFixedLength ||\n    body.token ||\n    body.accessToken ||\n    body.jwt ||\n    body.bearerToken;\n\nif (!token) {\n    msg.payload = {\n        error: \"No token found in response\",\n        response: body\n    };\n    return msg;\n}\n\nflow.set(\"eztvToken\", token);\nflow.set(\"eztvBaseUrl\", \"https://10.187.138.16\");\n\nmsg.payload = \"EZTV token stored\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 2520,
+        "wires": [
+            [
+                "30f5ea10bb976dec"
+            ]
+        ]
+    },
+    {
+        "id": "30f5ea10bb976dec",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 2460,
+        "wires": []
+    },
+    {
+        "id": "1d25fb64d89a0b3f",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Initalize",
+        "label": "test token",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 160,
+        "y": 2620,
+        "wires": [
+            [
+                "fb8bad43016adeeb"
+            ]
+        ]
+    },
+    {
+        "id": "bfb3c155863eed1b",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 2380,
+        "wires": []
+    },
+    {
+        "id": "5225febf35f2a105",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Initalize",
+        "label": "test get status",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 120,
+        "y": 2800,
+        "wires": [
+            [
+                "29c9b39e5aedd0a6"
+            ]
+        ]
+    },
+    {
+        "id": "29c9b39e5aedd0a6",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Get Endpoint Request",
+        "func": "const token = flow.get(\"eztvToken\");\nconst baseUrl = flow.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\n\n// temporary hard-coded endpoint for tomorrow's test\nconst endpointId = \"69c49080bb6edf3f8c2012f2\";\n\nif (!token) {\n    msg.payload = \"No EZTV token. Run login first.\";\n    return [null, msg];\n}\n\n\n\n\nmsg.headers = {\n    \"Authorization\": `Bearer ${token}`,\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = null;\n\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 2700,
+        "wires": [
+            [
+                "1841757043fb2a22"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "5506fe291b1b473e",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Decode Endpoint Status",
+        "func": "let ep = msg.payload;\n\nif (typeof ep === \"string\") {\n    ep = JSON.parse(ep);\n}\n\nconst mv = Array.isArray(ep.multiViewChannels) ? ep.multiViewChannels : [];\n\nlet layout = \"1\";\nlet windows = [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nif (mv.length > 0) {\n    layout = String(mv.length);\n\n    for (let i = 0; i < Math.min(mv.length, 4); i++) {\n        windows[i] = String(mv[i].number ?? \"-1\");\n    }\n} else if (ep.playingChannel1Number || ep.playingChannel1Name) {\n    layout = \"1\";\n    windows[0] = String(ep.playingChannel1Number ?? \"-1\");\n}\n\nmsg.payload = {\n    endpointId: ep.id,\n    endpointName: ep.name,\n    endpointLabel: ep.description || ep.name,\n    layout,\n    windows,\n    rawMultiViewChannels: mv\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 2700,
+        "wires": [
+            [
+                "4cc70b9b83ccaf3b"
+            ]
+        ]
+    },
+    {
+        "id": "4cc70b9b83ccaf3b",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 2640,
+        "wires": []
+    },
+    {
+        "id": "1841757043fb2a22",
+        "type": "http request",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "https://10.187.138.16/eztv/api/endpoints/69c49080bb6edf3f8c2012ef",
+        "tls": "12d45e53c85cf190",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 590,
+        "y": 2700,
+        "wires": [
+            [
+                "5506fe291b1b473e"
+            ]
+        ]
+    },
+    {
+        "id": "484223194205df7a",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Apply Test button",
+        "label": "Apply Test",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 170,
+        "y": 2980,
+        "wires": [
+            [
+                "65c88de2928d42a1"
+            ]
+        ]
+    },
+    {
+        "id": "65c88de2928d42a1",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build EZTV Apply Request",
+        "func": "const token = flow.get(\"eztvToken\");\nconst baseUrl = flow.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\n\n// hard-code for tomorrow's test, later replace from wall manager\nconst endpointId = \"69c49080bb6edf3f8c2012ef\";\n\nif (!token) {\n    msg.payload = \"No EZTV token. Run login first.\";\n    return [null, msg];\n}\n\nconst layout = String(flow.get(\"editLayout\") || \"1\");\n\nconst windows = [\n    String(flow.get(\"editWindow1\") || \"-1\"),\n    String(flow.get(\"editWindow2\") || \"-1\"),\n    String(flow.get(\"editWindow3\") || \"-1\"),\n    String(flow.get(\"editWindow4\") || \"-1\")\n];\n\nmsg.headers = {\n    \"Authorization\": `Bearer ${token}`,\n    \"Content-Type\": \"application/json\",\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = JSON.stringify({\n    action: \"LoadChannelMultiview\",\n    actionCluster: \"DSS\",\n    actionParameters: [\n        { name: \"Slots\", value: layout },\n        { name: \"ChannelOverlayInfo\", value: \"false\" },\n        { name: \"Channel1_ID\", value: windows[0] },\n        { name: \"Channel2_ID\", value: windows[1] },\n        { name: \"Channel3_ID\", value: windows[2] },\n        { name: \"Channel4_ID\", value: windows[3] }\n    ],\n    actionTargets: [\n        {\n            id: endpointId,\n            cmdTargetType: \"Endpoint\"\n        }\n    ]\n});\n\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 2880,
+        "wires": [
+            [
+                "8c988cad34fbd732"
+            ],
+            [
+                "e09f7a474d41fae0"
+            ]
+        ]
+    },
+    {
+        "id": "8c988cad34fbd732",
+        "type": "http request",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "https://10.187.138.16/eztv/api/events/immediate/activities",
+        "tls": "12d45e53c85cf190",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 610,
+        "y": 2880,
+        "wires": [
+            [
+                "ad475d30f2160d65"
+            ]
+        ]
+    },
+    {
+        "id": "ad475d30f2160d65",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 980,
+        "y": 2820,
+        "wires": []
+    }
+]
