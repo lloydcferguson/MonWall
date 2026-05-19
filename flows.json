@@ -1,16 +1,16 @@
 [
     {
-        "id": "cf7eaad9a22ee83d",
+        "id": "9b14d8fa4e4d8265",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "Video Wall V0",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "9b14d8fa4e4d8265",
+        "id": "cf7eaad9a22ee83d",
         "type": "tab",
-        "label": "Video Wall V0",
+        "label": "Flow 1",
         "disabled": false,
         "info": "",
         "env": []
@@ -1489,42 +1489,6 @@
         ]
     },
     {
-        "id": "412892f1a9974505",
-        "type": "ui-dropdown",
-        "z": "9b14d8fa4e4d8265",
-        "group": "649e961e5ac18723",
-        "name": "Wall Selector dropdown",
-        "label": "Wall Selector",
-        "tooltip": "",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "multiple": false,
-        "chips": false,
-        "clearable": false,
-        "options": [
-            {
-                "label": "",
-                "value": "",
-                "type": "str"
-            }
-        ],
-        "payload": "",
-        "topic": "topic",
-        "topicType": "msg",
-        "className": "",
-        "typeIsComboBox": true,
-        "msgTrigger": "onChange",
-        "x": 1190,
-        "y": 2120,
-        "wires": [
-            [
-                "36a979d52758e07c"
-            ]
-        ]
-    },
-    {
         "id": "873032798d5983ee",
         "type": "function",
         "z": "9b14d8fa4e4d8265",
@@ -1588,7 +1552,7 @@
         "type": "ui-text",
         "z": "9b14d8fa4e4d8265",
         "group": "649e961e5ac18723",
-        "order": 8,
+        "order": 9,
         "width": 0,
         "height": 0,
         "name": "Status text",
@@ -2122,7 +2086,7 @@
         "group": "649e961e5ac18723",
         "name": "Initalize",
         "label": "test token",
-        "order": 7,
+        "order": 11,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -2178,7 +2142,7 @@
         "group": "649e961e5ac18723",
         "name": "Initalize",
         "label": "test get status",
-        "order": 7,
+        "order": 10,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -2298,7 +2262,7 @@
         "group": "649e961e5ac18723",
         "name": "Apply Test button",
         "label": "Apply Test",
-        "order": 7,
+        "order": 8,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -2392,5 +2356,41 @@
         "x": 980,
         "y": 2820,
         "wires": []
+    },
+    {
+        "id": "412892f1a9974505",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Wall Selector dropdown",
+        "label": "Wall Selector",
+        "tooltip": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "",
+                "value": "",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 1190,
+        "y": 2120,
+        "wires": [
+            [
+                "36a979d52758e07c"
+            ]
+        ]
     }
 ]
