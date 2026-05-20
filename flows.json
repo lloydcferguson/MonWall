@@ -16,6 +16,113 @@
         "env": []
     },
     {
+        "id": "b61f7864f98644eb",
+        "type": "subflow",
+        "name": "EZTV Get Endpoint",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "29c9b39e5aedd0a6"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 960,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "5506fe291b1b473e",
+                        "port": 0
+                    },
+                    {
+                        "id": "29c9b39e5aedd0a6",
+                        "port": 1
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "bb149e69a82c9cc5",
+        "type": "subflow",
+        "name": "EZTV Login",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "fb8bad43016adeeb"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 880,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "42f2d67ee3481038",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "ebf5ae94f113b0f9",
+        "type": "subflow",
+        "name": "EZTV Apply Layout",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "65c88de2928d42a1"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 980,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "65c88de2928d42a1",
+                        "port": 1
+                    },
+                    {
+                        "id": "69f3c11ca935af15",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
         "id": "88c8fdd21ce1d881",
         "type": "ui-base",
         "name": "My Dashboard",
@@ -57,7 +164,7 @@
     {
         "id": "2998d7d0a5101c7c",
         "type": "ui-page",
-        "name": "Wall Overview",
+        "name": "Wall Control",
         "ui": "88c8fdd21ce1d881",
         "path": "/page2",
         "icon": "home",
@@ -93,7 +200,7 @@
     {
         "id": "a43da85b9c3d42f3",
         "type": "ui-group",
-        "name": "Wall Overview",
+        "name": "Active Wall Selector",
         "page": "2998d7d0a5101c7c",
         "width": 6,
         "height": 1,
@@ -149,7 +256,7 @@
     {
         "id": "4091bce8e5b7d2b9",
         "type": "ui-page",
-        "name": "Config",
+        "name": "Wall Management",
         "ui": "88c8fdd21ce1d881",
         "path": "/page3",
         "icon": "home",
@@ -199,7 +306,7 @@
     {
         "id": "649e961e5ac18723",
         "type": "ui-group",
-        "name": "Wall Management",
+        "name": "Create / Delete Walls",
         "page": "4091bce8e5b7d2b9",
         "width": 6,
         "height": 1,
@@ -237,6 +344,272 @@
         "servername": "",
         "verifyservercert": false,
         "alpnprotocol": ""
+    },
+    {
+        "id": "a1e4996eee66e8a8",
+        "type": "ui-page",
+        "name": "Configuration",
+        "ui": "88c8fdd21ce1d881",
+        "path": "/page4",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "fdabdb9d9c30c2bd",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 3,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "8858bccd6c432f3b",
+        "type": "ui-group",
+        "name": "Configuration",
+        "page": "a1e4996eee66e8a8",
+        "width": 6,
+        "height": 1,
+        "order": 3,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "18c6f17b0302ca08",
+        "type": "ui-group",
+        "name": "Mode Select",
+        "page": "a1e4996eee66e8a8",
+        "width": 6,
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "c74a3a80b0f9b946",
+        "type": "ui-group",
+        "name": "Import / Export",
+        "page": "a1e4996eee66e8a8",
+        "width": 6,
+        "height": 1,
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "29c9b39e5aedd0a6",
+        "type": "function",
+        "z": "b61f7864f98644eb",
+        "name": "Build Get Endpoint Request",
+        "func": "const token = flow.get(\"eztvToken\");\nconst baseUrl = flow.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\nconst endpointId = msg.endpointId || msg.payload;\n\nif (!token) {\n    msg.payload = \"No EZTV token. Run login first.\";\n    return [null, msg];\n}\n\nif (!endpointId) {\n    msg.payload = \"No endpointId supplied\";\n    return [null, msg];\n}\n\nmsg.method = \"GET\";\nmsg.url = `${baseUrl}/eztv/api/endpoints/${endpointId}`;\n\nmsg.headers = {\n    \"Authorization\": `Bearer ${token}`,\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = null;\n\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 80,
+        "wires": [
+            [
+                "1841757043fb2a22"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "1841757043fb2a22",
+        "type": "http request",
+        "z": "b61f7864f98644eb",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "https://10.187.138.16/eztv/api/endpoints/69c49080bb6edf3f8c2012ef",
+        "tls": "12d45e53c85cf190",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 20,
+        "wires": [
+            [
+                "5506fe291b1b473e"
+            ]
+        ]
+    },
+    {
+        "id": "5506fe291b1b473e",
+        "type": "function",
+        "z": "b61f7864f98644eb",
+        "name": "Decode Endpoint Status",
+        "func": "let ep = msg.payload;\n\nif (typeof ep === \"string\") {\n    ep = JSON.parse(ep);\n}\n\nconst mv = Array.isArray(ep.multiViewChannels) ? ep.multiViewChannels : [];\n\nlet layout = \"1\";\nlet windows = [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nif (mv.length > 0) {\n    layout = String(mv.length);\n\n    for (let i = 0; i < Math.min(mv.length, 4); i++) {\n        windows[i] = String(mv[i].number ?? \"-1\");\n    }\n}\n\nmsg.payload = {\n    endpointId: ep.id,\n    endpointName: ep.name,\n    endpointLabel: ep.description || ep.name,\n    layout,\n    windows,\n    rawMultiViewChannels: mv,\n    rawEndpoint: ep\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fb8bad43016adeeb",
+        "type": "function",
+        "z": "bb149e69a82c9cc5",
+        "name": "Build EZTV Login Request",
+        "func": "msg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = JSON.stringify({\n    username: \"admin@dss-internal\",\n    password: \"1qaz!QAZ\",\n    customerPlatform: \"STB\"\n});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 80,
+        "wires": [
+            [
+                "cabea7cb5181bff1"
+            ]
+        ]
+    },
+    {
+        "id": "cabea7cb5181bff1",
+        "type": "http request",
+        "z": "bb149e69a82c9cc5",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://10.187.138.16/eztv/api/login/ ",
+        "tls": "8873d83114a83a85",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 510,
+        "y": 80,
+        "wires": [
+            [
+                "42f2d67ee3481038"
+            ]
+        ]
+    },
+    {
+        "id": "42f2d67ee3481038",
+        "type": "function",
+        "z": "bb149e69a82c9cc5",
+        "name": "Store Token",
+        "func": "try {\n    let body = msg.payload;\n\n    if (typeof body === \"string\") {\n        body = JSON.parse(body);\n    }\n\n    const token = body.tokenFixedLength || body.token || body.accessToken;\n\n    if (!token) {\n        msg.success = false;\n        msg.payload = \"No token found in login response\";\n        return msg;\n    }\n\n    flow.set(\"eztvToken\", token);\n\n    msg.success = true;\n    msg.payload = \"EZTV token stored\";\n    return msg;\n\n} catch (err) {\n    msg.success = false;\n    msg.payload = `Login failed: ${err.message}`;\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "65c88de2928d42a1",
+        "type": "function",
+        "z": "ebf5ae94f113b0f9",
+        "name": "Build EZTV Apply Request",
+        "func": "const token = flow.get(\"eztvToken\");\nconst baseUrl = flow.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\n\nconst endpointId = msg.endpointId;\nconst layout = String(msg.layout || \"1\");\nconst windows = Array.isArray(msg.windows)\n    ? msg.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nwhile (windows.length < 4) {\n    windows.push(\"-1\");\n}\n\nif (!token) {\n    msg.success = false;\n    msg.payload = \"No EZTV token. Run login first.\";\n    return msg;\n}\n\nif (!endpointId) {\n    msg.success = false;\n    msg.payload = \"No endpointId supplied.\";\n    return msg;\n}\n\nmsg.method = \"POST\";\nmsg.url = `${baseUrl}/eztv/api/events/immediate/activities`;\n\nmsg.headers = {\n    \"Authorization\": `Bearer ${token}`,\n    \"Content-Type\": \"application/json\",\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = JSON.stringify({\n    action: \"LoadChannelMultiview\",\n    actionCluster: \"DSS\",\n    actionParameters: [\n        { name: \"Slots\", value: layout },\n        { name: \"ChannelOverlayInfo\", value: \"false\" },\n        { name: \"Channel1_ID\", value: windows[0] },\n        { name: \"Channel2_ID\", value: windows[1] },\n        { name: \"Channel3_ID\", value: windows[2] },\n        { name: \"Channel4_ID\", value: windows[3] }\n    ],\n    actionTargets: [\n        {\n            id: endpointId,\n            cmdTargetType: \"Endpoint\"\n        }\n    ]\n};\n\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 80,
+        "wires": [
+            [
+                "8c988cad34fbd732"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8c988cad34fbd732",
+        "type": "http request",
+        "z": "ebf5ae94f113b0f9",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "https://10.187.138.16/eztv/api/events/immediate/activities",
+        "tls": "12d45e53c85cf190",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 40,
+        "wires": [
+            [
+                "69f3c11ca935af15"
+            ]
+        ]
+    },
+    {
+        "id": "69f3c11ca935af15",
+        "type": "function",
+        "z": "ebf5ae94f113b0f9",
+        "name": "Decode Apply Response",
+        "func": "let body = msg.payload;\n\ntry {\n    if (typeof body === \"string\") {\n        body = JSON.parse(body);\n    }\n\n    msg.success = true;\n    msg.activityId = body.activityId;\n    msg.applyState = body.state;\n    msg.payload = body;\n\n    return msg;\n\n} catch (err) {\n    msg.success = false;\n    msg.payload = {\n        error: \"Could not parse EZTV apply response\",\n        details: err.message,\n        raw: msg.payload\n    };\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 40,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "87ef541174c4ed8d",
@@ -462,15 +835,15 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Load Display State",
-        "func": "if (typeof msg.payload !== \"string\") {\n    return null;\n}\n\nconst display = msg.payload;\nflow.set(\"selectedDisplay\", display);\n\nconst wallState = flow.get(\"wallState\") || {};\nconst state = wallState[display] || {\n    layout: \"1\",\n    window1: \"-1\",\n    window2: \"-1\",\n    window3: \"-1\",\n    window4: \"-1\"\n};\n\n// keep edit context in sync with what is shown on screen\nflow.set(\"editLayout\", String(state.layout));\nflow.set(\"editWindow1\", String(state.window1));\nflow.set(\"editWindow2\", String(state.window2));\nflow.set(\"editWindow3\", String(state.window3));\nflow.set(\"editWindow4\", String(state.window4));\n\nconst msgLabel = {\n    payload: `Editing ${display}`,\n    display: display\n};\n\nconst msgLayout = {\n    payload: String(state.layout)\n};\n\nconst msgW1 = { payload: String(state.window1) };\nconst msgW2 = { payload: String(state.window2) };\nconst msgW3 = { payload: String(state.window3) };\nconst msgW4 = { payload: String(state.window4) };\n\nconst msgRefreshPreview = { payload: \"refresh\" };\n\nreturn [msgLabel, msgLayout, msgW1, msgW2, msgW3, msgW4, msgRefreshPreview];",
+        "func": "const slot = Number(msg.payload);\n\nconst walls = flow.get(\"walls\") || {};\nconst wallId = flow.get(\"selectedWallId\") || \"\";\nconst wall = walls[wallId];\n\nif (!wall || !slot) {\n    msg.payload = \"No wall/display selected\";\n    return [msg, null, null, null, null, null, null];\n}\n\nconst display = wall.displays.find(d => Number(d.slot) === slot);\n\nif (!display) {\n    msg.payload = `Slot ${slot} not found`;\n    return [msg, null, null, null, null, null, null];\n}\n\nconst layout = String(display.layout || \"1\");\nconst windows = display.windows || [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nflow.set(\"selectedSlot\", slot);\nflow.set(\"editLayout\", layout);\nflow.set(\"editWindow1\", String(windows[0] || \"-1\"));\nflow.set(\"editWindow2\", String(windows[1] || \"-1\"));\nflow.set(\"editWindow3\", String(windows[2] || \"-1\"));\nflow.set(\"editWindow4\", String(windows[3] || \"-1\"));\n\nreturn [\n    { payload: `Editing ${wall.wallName} - Slot ${slot}` },\n    { payload: layout },\n    { payload: String(windows[0] || \"-1\") },\n    { payload: String(windows[1] || \"-1\") },\n    { payload: String(windows[2] || \"-1\") },\n    { payload: String(windows[3] || \"-1\") },\n    { payload: \"refresh\" }\n];",
         "outputs": 7,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 380,
+        "x": 490,
+        "y": 580,
         "wires": [
             [
                 "87ef541174c4ed8d"
@@ -599,10 +972,10 @@
         "id": "1fac16d5a9ab045a",
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
-        "group": "bc5eef628c603338",
+        "group": "8858bccd6c432f3b",
         "name": "Manual Reload",
-        "label": "Reload",
-        "order": 8,
+        "label": "Reload Sources",
+        "order": 6,
         "width": "3",
         "height": "1",
         "emulateClick": false,
@@ -627,7 +1000,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 80,
-        "y": 880,
+        "y": 800,
         "wires": [
             [
                 "d9e93fb4fe73aa3f",
@@ -805,8 +1178,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 570,
-        "y": 800,
+        "x": 50,
+        "y": 860,
         "wires": [
             [
                 "3bb3b7f5ba5ff9fd"
@@ -818,18 +1191,18 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Save Display State",
-        "func": "const selectedDisplay = flow.get(\"selectedDisplay\");\nif (!selectedDisplay) {\n    msg.payload = \"No display selected\";\n    return msg;\n}\n\nlet wallState = flow.get(\"wallState\") || {};\n\nwallState[selectedDisplay] = {\n    layout: String(flow.get(\"editLayout\") || \"1\"),\n    window1: String(flow.get(\"editWindow1\") || \"-1\"),\n    window2: String(flow.get(\"editWindow2\") || \"-1\"),\n    window3: String(flow.get(\"editWindow3\") || \"-1\"),\n    window4: String(flow.get(\"editWindow4\") || \"-1\")\n};\n\nflow.set(\"wallState\", wallState);\n\nmsg.payload = `Applied changes to ${selectedDisplay}`;\nmsg.wallState = wallState;\nmsg.display = selectedDisplay;\n\nreturn msg;",
+        "func": "const wallId = flow.get(\"selectedWallId\");\nconst slot = Number(flow.get(\"selectedSlot\"));\n\nlet walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst display = wall.displays.find(d => Number(d.slot) === slot);\n\nif (!display) {\n    msg.payload = \"No display/slot selected\";\n    return msg;\n}\n\ndisplay.layout = String(flow.get(\"editLayout\") || \"1\");\n\ndisplay.windows = [\n    String(flow.get(\"editWindow1\") || \"-1\"),\n    String(flow.get(\"editWindow2\") || \"-1\"),\n    String(flow.get(\"editWindow3\") || \"-1\"),\n    String(flow.get(\"editWindow4\") || \"-1\")\n];\n\nflow.set(\"walls\", walls);\n\nmsg.payload = `Applied changes to ${wall.wallName} - Slot ${slot}`;\nmsg.wall = wall;\nmsg.display = display;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 770,
-        "y": 800,
+        "x": 230,
+        "y": 860,
         "wires": [
             [
-                "45e880a1702f75dd"
+                "fdb203d26c149245"
             ]
         ]
     },
@@ -838,18 +1211,19 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Build Wall Preview",
-        "func": "const wallState = flow.get(\"wallState\") || {};\nconst channelLabelMap = flow.get(\"channelLabelMap\") || {};\nconst selectedDisplay = flow.get(\"selectedDisplay\") || \"\";\n\nmsg.payload = {\n    wallState,\n    channelLabelMap,\n    selectedDisplay\n};\nreturn msg;",
+        "func": "const walls = flow.get(\"walls\") || {};\nconst selectedWallId = flow.get(\"selectedWallId\") || \"\";\nconst selectedSlot = String(flow.get(\"selectedSlot\") || \"\");\nconst channelLabelMap = flow.get(\"channelLabelMap\") || {};\n\nconst wall = walls[selectedWallId];\n\nif (!wall) {\n    msg.payload = {\n        wallName: \"No wall selected\",\n        displays: [],\n        selectedSlot: \"\",\n        channelLabelMap\n    };\n    return msg;\n}\n\nmsg.payload = {\n    wallName: wall.wallName,\n    displays: wall.displays || [],\n    selectedSlot,\n    channelLabelMap\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 990,
+        "x": 1010,
         "y": 800,
         "wires": [
             [
-                "adeffbac5d818df8"
+                "adeffbac5d818df8",
+                "f7d5e94a7428e54e"
             ]
         ]
     },
@@ -861,11 +1235,11 @@
         "page": "",
         "ui": "",
         "name": "",
-        "order": 1,
+        "order": 3,
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<template>\n  <div class=\"wall-grid\">\n    <div\n      v-for=\"(display, name) in msg.payload.wallState\"\n      :key=\"name\"\n      class=\"display-card\"\n      :class=\"{ selected: name === msg.payload.selectedDisplay }\"\n      @click=\"selectDisplay(name)\"\n    >\n      <div class=\"display-header\">\n        <div class=\"display-title\">{{ name }}</div>\n        <div class=\"display-layout\">{{ layoutLabel(display.layout) }}</div>\n      </div>\n\n      <div\n        class=\"display-screen\"\n        :class=\"screenClass(display.layout)\"\n      >\n        <div v-if=\"showWindow(display.layout, 1)\" class=\"window\">\n          {{ channelLabel(display.window1) }}\n        </div>\n        <div v-if=\"showWindow(display.layout, 2)\" class=\"window\">\n          {{ channelLabel(display.window2) }}\n        </div>\n        <div v-if=\"showWindow(display.layout, 3)\" class=\"window\">\n          {{ channelLabel(display.window3) }}\n        </div>\n        <div v-if=\"showWindow(display.layout, 4)\" class=\"window\">\n          {{ channelLabel(display.window4) }}\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  methods: {\n    selectDisplay(name) {\n      this.send({ payload: name });\n    },\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n      return map[String(layout)] || `layout ${layout}`;\n    },\n    screenClass(layout) {\n      const l = String(layout);\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n      if (l === \"3\") return \"layout-3\";\n      return \"layout-4\";\n    },\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    },\n    channelLabel(value) {\n      const v = String(value);\n      if (v === \"-1\") return \"Empty\";\n      return this.msg.payload.channelLabelMap?.[v] || v;\n    }\n  }\n}\n</script>\n\n<style>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(3, minmax(220px, 1fr));\n  gap: 16px;\n}\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n}\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  margin-bottom: 10px;\n}\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n.display-screen.layout-3,\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n.window {\n  background: #1f2937;\n  color: #f9fafb;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n  font-weight: 500;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n  border-color: #94a3b8;\n}\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n</style>",
+        "format": "<template>\n  <div class=\"wall-grid\">\n\n    <div\n      v-for=\"display in msg.payload.displays\"\n      :key=\"display.slot\"\n      class=\"display-card\"\n      :class=\"{ selected: String(display.slot) === String(msg.payload.selectedSlot) }\"\n      @click=\"selectDisplay(display.slot)\"\n    >\n\n      <div class=\"display-header\">\n        <div class=\"display-title\">\n          {{ msg.payload.wallName }} - Slot {{ display.slot }}\n        </div>\n\n        <div class=\"display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n\n      <div\n        class=\"display-screen\"\n        :class=\"screenClass(display.layout)\"\n      >\n\n        <div\n          v-if=\"showWindow(display.layout, 1)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[0]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 2)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[1]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 3)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[2]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 4)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[3]) }}\n        </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  methods: {\n\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot)\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n\n      const l = String(layout);\n\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    },\n\n    channelLabel(value) {\n\n      const v = String(value);\n\n      if (\n        v === \"-1\" ||\n        v === \"\" ||\n        v === \"undefined\"\n      ) {\n        return \"Empty\";\n      }\n\n      return this.msg.payload.channelLabelMap?.[v] || v;\n    }\n  }\n}\n</script>\n\n<style>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));\n  gap: 16px;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: 0.15s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 10px;\n}\n\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.window {\n  background: #1f2937;\n  color: white;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -1220,9 +1594,9 @@
         "id": "3a0921567a54d848",
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
-        "group": "9c62e76fc2e63680",
+        "group": "8858bccd6c432f3b",
         "name": "Manual Reload",
-        "label": "Reload",
+        "label": "Reload Monitor Select",
         "order": 4,
         "width": 0,
         "height": 0,
@@ -1407,13 +1781,13 @@
         "height": 0,
         "topic": "topic",
         "topicType": "msg",
-        "min": 0,
-        "max": 10,
+        "min": "1",
+        "max": "15",
         "step": 1,
         "tooltip": "",
         "delay": 300,
         "passthru": false,
-        "sendOnDelay": false,
+        "sendOnDelay": true,
         "sendOnBlur": true,
         "sendOnEnter": true,
         "className": "",
@@ -1484,7 +1858,8 @@
         "wires": [
             [
                 "412892f1a9974505",
-                "36a979d52758e07c"
+                "36a979d52758e07c",
+                "0f80784114c268ef"
             ]
         ]
     },
@@ -1552,7 +1927,7 @@
         "type": "ui-text",
         "z": "9b14d8fa4e4d8265",
         "group": "649e961e5ac18723",
-        "order": 9,
+        "order": 7,
         "width": 0,
         "height": 0,
         "name": "Status text",
@@ -1673,17 +2048,19 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Initialize",
-        "func": "// initialize wall registry if missing\nlet walls = flow.get(\"walls\");\n\nif (!walls) {\n    walls = {};\n    flow.set(\"walls\", walls);\n}\n\n// selected wall\nif (flow.get(\"selectedWallId\") === undefined) {\n    flow.set(\"selectedWallId\", \"\");\n}\n\n// wall edit form defaults\nif (flow.get(\"editWallName\") === undefined) {\n    flow.set(\"editWallName\", \"\");\n}\n\nif (flow.get(\"editWallDisplayCount\") === undefined) {\n    flow.set(\"editWallDisplayCount\", 6);\n}\n\n// optional future structures\nif (!flow.get(\"endpointOptions\")) {\n    flow.set(\"endpointOptions\", []);\n}\n\nif (!flow.get(\"endpointDetailsById\")) {\n    flow.set(\"endpointDetailsById\", {});\n}\n\nif (!flow.get(\"channelOptions\")) {\n    flow.set(\"channelOptions\", []);\n}\n\nif (!flow.get(\"channelLabelMap\")) {\n    flow.set(\"channelLabelMap\", {});\n}\n\nif (!flow.get(\"wallPresets\")) {\n    flow.set(\"wallPresets\", {});\n}\n\nmsg.payload = \"Wall controller initialized\";\n\nreturn msg;",
+        "func": "// initialize wall registry if missing\nlet walls = flow.get(\"walls\");\n\nif (!walls) {\n    walls = {};\n    flow.set(\"walls\", walls);\n}\n\n// selected wall\nif (flow.get(\"selectedWallId\") === undefined) {\n    flow.set(\"selectedWallId\", \"\");\n}\n\n// wall edit form defaults\nif (flow.get(\"editWallName\") === undefined) {\n    flow.set(\"editWallName\", \"\");\n}\n\nif (flow.get(\"editWallDisplayCount\") === undefined) {\n    flow.set(\"editWallDisplayCount\", 6);\n}\n\n// optional future structures\nif (!flow.get(\"endpointOptions\")) {\n    flow.set(\"endpointOptions\", []);\n}\n\nif (!flow.get(\"endpointDetailsById\")) {\n    flow.set(\"endpointDetailsById\", {});\n}\n\nif (!flow.get(\"channelOptions\")) {\n    flow.set(\"channelOptions\", []);\n}\n\nif (!flow.get(\"channelLabelMap\")) {\n    flow.set(\"channelLabelMap\", {});\n}\n\nif (!flow.get(\"wallPresets\")) {\n    flow.set(\"wallPresets\", {});\n}\n\nif (!flow.get(\"controlMode\")) {\n    flow.set(\"controlMode\", \"development\");\n}\n\nmsg.payload = \"Wall controller initialized\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
-        "y": 2340,
+        "x": 360,
+        "y": 3280,
         "wires": [
-            []
+            [
+                "379ffc101ff276d4"
+            ]
         ]
     },
     {
@@ -1707,8 +2084,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 210,
-        "y": 2340,
+        "x": 150,
+        "y": 3280,
         "wires": [
             [
                 "185fce46aa88aaa9"
@@ -1719,10 +2096,10 @@
         "id": "6bf7c679733246b5",
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
-        "group": "649e961e5ac18723",
+        "group": "8858bccd6c432f3b",
         "name": "Initalize",
         "label": "Initialize",
-        "order": 7,
+        "order": 5,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -1746,8 +2123,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 200,
-        "y": 2420,
+        "x": 140,
+        "y": 3360,
         "wires": [
             [
                 "185fce46aa88aaa9"
@@ -1870,7 +2247,7 @@
         "type": "ui-text",
         "z": "9b14d8fa4e4d8265",
         "group": "9c62e76fc2e63680",
-        "order": 5,
+        "order": 4,
         "width": 0,
         "height": 0,
         "name": "Assignmnet Summary text",
@@ -1993,74 +2370,7 @@
         "x": 130,
         "y": 2520,
         "wires": [
-            [
-                "fb8bad43016adeeb"
-            ]
-        ]
-    },
-    {
-        "id": "fb8bad43016adeeb",
-        "type": "function",
-        "z": "9b14d8fa4e4d8265",
-        "name": "Build EZTV Login Request",
-        "func": "msg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = JSON.stringify({\n    username: \"admin@dss-internal\",\n    password: \"1qaz!QAZ\",\n    customerPlatform: \"STB\"\n});\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 360,
-        "y": 2520,
-        "wires": [
-            [
-                "cabea7cb5181bff1"
-            ]
-        ]
-    },
-    {
-        "id": "cabea7cb5181bff1",
-        "type": "http request",
-        "z": "9b14d8fa4e4d8265",
-        "name": "",
-        "method": "POST",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "https://10.187.138.16/eztv/api/login/ ",
-        "tls": "8873d83114a83a85",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 610,
-        "y": 2520,
-        "wires": [
-            [
-                "42f2d67ee3481038",
-                "bfb3c155863eed1b"
-            ]
-        ]
-    },
-    {
-        "id": "42f2d67ee3481038",
-        "type": "function",
-        "z": "9b14d8fa4e4d8265",
-        "name": "Store Token",
-        "func": "let body = msg.payload;\n\nif (typeof body === \"string\") {\n    body = JSON.parse(body);\n}\n\nconst token =\n    body.tokenFixedLength ||\n    body.token ||\n    body.accessToken ||\n    body.jwt ||\n    body.bearerToken;\n\nif (!token) {\n    msg.payload = {\n        error: \"No token found in response\",\n        response: body\n    };\n    return msg;\n}\n\nflow.set(\"eztvToken\", token);\nflow.set(\"eztvBaseUrl\", \"https://10.187.138.16\");\n\nmsg.payload = \"EZTV token stored\";\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 830,
-        "y": 2520,
-        "wires": [
-            [
-                "30f5ea10bb976dec"
-            ]
+            []
         ]
     },
     {
@@ -2083,10 +2393,10 @@
         "id": "1d25fb64d89a0b3f",
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
-        "group": "649e961e5ac18723",
+        "group": "8858bccd6c432f3b",
         "name": "Initalize",
         "label": "test token",
-        "order": 11,
+        "order": 3,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -2114,7 +2424,7 @@
         "y": 2620,
         "wires": [
             [
-                "fb8bad43016adeeb"
+                "5e01ea0c2a404da8"
             ]
         ]
     },
@@ -2139,10 +2449,10 @@
         "id": "5225febf35f2a105",
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
-        "group": "649e961e5ac18723",
+        "group": "8858bccd6c432f3b",
         "name": "Initalize",
         "label": "test get status",
-        "order": 10,
+        "order": 2,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -2170,48 +2480,7 @@
         "y": 2800,
         "wires": [
             [
-                "29c9b39e5aedd0a6"
-            ]
-        ]
-    },
-    {
-        "id": "29c9b39e5aedd0a6",
-        "type": "function",
-        "z": "9b14d8fa4e4d8265",
-        "name": "Build Get Endpoint Request",
-        "func": "const token = flow.get(\"eztvToken\");\nconst baseUrl = flow.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\n\n// temporary hard-coded endpoint for tomorrow's test\nconst endpointId = \"69c49080bb6edf3f8c2012f2\";\n\nif (!token) {\n    msg.payload = \"No EZTV token. Run login first.\";\n    return [null, msg];\n}\n\n\n\n\nmsg.headers = {\n    \"Authorization\": `Bearer ${token}`,\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = null;\n\nreturn [msg, null];",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 320,
-        "y": 2700,
-        "wires": [
-            [
-                "1841757043fb2a22"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "5506fe291b1b473e",
-        "type": "function",
-        "z": "9b14d8fa4e4d8265",
-        "name": "Decode Endpoint Status",
-        "func": "let ep = msg.payload;\n\nif (typeof ep === \"string\") {\n    ep = JSON.parse(ep);\n}\n\nconst mv = Array.isArray(ep.multiViewChannels) ? ep.multiViewChannels : [];\n\nlet layout = \"1\";\nlet windows = [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nif (mv.length > 0) {\n    layout = String(mv.length);\n\n    for (let i = 0; i < Math.min(mv.length, 4); i++) {\n        windows[i] = String(mv[i].number ?? \"-1\");\n    }\n} else if (ep.playingChannel1Number || ep.playingChannel1Name) {\n    layout = \"1\";\n    windows[0] = String(ep.playingChannel1Number ?? \"-1\");\n}\n\nmsg.payload = {\n    endpointId: ep.id,\n    endpointName: ep.name,\n    endpointLabel: ep.description || ep.name,\n    layout,\n    windows,\n    rawMultiViewChannels: mv\n};\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 830,
-        "y": 2700,
-        "wires": [
-            [
-                "4cc70b9b83ccaf3b"
+                "6b5446e0ac09da76"
             ]
         ]
     },
@@ -2232,37 +2501,13 @@
         "wires": []
     },
     {
-        "id": "1841757043fb2a22",
-        "type": "http request",
-        "z": "9b14d8fa4e4d8265",
-        "name": "",
-        "method": "GET",
-        "ret": "txt",
-        "paytoqs": "body",
-        "url": "https://10.187.138.16/eztv/api/endpoints/69c49080bb6edf3f8c2012ef",
-        "tls": "12d45e53c85cf190",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 590,
-        "y": 2700,
-        "wires": [
-            [
-                "5506fe291b1b473e"
-            ]
-        ]
-    },
-    {
         "id": "484223194205df7a",
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
-        "group": "649e961e5ac18723",
+        "group": "8858bccd6c432f3b",
         "name": "Apply Test button",
         "label": "Apply Test",
-        "order": 8,
+        "order": 1,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -2290,54 +2535,7 @@
         "y": 2980,
         "wires": [
             [
-                "65c88de2928d42a1"
-            ]
-        ]
-    },
-    {
-        "id": "65c88de2928d42a1",
-        "type": "function",
-        "z": "9b14d8fa4e4d8265",
-        "name": "Build EZTV Apply Request",
-        "func": "const token = flow.get(\"eztvToken\");\nconst baseUrl = flow.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\n\n// hard-code for tomorrow's test, later replace from wall manager\nconst endpointId = \"69c49080bb6edf3f8c2012ef\";\n\nif (!token) {\n    msg.payload = \"No EZTV token. Run login first.\";\n    return [null, msg];\n}\n\nconst layout = String(flow.get(\"editLayout\") || \"1\");\n\nconst windows = [\n    String(flow.get(\"editWindow1\") || \"-1\"),\n    String(flow.get(\"editWindow2\") || \"-1\"),\n    String(flow.get(\"editWindow3\") || \"-1\"),\n    String(flow.get(\"editWindow4\") || \"-1\")\n];\n\nmsg.headers = {\n    \"Authorization\": `Bearer ${token}`,\n    \"Content-Type\": \"application/json\",\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = JSON.stringify({\n    action: \"LoadChannelMultiview\",\n    actionCluster: \"DSS\",\n    actionParameters: [\n        { name: \"Slots\", value: layout },\n        { name: \"ChannelOverlayInfo\", value: \"false\" },\n        { name: \"Channel1_ID\", value: windows[0] },\n        { name: \"Channel2_ID\", value: windows[1] },\n        { name: \"Channel3_ID\", value: windows[2] },\n        { name: \"Channel4_ID\", value: windows[3] }\n    ],\n    actionTargets: [\n        {\n            id: endpointId,\n            cmdTargetType: \"Endpoint\"\n        }\n    ]\n});\n\nreturn [msg, null];",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 2880,
-        "wires": [
-            [
-                "8c988cad34fbd732"
-            ],
-            [
-                "e09f7a474d41fae0"
-            ]
-        ]
-    },
-    {
-        "id": "8c988cad34fbd732",
-        "type": "http request",
-        "z": "9b14d8fa4e4d8265",
-        "name": "",
-        "method": "POST",
-        "ret": "txt",
-        "paytoqs": "body",
-        "url": "https://10.187.138.16/eztv/api/events/immediate/activities",
-        "tls": "12d45e53c85cf190",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 610,
-        "y": 2880,
-        "wires": [
-            [
-                "ad475d30f2160d65"
+                "0bc09509ad1ba8d1"
             ]
         ]
     },
@@ -2362,7 +2560,7 @@
         "type": "ui-dropdown",
         "z": "9b14d8fa4e4d8265",
         "group": "649e961e5ac18723",
-        "name": "Wall Selector dropdown",
+        "name": "Config Wall Selector dropdown",
         "label": "Wall Selector",
         "tooltip": "",
         "order": 1,
@@ -2385,11 +2583,444 @@
         "className": "",
         "typeIsComboBox": true,
         "msgTrigger": "onChange",
-        "x": 1190,
+        "x": 1210,
         "y": 2120,
         "wires": [
             [
                 "36a979d52758e07c"
+            ]
+        ]
+    },
+    {
+        "id": "0f80784114c268ef",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "a43da85b9c3d42f3",
+        "name": "Overview Wall Selector dropdown",
+        "label": "Wall Selector",
+        "tooltip": "",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "",
+                "value": "",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 1020,
+        "y": 1340,
+        "wires": [
+            [
+                "92376c2d2bffa4cf"
+            ]
+        ]
+    },
+    {
+        "id": "92376c2d2bffa4cf",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Load Selected Wall",
+        "func": "const wallId = msg.payload || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    flow.set(\"selectedWallId\", \"\");\n    flow.set(\"selectedSlot\", \"\");\n\n    return [\n        { payload: \"\" },        // to Load Display State\n        { payload: \"refresh\" }  // to Build Wall Preview\n    ];\n}\n\nflow.set(\"selectedWallId\", wallId);\n\nconst firstDisplay = wall.displays?.[0];\nconst firstSlot = firstDisplay ? String(firstDisplay.slot) : \"\";\n\nflow.set(\"selectedSlot\", firstSlot);\n\nreturn [\n    { payload: firstSlot },     // to Load Display State\n    { payload: \"refresh\" }      // to Build Wall Preview\n];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 1340,
+        "wires": [
+            [
+                "af77bad795fcf34c"
+            ],
+            [
+                "45e880a1702f75dd"
+            ]
+        ]
+    },
+    {
+        "id": "f7d5e94a7428e54e",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1180,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "7d061da091ee2e07",
+        "type": "ui-dropdown",
+        "z": "9b14d8fa4e4d8265",
+        "group": "18c6f17b0302ca08",
+        "name": "Mode Select",
+        "label": "Select Option:",
+        "tooltip": "",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "Development",
+                "value": "development",
+                "type": "str"
+            },
+            {
+                "label": "Online",
+                "value": "online",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": true,
+        "msgTrigger": "onChange",
+        "x": 150,
+        "y": 3060,
+        "wires": [
+            [
+                "a17796db2a2b0706"
+            ]
+        ]
+    },
+    {
+        "id": "a17796db2a2b0706",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Mode Select function",
+        "func": "const mode = msg.payload || \"development\";\n\nflow.set(\"controlMode\", mode);\n\nmsg.payload = `Mode set to ${mode}`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 3060,
+        "wires": [
+            [
+                "379ffc101ff276d4"
+            ]
+        ]
+    },
+    {
+        "id": "379ffc101ff276d4",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Status function",
+        "func": "const mode = flow.get(\"controlMode\") || \"development\";\n\nmsg.payload = {\n    mode\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 3100,
+        "wires": [
+            [
+                "f6ce2cc5d1d3eaeb",
+                "1ef3c4b03d1b7116"
+            ]
+        ]
+    },
+    {
+        "id": "f6ce2cc5d1d3eaeb",
+        "type": "ui-template",
+        "z": "9b14d8fa4e4d8265",
+        "group": "18c6f17b0302ca08",
+        "page": "",
+        "ui": "",
+        "name": "System Mode",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <div\n    :style=\"{\n      padding: '10px',\n      borderRadius: '8px',\n      fontWeight: 'bold',\n      textAlign: 'center',\n      color: 'white',\n      backgroundColor: modeColor\n    }\"\n  >\n    SYSTEM MODE: {{ modeText }}\n  </div>\n</template>\n\n<script>\nexport default {\n  computed: {\n\n    modeText() {\n      const mode = this.msg.payload?.mode || \"development\";\n\n      if (mode === \"online\") {\n        return \"ONLINE\";\n      }\n\n      return \"DEVELOPMENT\";\n    },\n\n    modeColor() {\n      const mode = this.msg.payload?.mode || \"development\";\n\n      if (mode === \"online\") {\n        return \"#16a34a\"; // green\n      }\n\n      return \"#d97706\"; // amber/orange\n    }\n  }\n}\n</script>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 880,
+        "y": 3100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f1373d38b2235d6d",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "c74a3a80b0f9b946",
+        "name": "Export Wall Configuration",
+        "label": "Export Wall Configuration",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 210,
+        "y": 3420,
+        "wires": [
+            [
+                "2d2ed029075c6eb5"
+            ]
+        ]
+    },
+    {
+        "id": "16195524cd026b34",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "c74a3a80b0f9b946",
+        "name": "Import Wall Configuration",
+        "label": "Import Wall Configuration",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 210,
+        "y": 3460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0585fb9a5974d7c9",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "c74a3a80b0f9b946",
+        "name": "Import System Configuration",
+        "label": "Import System Configuration",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 220,
+        "y": 3560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "30265729f2a0c9aa",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "c74a3a80b0f9b946",
+        "name": "Export System Configuration",
+        "label": "Export System Configuration",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 220,
+        "y": 3520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2d2ed029075c6eb5",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Export Wall function",
+        "func": "msg.payload = JSON.stringify({\n    version: 1,\n    exportedAt: new Date().toISOString(),\n    walls: flow.get(\"walls\") || {}\n}, null, 2);\n\nmsg.filename = \"wall-config.json\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 3420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fdb203d26c149245",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Check Control Mode",
+        "func": "const mode = flow.get(\"controlMode\") || \"development\";\n\nif (mode === \"online\") {\n    return [null, msg];\n}\n\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 860,
+        "wires": [
+            [
+                "45e880a1702f75dd"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "1ef3c4b03d1b7116",
+        "type": "ui-template",
+        "z": "9b14d8fa4e4d8265",
+        "group": "a43da85b9c3d42f3",
+        "page": "",
+        "ui": "",
+        "name": "System Mode (Wall Ctl)",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <div\n    :style=\"{\n      padding: '10px',\n      borderRadius: '8px',\n      fontWeight: 'bold',\n      textAlign: 'center',\n      color: 'white',\n      backgroundColor: modeColor\n    }\"\n  >\n    SYSTEM MODE: {{ modeText }}\n  </div>\n</template>\n\n<script>\nexport default {\n  computed: {\n\n    modeText() {\n      const mode = this.msg.payload?.mode || \"development\";\n\n      if (mode === \"online\") {\n        return \"ONLINE\";\n      }\n\n      return \"DEVELOPMENT\";\n    },\n\n    modeColor() {\n      const mode = this.msg.payload?.mode || \"development\";\n\n      if (mode === \"online\") {\n        return \"#16a34a\"; // green\n      }\n\n      return \"#d97706\"; // amber/orange\n    }\n  }\n}\n</script>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 910,
+        "y": 3160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6b5446e0ac09da76",
+        "type": "subflow:b61f7864f98644eb",
+        "z": "9b14d8fa4e4d8265",
+        "name": "EZTV Get Endpoint",
+        "x": 590,
+        "y": 2660,
+        "wires": [
+            [
+                "4cc70b9b83ccaf3b"
+            ]
+        ]
+    },
+    {
+        "id": "5e01ea0c2a404da8",
+        "type": "subflow:bb149e69a82c9cc5",
+        "z": "9b14d8fa4e4d8265",
+        "name": "EZTV Login",
+        "x": 590,
+        "y": 2520,
+        "wires": [
+            [
+                "30f5ea10bb976dec"
+            ]
+        ]
+    },
+    {
+        "id": "0bc09509ad1ba8d1",
+        "type": "subflow:ebf5ae94f113b0f9",
+        "z": "9b14d8fa4e4d8265",
+        "name": "EZTV Apply Layout",
+        "x": 490,
+        "y": 2880,
+        "wires": [
+            [
+                "ad475d30f2160d65"
             ]
         ]
     }
