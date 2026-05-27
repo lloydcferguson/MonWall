@@ -8,14 +8,6 @@
         "env": []
     },
     {
-        "id": "cf7eaad9a22ee83d",
-        "type": "tab",
-        "label": "Flow 1",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
         "id": "b61f7864f98644eb",
         "type": "subflow",
         "name": "EZTV Get Endpoint",
@@ -428,7 +420,7 @@
         "type": "function",
         "z": "b61f7864f98644eb",
         "name": "Build Get Endpoint Request",
-        "func": "const token = flow.get(\"eztvToken\");\nconst baseUrl = flow.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\nconst endpointId = msg.endpointId || msg.payload;\n\nif (!token) {\n    msg.payload = \"No EZTV token. Run login first.\";\n    return [null, msg];\n}\n\nif (!endpointId) {\n    msg.payload = \"No endpointId supplied\";\n    return [null, msg];\n}\n\nmsg.method = \"GET\";\nmsg.url = `${baseUrl}/eztv/api/endpoints/${endpointId}`;\n\nmsg.headers = {\n    \"Authorization\": `Bearer ${token}`,\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = null;\n\nreturn [msg, null];",
+        "func": "const token = global.get(\"eztvToken\");\nconst baseUrl = global.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\n\nconst endpointId = msg.endpointId || msg.payload;\n\nif (!token) {\n    msg.payload = \"No EZTV token. Run login first.\";\n    return [null, msg];\n}\n\nif (!endpointId) {\n    msg.payload = \"No endpointId supplied\";\n    return [null, msg];\n}\n\nmsg.method = \"GET\";\n\nmsg.url = `${baseUrl}/eztv/api/endpoints/${endpointId}`;\n\nmsg.headers = {\n    Authorization: `Bearer ${token}`,\n    Accept: \"application/json\"\n};\n\nmsg.payload = \"\";\n\nreturn [msg, null];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -449,10 +441,10 @@
         "type": "http request",
         "z": "b61f7864f98644eb",
         "name": "",
-        "method": "GET",
+        "method": "use",
         "ret": "txt",
         "paytoqs": "body",
-        "url": "https://10.187.138.16/eztv/api/endpoints/69c49080bb6edf3f8c2012ef",
+        "url": "",
         "tls": "12d45e53c85cf190",
         "persist": false,
         "proxy": "",
@@ -514,7 +506,7 @@
         "method": "POST",
         "ret": "obj",
         "paytoqs": "ignore",
-        "url": "https://10.187.138.16/eztv/api/login/ ",
+        "url": "https://10.187.138.16/eztv/api/login/",
         "tls": "8873d83114a83a85",
         "persist": false,
         "proxy": "",
@@ -535,7 +527,7 @@
         "type": "function",
         "z": "bb149e69a82c9cc5",
         "name": "Store Token",
-        "func": "try {\n    let body = msg.payload;\n\n    if (typeof body === \"string\") {\n        body = JSON.parse(body);\n    }\n\n    const token = body.tokenFixedLength || body.token || body.accessToken;\n\n    if (!token) {\n        msg.success = false;\n        msg.payload = \"No token found in login response\";\n        return msg;\n    }\n\n    flow.set(\"eztvToken\", token);\n\n    msg.success = true;\n    msg.payload = \"EZTV token stored\";\n    return msg;\n\n} catch (err) {\n    msg.success = false;\n    msg.payload = `Login failed: ${err.message}`;\n    return msg;\n}",
+        "func": "try {\n    let body = msg.payload;\n\n    if (typeof body === \"string\") {\n        body = JSON.parse(body);\n    }\n\n    const token = body.tokenFixedLength || body.token || body.accessToken;\n\n    if (!token) {\n        msg.success = false;\n        msg.payload = \"No token found in login response\";\n        return msg;\n    }\n\n    global.set(\"eztvToken\", token);\n\n    msg.success = true;\n    msg.payload = \"EZTV token stored\";\n    return msg;\n\n} catch (err) {\n    msg.success = false;\n    msg.payload = `Login failed: ${err.message}`;\n    return msg;\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -553,7 +545,7 @@
         "type": "function",
         "z": "ebf5ae94f113b0f9",
         "name": "Build EZTV Apply Request",
-        "func": "const token = flow.get(\"eztvToken\");\nconst baseUrl = flow.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\n\nconst endpointId = msg.endpointId;\nconst layout = String(msg.layout || \"1\");\nconst windows = Array.isArray(msg.windows)\n    ? msg.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nwhile (windows.length < 4) {\n    windows.push(\"-1\");\n}\n\nif (!token) {\n    msg.success = false;\n    msg.payload = \"No EZTV token. Run login first.\";\n    return msg;\n}\n\nif (!endpointId) {\n    msg.success = false;\n    msg.payload = \"No endpointId supplied.\";\n    return msg;\n}\n\nmsg.method = \"POST\";\nmsg.url = `${baseUrl}/eztv/api/events/immediate/activities`;\n\nmsg.headers = {\n    \"Authorization\": `Bearer ${token}`,\n    \"Content-Type\": \"application/json\",\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = JSON.stringify({\n    action: \"LoadChannelMultiview\",\n    actionCluster: \"DSS\",\n    actionParameters: [\n        { name: \"Slots\", value: layout },\n        { name: \"ChannelOverlayInfo\", value: \"false\" },\n        { name: \"Channel1_ID\", value: windows[0] },\n        { name: \"Channel2_ID\", value: windows[1] },\n        { name: \"Channel3_ID\", value: windows[2] },\n        { name: \"Channel4_ID\", value: windows[3] }\n    ],\n    actionTargets: [\n        {\n            id: endpointId,\n            cmdTargetType: \"Endpoint\"\n        }\n    ]\n};\n\nreturn msg;",
+        "func": "const token = global.get(\"eztvToken\");\nconst baseUrl = global.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\n\nconst endpointId = msg.endpointId;\nconst layout = String(msg.layout || \"1\");\n\nconst windows = Array.isArray(msg.windows)\n    ? msg.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nwhile (windows.length < 4) {\n    windows.push(\"-1\");\n}\n\nif (!token) {\n    msg.success = false;\n    msg.payload = \"No EZTV token. Run login first.\";\n    return [null, msg];\n}\n\nif (!endpointId) {\n    msg.success = false;\n    msg.payload = \"No endpointId supplied.\";\n    return [null, msg];\n}\n\nmsg.method = \"POST\";\n\nmsg.url = `${baseUrl}/eztv/api/events/immediate/activities`;\n\nmsg.headers = {\n    Authorization: `Bearer ${token}`,\n    \"Content-Type\": \"application/json\",\n    Accept: \"application/json\"\n};\n\nmsg.payload = {\n    action: \"LoadChannelMultiview\",\n    actionCluster: \"DSS\",\n    actionParameters: [\n        { name: \"Slots\", value: layout },\n        { name: \"ChannelOverlayInfo\", value: \"false\" },\n        { name: \"Channel1_ID\", value: windows[0] },\n        { name: \"Channel2_ID\", value: windows[1] },\n        { name: \"Channel3_ID\", value: windows[2] },\n        { name: \"Channel4_ID\", value: windows[3] }\n    ],\n    actionTargets: [\n        {\n            id: endpointId,\n            cmdTargetType: \"Endpoint\"\n        }\n    ]\n};\n\nreturn [msg, null];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -574,10 +566,10 @@
         "type": "http request",
         "z": "ebf5ae94f113b0f9",
         "name": "",
-        "method": "POST",
+        "method": "use",
         "ret": "txt",
         "paytoqs": "body",
-        "url": "https://10.187.138.16/eztv/api/events/immediate/activities",
+        "url": "",
         "tls": "12d45e53c85cf190",
         "persist": false,
         "proxy": "",
@@ -608,8 +600,26 @@
         "x": 770,
         "y": 40,
         "wires": [
-            []
+            [
+                "96a293afe0841aa1"
+            ]
         ]
+    },
+    {
+        "id": "96a293afe0841aa1",
+        "type": "debug",
+        "z": "ebf5ae94f113b0f9",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 160,
+        "wires": []
     },
     {
         "id": "87ef541174c4ed8d",
@@ -2387,7 +2397,8 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
         "x": 1000,
@@ -2399,7 +2410,7 @@
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
         "group": "8858bccd6c432f3b",
-        "name": "Initalize",
+        "name": "Initalize Token",
         "label": "test token",
         "order": 3,
         "width": 0,
@@ -2425,7 +2436,7 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 160,
+        "x": 180,
         "y": 2620,
         "wires": [
             [
@@ -2456,7 +2467,7 @@
         "z": "9b14d8fa4e4d8265",
         "group": "8858bccd6c432f3b",
         "name": "Initalize",
-        "label": "test get status",
+        "label": "test get endpoint",
         "order": 2,
         "width": 0,
         "height": 0,
@@ -2467,7 +2478,7 @@
         "className": "",
         "icon": "",
         "iconPosition": "left",
-        "payload": "",
+        "payload": "69c49080bb6edf3f8c2012ef",
         "payloadType": "str",
         "topic": "topic",
         "topicType": "msg",
@@ -2536,11 +2547,11 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 170,
-        "y": 2980,
+        "x": 130,
+        "y": 2940,
         "wires": [
             [
-                "0bc09509ad1ba8d1"
+                "94e811c1402b49a0"
             ]
         ]
     },
@@ -3021,8 +3032,8 @@
         "type": "subflow:ebf5ae94f113b0f9",
         "z": "9b14d8fa4e4d8265",
         "name": "EZTV Apply Layout",
-        "x": 490,
-        "y": 2880,
+        "x": 690,
+        "y": 2860,
         "wires": [
             [
                 "ad475d30f2160d65"
@@ -3044,5 +3055,64 @@
         "x": 680,
         "y": 1580,
         "wires": []
+    },
+    {
+        "id": "263685b55e6509d5",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 2820,
+        "wires": []
+    },
+    {
+        "id": "94e811c1402b49a0",
+        "type": "change",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "endpointId",
+                "pt": "msg",
+                "to": "69c49080bb6edf3f8c2012ef",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "layout",
+                "pt": "msg",
+                "to": "3",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "windows",
+                "pt": "msg",
+                "to": "[\"21\",\"22\",\"23\",\"24\"]",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 2980,
+        "wires": [
+            [
+                "0bc09509ad1ba8d1",
+                "263685b55e6509d5"
+            ]
+        ]
     }
 ]
