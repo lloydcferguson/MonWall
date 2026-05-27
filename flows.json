@@ -843,7 +843,7 @@
         "finalize": "",
         "libs": [],
         "x": 490,
-        "y": 580,
+        "y": 660,
         "wires": [
             [
                 "87ef541174c4ed8d"
@@ -1029,8 +1029,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 270,
-        "y": 1020,
+        "x": 250,
+        "y": 900,
         "wires": [
             [
                 "7a976e82f53a0671"
@@ -1049,8 +1049,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
-        "y": 1020,
+        "x": 480,
+        "y": 900,
         "wires": [
             [
                 "45e880a1702f75dd"
@@ -1378,8 +1378,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 450,
-        "y": 1080,
+        "x": 230,
+        "y": 980,
         "wires": [
             [
                 "6efb865d3255eaef"
@@ -1418,8 +1418,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 670,
-        "y": 1080,
+        "x": 510,
+        "y": 980,
         "wires": [
             [
                 "45e880a1702f75dd"
@@ -1583,7 +1583,7 @@
         "finalize": "",
         "libs": [],
         "x": 660,
-        "y": 1680,
+        "y": 1480,
         "wires": [
             [
                 "71cb3505808773ec"
@@ -1622,7 +1622,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 80,
-        "y": 1820,
+        "y": 1480,
         "wires": [
             [
                 "33fdcbddf33e067a"
@@ -1645,8 +1645,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 230,
-        "y": 1680,
+        "x": 290,
+        "y": 1480,
         "wires": [
             [
                 "86ae05031f0ddf99"
@@ -1670,7 +1670,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 450,
-        "y": 1680,
+        "y": 1480,
         "wires": [
             [
                 "32435ef3466aa0f9"
@@ -1754,7 +1754,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Save Wall function",
-        "func": "let walls = flow.get(\"walls\") || {};\n\nlet selectedWallId = flow.get(\"selectedWallId\") || \"\";\nconst wallName = (flow.get(\"editWallName\") || \"\").trim();\nconst displayCount = Number(flow.get(\"editWallDisplayCount\") || 0);\n\nif (!wallName || displayCount < 1) {\n    msg.payload = \"Wall name and display count are required\";\n    return msg;\n}\n\nfunction makeWallId(name) {\n    return name\n        .toLowerCase()\n        .replace(/[^a-z0-9]+/g, \"-\")\n        .replace(/^-|-$/g, \"\");\n}\n\nfunction makeDisplay(slot) {\n    return {\n        slot,\n        label: `Display ${slot}`,\n        endpointId: \"\",\n        endpointLabel: \"Unassigned\",\n        endpointName: \"\",\n        endpointDescription: \"\",\n        endpointLocation: \"\",\n        layout: \"1\",\n        windows: [\"-1\", \"-1\", \"-1\", \"-1\"]\n    };\n}\n\nlet wall;\n\n// update existing wall\nif (selectedWallId && walls[selectedWallId]) {\n    wall = walls[selectedWallId];\n    wall.wallName = wallName;\n\n    const oldCount = wall.displays.length;\n\n    if (displayCount > oldCount) {\n        for (let i = oldCount + 1; i <= displayCount; i++) {\n            wall.displays.push(makeDisplay(i));\n        }\n    } else if (displayCount < oldCount) {\n        wall.displays = wall.displays.slice(0, displayCount);\n    }\n\n    wall.displayCount = displayCount;\n\n    msg.payload = `Saved wall: ${wall.wallName}`;\n}\n// create new wall\nelse {\n    const wallId = makeWallId(wallName);\n\n    if (walls[wallId]) {\n        msg.payload = \"A wall with that name already exists\";\n        return msg;\n    }\n\n    const displays = [];\n    for (let i = 1; i <= displayCount; i++) {\n        displays.push(makeDisplay(i));\n    }\n\n    wall = {\n        wallId,\n        wallName,\n        displayCount,\n        displays\n    };\n\n    walls[wallId] = wall;\n    selectedWallId = wallId;\n    flow.set(\"selectedWallId\", wallId);\n\n    msg.payload = `Added wall: ${wall.wallName}`;\n}\n\nflow.set(\"walls\", walls);\n\n// useful for downstream nodes\nmsg.wallId = selectedWallId;\nmsg.wall = wall;\n\nreturn msg;",
+        "func": "let walls = flow.get(\"walls\") || {};\n\nlet configWallId = flow.get(\"configWallId\") || \"\";\nconst wallName = (flow.get(\"editWallName\") || \"\").trim();\nconst displayCount = Number(flow.get(\"editWallDisplayCount\") || 0);\n\nif (!wallName || displayCount < 1) {\n    msg.payload = \"Wall name and display count are required\";\n    return msg;\n}\n\nfunction makeWallId(name) {\n    return name\n        .toLowerCase()\n        .replace(/[^a-z0-9]+/g, \"-\")\n        .replace(/^-|-$/g, \"\");\n}\n\nfunction makeDisplay(slot) {\n    return {\n        slot,\n        label: `Display ${slot}`,\n        endpointId: \"\",\n        endpointLabel: \"Unassigned\",\n        endpointName: \"\",\n        endpointDescription: \"\",\n        endpointLocation: \"\",\n        layout: \"1\",\n        windows: [\"-1\", \"-1\", \"-1\", \"-1\"]\n    };\n}\n\nlet wall;\n\n// update existing config wall\nif (configWallId && walls[configWallId]) {\n    wall = walls[configWallId];\n    wall.wallName = wallName;\n\n    const oldCount = wall.displays.length;\n\n    if (displayCount > oldCount) {\n        for (let i = oldCount + 1; i <= displayCount; i++) {\n            wall.displays.push(makeDisplay(i));\n        }\n    } else if (displayCount < oldCount) {\n        wall.displays = wall.displays.slice(0, displayCount);\n    }\n\n    wall.displayCount = displayCount;\n\n    msg.payload = `Saved wall: ${wall.wallName}`;\n}\n\n// create new config wall\nelse {\n    const wallId = makeWallId(wallName);\n\n    if (walls[wallId]) {\n        msg.payload = \"A wall with that name already exists\";\n        return msg;\n    }\n\n    const displays = [];\n\n    for (let i = 1; i <= displayCount; i++) {\n        displays.push(makeDisplay(i));\n    }\n\n    wall = {\n        wallId,\n        wallName,\n        displayCount,\n        displays\n    };\n\n    walls[wallId] = wall;\n    configWallId = wallId;\n    flow.set(\"configWallId\", wallId);\n\n    msg.payload = `Added wall: ${wall.wallName}`;\n}\n\nflow.set(\"walls\", walls);\n\n// useful for downstream nodes\nmsg.wallId = configWallId;\nmsg.wall = wall;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1765,7 +1765,8 @@
         "y": 2080,
         "wires": [
             [
-                "28d0a5d5e5c90419"
+                "28d0a5d5e5c90419",
+                "b249eaa9b9eea886"
             ]
         ]
     },
@@ -1846,8 +1847,8 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Build Wall Options function",
-        "func": "const walls = flow.get(\"walls\") || {};\nconst selectedWallId = flow.get(\"selectedWallId\") || \"\";\n\nlet options = Object.values(walls)\n    .sort((a, b) => a.wallName.localeCompare(b.wallName))\n    .map(wall => ({\n        label: wall.wallName,\n        value: wall.wallId\n    }));\n\nif (options.length === 0) {\n    options = [\n        {\n            label: \"No walls configured\",\n            value: \"\"\n        }\n    ];\n}\n\nmsg.ui_update = { options };\nmsg.payload = selectedWallId || \"\";\n\nreturn msg;",
-        "outputs": 1,
+        "func": "const walls = flow.get(\"walls\") || {};\n\nconst configWallId = flow.get(\"configWallId\") || \"\";\nlet selectedWallId = flow.get(\"selectedWallId\") || \"\";\n\nconst options = Object.values(walls)\n    .sort((a, b) => a.wallName.localeCompare(b.wallName))\n    .map(wall => ({\n        label: wall.wallName,\n        value: wall.wallId\n    }));\n\nconst validIds = new Set(options.map(o => o.value));\n\nif (selectedWallId && !validIds.has(selectedWallId)) {\n    selectedWallId = \"\";\n    flow.set(\"selectedWallId\", \"\");\n    flow.set(\"selectedSlot\", \"\");\n}\n\nconst safeOptions = options.length\n    ? options\n    : [{ label: \"No walls configured\", value: \"\" }];\n\nreturn [\n    {\n        ui_update: { options: safeOptions },\n        payload: validIds.has(configWallId) ? configWallId : \"\"\n    },\n    {\n        ui_update: { options: safeOptions },\n        payload: validIds.has(selectedWallId) ? selectedWallId : \"\"\n    }\n];",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -1857,8 +1858,9 @@
         "y": 2080,
         "wires": [
             [
-                "412892f1a9974505",
-                "36a979d52758e07c",
+                "412892f1a9974505"
+            ],
+            [
                 "0f80784114c268ef"
             ]
         ]
@@ -1868,18 +1870,21 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Delete Wall function",
-        "func": "const wallId = flow.get(\"selectedWallId\");\nlet walls = flow.get(\"walls\") || {};\n\nif (!wallId || !walls[wallId]) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst deletedName = walls[wallId].wallName;\ndelete walls[wallId];\n\nconst remainingIds = Object.keys(walls).sort((a, b) =>\n    walls[a].wallName.localeCompare(walls[b].wallName)\n);\n\nconst nextWallId = remainingIds[0] || \"\";\n\nflow.set(\"walls\", walls);\nflow.set(\"selectedWallId\", nextWallId);\n\nmsg.payload = `Deleted wall: ${deletedName}`;\nreturn msg;",
+        "func": "const wallId = flow.get(\"configWallId\");\nlet walls = flow.get(\"walls\") || {};\n\nif (!wallId || !walls[wallId]) {\n    msg.payload = \"No config wall selected\";\n    return msg;\n}\n\nconst deletedName = walls[wallId].wallName;\n\ndelete walls[wallId];\n\nflow.set(\"walls\", walls);\n\n// Clear Config selection if needed\nif (flow.get(\"configWallId\") === wallId) {\n    flow.set(\"configWallId\", \"\");\n    flow.set(\"editWallName\", \"\");\n    flow.set(\"editWallDisplayCount\", 1);\n    flow.set(\"configSlot\", \"\");\n    flow.set(\"configEndpointId\", \"\");\n}\n\n// Clear Overview selection if needed\nif (flow.get(\"selectedWallId\") === wallId) {\n    flow.set(\"selectedWallId\", \"\");\n    flow.set(\"selectedSlot\", \"\");\n    flow.set(\"selectedEndpointId\", \"\");\n}\n\nmsg.payload = `Deleted wall: ${deletedName}`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
-        "y": 2120,
+        "x": 340,
+        "y": 1560,
         "wires": [
             [
-                "28d0a5d5e5c90419"
+                "28d0a5d5e5c90419",
+                "45e880a1702f75dd",
+                "af77bad795fcf34c",
+                "d18d3b6e3c7561a3"
             ]
         ]
     },
@@ -1914,8 +1919,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 270,
-        "y": 2120,
+        "x": 90,
+        "y": 1560,
         "wires": [
             [
                 "873032798d5983ee"
@@ -1950,15 +1955,15 @@
         "id": "36a979d52758e07c",
         "type": "function",
         "z": "9b14d8fa4e4d8265",
-        "name": "Load Selected Wall function",
-        "func": "const wallId = msg.payload || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    flow.set(\"selectedWallId\", \"\");\n    flow.set(\"editWallName\", \"\");\n    flow.set(\"editWallDisplayCount\", 1);\n    flow.set(\"selectedSlot\", \"\");\n    flow.set(\"selectedEndpointId\", \"\");\n\n    return [\n        { payload: \"\" },\n        { payload: 1 },\n        { payload: \"No wall selected\" },\n        { payload: \"\" }\n    ];\n}\n\nflow.set(\"selectedWallId\", wallId);\nflow.set(\"editWallName\", wall.wallName);\nflow.set(\"editWallDisplayCount\", wall.displayCount);\n\n// default to first display whenever a wall is selected\nconst firstDisplay = wall.displays?.[0];\nconst firstSlot = firstDisplay ? String(firstDisplay.slot) : \"\";\n\nflow.set(\"selectedSlot\", firstSlot);\nflow.set(\"selectedEndpointId\", firstDisplay?.endpointId || \"\");\n\nreturn [\n    { payload: wall.wallName },\n    { payload: wall.displayCount },\n    { payload: `Selected wall: ${wall.wallName}` },\n    { payload: firstSlot }\n];",
+        "name": "Load Config Wall function",
+        "func": "const wallId = msg.payload || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    flow.set(\"configWallId\", \"\");\n    flow.set(\"editWallName\", \"\");\n    flow.set(\"editWallDisplayCount\", 1);\n    flow.set(\"configSlot\", \"\");\n    flow.set(\"configEndpointId\", \"\");\n\n    return [\n        { payload: \"\" },\n        { payload: 1 },\n        { payload: \"No config wall selected\" },\n        { payload: \"\" }\n    ];\n}\n\nflow.set(\"configWallId\", wallId);\nflow.set(\"editWallName\", wall.wallName);\nflow.set(\"editWallDisplayCount\", wall.displayCount);\n\nconst firstDisplay = wall.displays?.[0];\nconst firstSlot = firstDisplay ? String(firstDisplay.slot) : \"\";\n\nflow.set(\"configSlot\", firstSlot);\nflow.set(\"configEndpointId\", firstDisplay?.endpointId || \"\");\n\nreturn [\n    { payload: wall.wallName },\n    { payload: wall.displayCount },\n    { payload: `Configuring wall: ${wall.wallName}` },\n    { payload: firstSlot }\n];",
         "outputs": 4,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1480,
+        "x": 1470,
         "y": 2080,
         "wires": [
             [
@@ -2019,7 +2024,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "New Wall function",
-        "func": "flow.set(\"selectedWallId\", \"\");\nflow.set(\"editWallName\", \"\");\nflow.set(\"editWallDisplayCount\", 1);\nflow.set(\"selectedSlot\", \"\");\nflow.set(\"selectedEndpointId\", \"\");\n\nconst msgName = { payload: \"\" };\nconst msgCount = { payload: 1 };\nconst msgStatus = {\n    payload: \"New wall: enter a name and display count, then click Save Wall\"\n};\n\n// triggers Build Display/Slot Options to clear slot/endpoint controls\nconst msgBuildSlots = { payload: \"\" };\n\nreturn [msgName, msgCount, msgStatus, msgBuildSlots];",
+        "func": "flow.set(\"configWallId\", \"\");\nflow.set(\"editWallName\", \"\");\nflow.set(\"editWallDisplayCount\", 1);\nflow.set(\"configSlot\", \"\");\nflow.set(\"configEndpointId\", \"\");\n\nreturn [\n    { payload: \"\" },\n    { payload: 1 },\n    { payload: \"New wall: enter a name and display count, then click Save Wall\" },\n    { payload: \"\" }\n];",
         "outputs": 4,
         "timeout": 0,
         "noerr": 0,
@@ -2271,7 +2276,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Build Display/Slot Options",
-        "func": "const walls = flow.get(\"walls\") || {};\nconst selectedWallId = flow.get(\"selectedWallId\") || \"\";\nconst wall = walls[selectedWallId];\n\nif (!wall || !Array.isArray(wall.displays) || wall.displays.length === 0) {\n    msg.ui_update = {\n        options: [{ label: \"No displays configured\", value: \"\" }]\n    };\n    msg.payload = \"\";\n    return msg;\n}\n\nconst options = wall.displays.map(d => ({\n    label: `${wall.wallName} - ${d.label}`,\n    value: String(d.slot)\n}));\n\nlet selectedSlot = String(flow.get(\"selectedSlot\") || \"\");\n\n// if selected slot is blank or not valid for this wall, use first display\nif (!options.some(o => o.value === selectedSlot)) {\n    selectedSlot = options[0].value;\n    flow.set(\"selectedSlot\", Number(selectedSlot));\n\n    const display = wall.displays.find(d => String(d.slot) === selectedSlot);\n    flow.set(\"selectedEndpointId\", display?.endpointId || \"\");\n}\n\nmsg.ui_update = { options };\nmsg.payload = selectedSlot;\n\nreturn msg;",
+        "func": "const walls = flow.get(\"walls\") || {};\nconst configWallId = flow.get(\"configWallId\") || \"\";\nconst wall = walls[configWallId];\n\nif (!wall || !Array.isArray(wall.displays) || wall.displays.length === 0) {\n    msg.ui_update = {\n        options: [{ label: \"No displays configured\", value: \"\" }]\n    };\n    msg.payload = \"\";\n    return msg;\n}\n\nconst options = wall.displays.map(d => ({\n    label: `${wall.wallName} - ${d.label}`,\n    value: String(d.slot)\n}));\n\nlet configSlot = String(flow.get(\"configSlot\") || \"\");\n\nif (!options.some(o => o.value === configSlot)) {\n    configSlot = options[0]?.value || \"\";\n    flow.set(\"configSlot\", configSlot);\n}\n\nmsg.ui_update = { options };\nmsg.payload = configSlot;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2279,7 +2284,7 @@
         "finalize": "",
         "libs": [],
         "x": 170,
-        "y": 1860,
+        "y": 1880,
         "wires": [
             [
                 "443c90a1b0988fb5",
@@ -2292,7 +2297,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Load Slot Assignment function",
-        "func": "const slot = Number(msg.payload);\nconst walls = flow.get(\"walls\") || {};\nconst selectedWallId = flow.get(\"selectedWallId\") || \"\";\nconst wall = walls[selectedWallId];\n\nif (!wall || !slot) {\n    flow.set(\"selectedSlot\", \"\");\n    flow.set(\"selectedEndpointId\", \"\");\n\n    return [\n        { payload: \"\" },\n        { payload: \"No display selected\" }\n    ];\n}\n\nconst display = wall.displays.find(d => d.slot === slot);\n\nif (!display) {\n    return [\n        { payload: \"\" },\n        { payload: `Display ${slot} not found` }\n    ];\n}\n\nflow.set(\"selectedSlot\", slot);\nflow.set(\"selectedEndpointId\", display.endpointId || \"\");\n\nreturn [\n    { payload: display.endpointId || \"\" },\n    { payload: `Editing ${display.label || `Display ${slot}`}` }\n];",
+        "func": "const slot = Number(msg.payload);\nconst walls = flow.get(\"walls\") || {};\nconst configWallId = flow.get(\"configWallId\") || \"\";\nconst wall = walls[configWallId];\n\nif (!wall || !slot) {\n    flow.set(\"configSlot\", \"\");\n    flow.set(\"configEndpointId\", \"\");\n\n    return [\n        { payload: \"\" },\n        { payload: \"No display selected\" }\n    ];\n}\n\nconst display = wall.displays.find(d => d.slot === slot);\n\nif (!display) {\n    return [\n        { payload: \"\" },\n        { payload: `Display ${slot} not found` }\n    ];\n}\n\nflow.set(\"configSlot\", slot);\nflow.set(\"configEndpointId\", display.endpointId || \"\");\n\nreturn [\n    { payload: display.endpointId || \"\" },\n    { payload: `Editing ${display.label || `Display ${slot}`}` }\n];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -2315,7 +2320,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Store Selected Endpoint",
-        "func": "flow.set(\"selectedEndpointId\", msg.payload || \"\");\nreturn null;",
+        "func": "flow.set(\"configEndpointId\", msg.payload || \"\");\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2333,7 +2338,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Save Endpoint Assignment button",
-        "func": "const wallId = flow.get(\"selectedWallId\");\nconst slot = Number(flow.get(\"selectedSlot\"));\nconst selectedEndpointId = flow.get(\"selectedEndpointId\") || \"\";\n\nlet walls = flow.get(\"walls\") || {};\nconst endpointDetailsById = flow.get(\"endpointDetailsById\") || {};\n\nconst wall = walls[wallId];\n\nif (!wall) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst display = wall.displays.find(d => d.slot === slot);\n\nif (!display) {\n    msg.payload = \"No display selected\";\n    return msg;\n}\n\nif (!selectedEndpointId) {\n    display.endpointId = \"\";\n    display.endpointLabel = \"Unassigned\";\n    display.endpointName = \"\";\n    display.endpointDescription = \"\";\n    display.endpointLocation = \"\";\n} else {\n    const ep = endpointDetailsById[selectedEndpointId];\n\n    if (!ep) {\n        msg.payload = \"Selected endpoint not found\";\n        return msg;\n    }\n\n    display.endpointId = ep.id;\n    display.endpointLabel = ep.operatorLabel;\n    display.endpointName = ep.name;\n    display.endpointDescription = ep.description;\n    display.endpointLocation = ep.location;\n}\n\nflow.set(\"walls\", walls);\n\nmsg.payload = `Assigned ${display.endpointLabel} to ${wall.wallName} ${display.label}`;\nreturn msg;",
+        "func": "const wallId = flow.get(\"configWallId\");\nconst slot = Number(flow.get(\"configSlot\"));\nconst selectedEndpointId = flow.get(\"configEndpointId\") || \"\";\n\nlet walls = flow.get(\"walls\") || {};\nconst endpointDetailsById = flow.get(\"endpointDetailsById\") || {};\n\nconst wall = walls[wallId];\n\nif (!wall) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst display = wall.displays.find(d => d.slot === slot);\n\nif (!display) {\n    msg.payload = \"No display selected\";\n    return msg;\n}\n\nif (!selectedEndpointId) {\n    display.endpointId = \"\";\n    display.endpointLabel = \"Unassigned\";\n    display.endpointName = \"\";\n    display.endpointDescription = \"\";\n    display.endpointLocation = \"\";\n} else {\n    const ep = endpointDetailsById[selectedEndpointId];\n\n    if (!ep) {\n        msg.payload = \"Selected endpoint not found\";\n        return msg;\n    }\n\n    display.endpointId = ep.id;\n    display.endpointLabel = ep.operatorLabel;\n    display.endpointName = ep.name;\n    display.endpointDescription = ep.description;\n    display.endpointLocation = ep.location;\n}\n\nflow.set(\"walls\", walls);\n\nmsg.payload = `Assigned ${display.endpointLabel} to ${wall.wallName} ${display.label}`;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2615,7 +2620,7 @@
         ],
         "payload": "",
         "topic": "topic",
-        "topicType": "msg",
+        "topicType": "str",
         "className": "",
         "typeIsComboBox": true,
         "msgTrigger": "onChange",
@@ -2631,15 +2636,15 @@
         "id": "92376c2d2bffa4cf",
         "type": "function",
         "z": "9b14d8fa4e4d8265",
-        "name": "Load Selected Wall",
-        "func": "const wallId = msg.payload || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    flow.set(\"selectedWallId\", \"\");\n    flow.set(\"selectedSlot\", \"\");\n\n    return [\n        { payload: \"\" },        // to Load Display State\n        { payload: \"refresh\" }  // to Build Wall Preview\n    ];\n}\n\nflow.set(\"selectedWallId\", wallId);\n\nconst firstDisplay = wall.displays?.[0];\nconst firstSlot = firstDisplay ? String(firstDisplay.slot) : \"\";\n\nflow.set(\"selectedSlot\", firstSlot);\n\nreturn [\n    { payload: firstSlot },     // to Load Display State\n    { payload: \"refresh\" }      // to Build Wall Preview\n];",
+        "name": "Load Overview Wall",
+        "func": "const wallId = msg.payload || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n\n    flow.set(\"selectedWallId\", \"\");\n    flow.set(\"selectedSlot\", \"\");\n\n    return [\n        { payload: \"\" },\n        { payload: \"No wall selected\" }\n    ];\n}\n\nflow.set(\"selectedWallId\", wallId);\n\nconst firstDisplay = wall.displays?.[0];\nconst firstSlot = firstDisplay\n    ? String(firstDisplay.slot)\n    : \"\";\n\nflow.set(\"selectedSlot\", firstSlot);\n\nreturn [\n    { payload: firstSlot },\n    { payload: `Selected wall: ${wall.wallName}` }\n];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1270,
+        "x": 1280,
         "y": 1340,
         "wires": [
             [
@@ -3023,5 +3028,21 @@
                 "ad475d30f2160d65"
             ]
         ]
+    },
+    {
+        "id": "d18d3b6e3c7561a3",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 1580,
+        "wires": []
     }
 ]
