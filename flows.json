@@ -494,7 +494,7 @@
         "y": 80,
         "wires": [
             [
-                "cabea7cb5181bff1"
+                "93ddf020d994214f"
             ]
         ]
     },
@@ -527,7 +527,7 @@
         "type": "function",
         "z": "bb149e69a82c9cc5",
         "name": "Store Token",
-        "func": "try {\n    let body = msg.payload;\n\n    if (typeof body === \"string\") {\n        body = JSON.parse(body);\n    }\n\n    const token = body.tokenFixedLength || body.token || body.accessToken;\n\n    if (!token) {\n        msg.success = false;\n        msg.payload = \"No token found in login response\";\n        return msg;\n    }\n\n    global.set(\"eztvToken\", token);\n\n    msg.success = true;\n    msg.payload = \"EZTV token stored\";\n    return msg;\n\n} catch (err) {\n    msg.success = false;\n    msg.payload = `Login failed: ${err.message}`;\n    return msg;\n}",
+        "func": "try {\n    let body = msg.payload;\n\n    if (typeof body === \"string\") {\n        body = JSON.parse(body);\n    }\n\n    const token =\n        body.tokenFixedLength ||\n        body.token ||\n        body.accessToken;\n\n    if (!token) {\n        msg.success = false;\n        msg.payload = \"No token found in login response\";\n        return msg;\n    }\n\n    // store token globally\n    global.set(\"eztvToken\", token);\n\n    // restore original message data\n    if (msg._originalPayload !== undefined) {\n        msg.payload = msg._originalPayload;\n    }\n\n    if (msg._originalDisplay !== undefined) {\n        msg.display = msg._originalDisplay;\n    }\n\n    if (msg._originalEndpointId !== undefined) {\n        msg.endpointId = msg._originalEndpointId;\n    }\n\n    if (msg._originalLayout !== undefined) {\n        msg.layout = msg._originalLayout;\n    }\n\n    if (msg._originalWindows !== undefined) {\n        msg.windows = msg._originalWindows;\n    }\n\n    msg.success = true;\n\n    return msg;\n\n} catch (err) {\n\n    msg.success = false;\n    msg.payload = `Login failed: ${err.message}`;\n\n    return msg;\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -538,6 +538,26 @@
         "y": 80,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "93ddf020d994214f",
+        "type": "function",
+        "z": "bb149e69a82c9cc5",
+        "name": "Preserve Original Message",
+        "func": "msg._originalPayload = msg.payload;\nmsg._originalDisplay = msg.display;\nmsg._originalEndpointId = msg.endpointId;\nmsg._originalLayout = msg.layout;\nmsg._originalWindows = msg.windows;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 180,
+        "wires": [
+            [
+                "cabea7cb5181bff1"
+            ]
         ]
     },
     {
@@ -1243,7 +1263,7 @@
         "group": "a43da85b9c3d42f3",
         "page": "",
         "ui": "",
-        "name": "",
+        "name": "ui-template",
         "order": 3,
         "width": 0,
         "height": 0,
@@ -1254,7 +1274,7 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 1240,
+        "x": 1250,
         "y": 800,
         "wires": [
             [
@@ -1266,7 +1286,7 @@
         "id": "5a09839690048525",
         "type": "switch",
         "z": "9b14d8fa4e4d8265",
-        "name": "",
+        "name": "payload is string",
         "property": "payload",
         "propertyType": "msg",
         "rules": [
@@ -1279,11 +1299,11 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 1390,
+        "x": 1420,
         "y": 820,
         "wires": [
             [
-                "af77bad795fcf34c"
+                "bd49460092d6193f"
             ]
         ]
     },
@@ -2974,8 +2994,8 @@
                 "45e880a1702f75dd"
             ],
             [
-                "5e3e561a59d57a97",
-                "a0f56a5f05291103"
+                "a0f56a5f05291103",
+                "0273c7d0e4575429"
             ]
         ]
     },
@@ -3142,6 +3162,126 @@
         "statusType": "auto",
         "x": 680,
         "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "0273c7d0e4575429",
+        "type": "subflow:bb149e69a82c9cc5",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "x": 710,
+        "y": 960,
+        "wires": [
+            [
+                "5e3e561a59d57a97"
+            ]
+        ]
+    },
+    {
+        "id": "bd49460092d6193f",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Check Control Mode",
+        "func": "const mode = flow.get(\"controlMode\") || \"development\";\n\nif (mode === \"online\") {\n    return [null, msg];\n}\n\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1660,
+        "y": 820,
+        "wires": [
+            [
+                "af77bad795fcf34c"
+            ],
+            [
+                "a21dd1754bb0108c",
+                "7a074a5a6919ea95"
+            ]
+        ]
+    },
+    {
+        "id": "a21dd1754bb0108c",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Get Selected Endpoint Input",
+        "func": "const slot = Number(msg.payload);\n\nconst walls = flow.get(\"walls\") || {};\nconst wallId = flow.get(\"selectedWallId\") || \"\";\nconst wall = walls[wallId];\n\nif (!wall || !slot) {\n    msg.payload = \"No wall/display selected\";\n    return [null, msg];\n}\n\nconst display = wall.displays.find(d => Number(d.slot) === slot);\n\nif (!display) {\n    msg.payload = `Slot ${slot} not found`;\n    return [null, msg];\n}\n\nif (!display.endpointId) {\n    msg.payload = `Slot ${slot} has no endpoint assigned`;\n    return [null, msg];\n}\n\nflow.set(\"selectedSlot\", slot);\n\nmsg.slot = slot;\nmsg.endpointId = display.endpointId;\nmsg.display = display;\n\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1980,
+        "y": 840,
+        "wires": [
+            [
+                "6f1b2ec378e79713"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "6f1b2ec378e79713",
+        "type": "subflow:bb149e69a82c9cc5",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "x": 2270,
+        "y": 840,
+        "wires": [
+            [
+                "7ff1d3ef729ff257"
+            ]
+        ]
+    },
+    {
+        "id": "7ff1d3ef729ff257",
+        "type": "subflow:b61f7864f98644eb",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "x": 2470,
+        "y": 840,
+        "wires": [
+            [
+                "b4d4baefe46fb8e5"
+            ]
+        ]
+    },
+    {
+        "id": "b4d4baefe46fb8e5",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Update Display From Endpoint",
+        "func": "const status = msg.payload;\n\nconst walls = flow.get(\"walls\") || {};\nconst wallId = flow.get(\"selectedWallId\");\nconst slot = Number(msg.slot || flow.get(\"selectedSlot\"));\n\nconst wall = walls[wallId];\nif (!wall) return msg;\n\nconst display = wall.displays.find(d => Number(d.slot) === slot);\nif (!display) return msg;\n\ndisplay.layout = String(status.layout || \"1\");\ndisplay.windows = Array.isArray(status.windows)\n    ? status.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\ndisplay.endpointName = status.endpointName || display.endpointName || \"\";\ndisplay.endpointLabel = status.endpointLabel || display.endpointLabel || \"\";\ndisplay.lastStatusAt = new Date().toISOString();\n\nflow.set(\"walls\", walls);\n\nmsg.payload = String(slot);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2730,
+        "y": 840,
+        "wires": [
+            [
+                "af77bad795fcf34c"
+            ]
+        ]
+    },
+    {
+        "id": "7a074a5a6919ea95",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 10",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1880,
+        "y": 960,
         "wires": []
     }
 ]
