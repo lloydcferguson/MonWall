@@ -545,7 +545,7 @@
         "type": "function",
         "z": "ebf5ae94f113b0f9",
         "name": "Build EZTV Apply Request",
-        "func": "const token = global.get(\"eztvToken\");\nconst baseUrl = global.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\n\nconst endpointId = msg.endpointId;\nconst layout = String(msg.layout || \"1\");\n\nconst windows = Array.isArray(msg.windows)\n    ? msg.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nwhile (windows.length < 4) {\n    windows.push(\"-1\");\n}\n\nif (!token) {\n    msg.success = false;\n    msg.payload = \"No EZTV token. Run login first.\";\n    return [null, msg];\n}\n\nif (!endpointId) {\n    msg.success = false;\n    msg.payload = \"No endpointId supplied.\";\n    return [null, msg];\n}\n\nmsg.method = \"POST\";\n\nmsg.url = `${baseUrl}/eztv/api/events/immediate/activities`;\n\nmsg.headers = {\n    Authorization: `Bearer ${token}`,\n    \"Content-Type\": \"application/json\",\n    Accept: \"application/json\"\n};\n\nmsg.payload = {\n    action: \"LoadChannelMultiview\",\n    actionCluster: \"DSS\",\n    actionParameters: [\n        { name: \"Slots\", value: layout },\n        { name: \"ChannelOverlayInfo\", value: \"false\" },\n        { name: \"Channel1_ID\", value: windows[0] },\n        { name: \"Channel2_ID\", value: windows[1] },\n        { name: \"Channel3_ID\", value: windows[2] },\n        { name: \"Channel4_ID\", value: windows[3] }\n    ],\n    actionTargets: [\n        {\n            id: endpointId,\n            cmdTargetType: \"Endpoint\"\n        }\n    ]\n};\n\nreturn [msg, null];",
+        "func": "const token = global.get(\"eztvToken\");\nconst baseUrl = global.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\n\nconst display = msg.display || {};\n\nconst endpointId =\n    msg.endpointId ||\n    display.endpointId;\n\nconst layout = String(\n    msg.layout ||\n    display.layout ||\n    \"1\"\n);\n\nlet windows =\n    msg.windows ||\n    display.windows ||\n    [\"-1\", \"-1\", \"-1\", \"-1\"];\n\n// allow JSON string input from Change nodes/buttons\nif (typeof windows === \"string\") {\n    try {\n        windows = JSON.parse(windows);\n    } catch (err) {\n        windows = [\"-1\", \"-1\", \"-1\", \"-1\"];\n    }\n}\n\n// normalize\nwindows = Array.isArray(windows)\n    ? windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\n// ensure exactly 4 entries\nwhile (windows.length < 4) {\n    windows.push(\"-1\");\n}\n\nif (!token) {\n    msg.success = false;\n    msg.payload = \"No EZTV token. Run login first.\";\n    return [null, msg];\n}\n\nif (!endpointId) {\n    msg.success = false;\n    msg.payload = \"No endpointId supplied.\";\n    return [null, msg];\n}\n\nmsg.method = \"POST\";\n\nmsg.url = `${baseUrl}/eztv/api/events/immediate/activities`;\n\nmsg.headers = {\n    Authorization: `Bearer ${token}`,\n    \"Content-Type\": \"application/json\",\n    Accept: \"application/json\"\n};\n\nmsg.payload = {\n    action: \"LoadChannelMultiview\",\n    actionCluster: \"DSS\",\n    actionParameters: [\n        { name: \"Slots\", value: layout },\n        { name: \"ChannelOverlayInfo\", value: \"false\" },\n        { name: \"Channel1_ID\", value: windows[0] },\n        { name: \"Channel2_ID\", value: windows[1] },\n        { name: \"Channel3_ID\", value: windows[2] },\n        { name: \"Channel4_ID\", value: windows[3] }\n    ],\n    actionTargets: [\n        {\n            id: endpointId,\n            cmdTargetType: \"Endpoint\"\n        }\n    ]\n};\n\nreturn [msg, null];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -556,7 +556,8 @@
         "y": 80,
         "wires": [
             [
-                "8c988cad34fbd732"
+                "8c988cad34fbd732",
+                "96a293afe0841aa1"
             ],
             []
         ]
@@ -600,9 +601,7 @@
         "x": 770,
         "y": 40,
         "wires": [
-            [
-                "96a293afe0841aa1"
-            ]
+            []
         ]
     },
     {
@@ -1201,7 +1200,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Save Display State",
-        "func": "const wallId = flow.get(\"selectedWallId\");\nconst slot = Number(flow.get(\"selectedSlot\"));\n\nlet walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst display = wall.displays.find(d => Number(d.slot) === slot);\n\nif (!display) {\n    msg.payload = \"No display/slot selected\";\n    return msg;\n}\n\ndisplay.layout = String(flow.get(\"editLayout\") || \"1\");\n\ndisplay.windows = [\n    String(flow.get(\"editWindow1\") || \"-1\"),\n    String(flow.get(\"editWindow2\") || \"-1\"),\n    String(flow.get(\"editWindow3\") || \"-1\"),\n    String(flow.get(\"editWindow4\") || \"-1\")\n];\n\nflow.set(\"walls\", walls);\n\nmsg.payload = `Applied changes to ${wall.wallName} - Slot ${slot}`;\nmsg.wall = wall;\nmsg.display = display;\n\nreturn msg;",
+        "func": "const wallId = flow.get(\"selectedWallId\");\nconst slot = Number(flow.get(\"selectedSlot\"));\n\nlet walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst display = wall.displays.find(d => Number(d.slot) === slot);\n\nif (!display) {\n    msg.payload = \"No display/slot selected\";\n    return msg;\n}\n\ndisplay.layout = String(flow.get(\"editLayout\") || \"1\");\n\ndisplay.windows = [\n    String(flow.get(\"editWindow1\") || \"-1\"),\n    String(flow.get(\"editWindow2\") || \"-1\"),\n    String(flow.get(\"editWindow3\") || \"-1\"),\n    String(flow.get(\"editWindow4\") || \"-1\")\n];\n\nflow.set(\"walls\", walls);\n\nmsg.wallId = wallId;\nmsg.slot = slot;\nmsg.wall = wall;\nmsg.display = display;\n\nmsg.payload = `Applied changes to ${wall.wallName} - Slot ${slot}`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2974,7 +2973,10 @@
             [
                 "45e880a1702f75dd"
             ],
-            []
+            [
+                "5e3e561a59d57a97",
+                "a0f56a5f05291103"
+            ]
         ]
     },
     {
@@ -3114,5 +3116,32 @@
                 "263685b55e6509d5"
             ]
         ]
+    },
+    {
+        "id": "5e3e561a59d57a97",
+        "type": "subflow:ebf5ae94f113b0f9",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "x": 930,
+        "y": 940,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a0f56a5f05291103",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 1020,
+        "wires": []
     }
 ]
