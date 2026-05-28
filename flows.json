@@ -483,7 +483,7 @@
         "type": "function",
         "z": "bb149e69a82c9cc5",
         "name": "Build EZTV Login Request",
-        "func": "msg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = JSON.stringify({\n    username: \"admin@dss-internal\",\n    password: \"1qaz!QAZ\",\n    customerPlatform: \"STB\"\n});\n\nreturn msg;",
+        "func": "const baseUrl = global.get(\"eztvBaseUrl\") || \"https://10.187.138.16\";\n\nmsg.method = \"POST\";\nmsg.url = `${baseUrl}/eztv/api/login/`;\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Accept\": \"application/json\"\n};\n\nmsg.payload = {\n    username: \"admin@dss-internal\",\n    password: \"1qaz!QAZ\",\n    customerPlatform: \"STB\"\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -503,10 +503,10 @@
         "type": "http request",
         "z": "bb149e69a82c9cc5",
         "name": "",
-        "method": "POST",
+        "method": "use",
         "ret": "obj",
         "paytoqs": "ignore",
-        "url": "https://10.187.138.16/eztv/api/login/",
+        "url": "",
         "tls": "8873d83114a83a85",
         "persist": false,
         "proxy": "",
@@ -514,7 +514,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 510,
+        "x": 530,
         "y": 80,
         "wires": [
             [
@@ -871,8 +871,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 490,
-        "y": 660,
+        "x": 470,
+        "y": 640,
         "wires": [
             [
                 "87ef541174c4ed8d"
@@ -1251,8 +1251,7 @@
         "y": 800,
         "wires": [
             [
-                "adeffbac5d818df8",
-                "f7d5e94a7428e54e"
+                "adeffbac5d818df8"
             ]
         ]
     },
@@ -2697,7 +2696,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1180,
+        "x": 1320,
         "y": 880,
         "wires": []
     },
@@ -3145,7 +3144,9 @@
         "x": 930,
         "y": 940,
         "wires": [
-            []
+            [
+                "5eb6a844ea77f344"
+            ]
         ]
     },
     {
@@ -3280,8 +3281,54 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1880,
-        "y": 960,
+        "x": 1900,
+        "y": 880,
         "wires": []
+    },
+    {
+        "id": "5eb6a844ea77f344",
+        "type": "delay",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1140,
+        "y": 940,
+        "wires": [
+            [
+                "9b0328a877d58b50",
+                "f7d5e94a7428e54e"
+            ]
+        ]
+    },
+    {
+        "id": "9b0328a877d58b50",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Refresh Endpoint Input",
+        "func": "const display = msg.display || {};\n\nconst endpointId =\n    msg.endpointId ||\n    display.endpointId;\n\nif (!endpointId) {\n    msg.payload = \"No endpointId for refresh\";\n    return [null, msg];\n}\n\nmsg.endpointId = endpointId;\n\nreturn [msg, null];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1980,
+        "y": 940,
+        "wires": [
+            [
+                "6f1b2ec378e79713"
+            ]
+        ]
     }
 ]
