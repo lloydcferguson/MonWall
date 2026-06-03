@@ -186,16 +186,16 @@
         ],
         "order": 1,
         "className": "",
-        "visible": "true",
-        "disabled": "false"
+        "visible": true,
+        "disabled": false
     },
     {
         "id": "a43da85b9c3d42f3",
         "type": "ui-group",
         "name": "Active Wall Selector",
         "page": "2998d7d0a5101c7c",
-        "width": 6,
-        "height": 1,
+        "width": "6",
+        "height": "1",
         "order": 1,
         "showTitle": true,
         "className": "",
@@ -208,37 +208,9 @@
         "type": "ui-group",
         "name": "Edit Display",
         "page": "2998d7d0a5101c7c",
-        "width": 6,
-        "height": 1,
+        "width": "6",
+        "height": "1",
         "order": 2,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "default"
-    },
-    {
-        "id": "a8900dcb3ccf6d17",
-        "type": "ui-group",
-        "name": "Current State",
-        "page": "2998d7d0a5101c7c",
-        "width": 6,
-        "height": 1,
-        "order": 3,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "default"
-    },
-    {
-        "id": "e4640d07a8b6787b",
-        "type": "ui-group",
-        "name": "Presets",
-        "page": "2998d7d0a5101c7c",
-        "width": 6,
-        "height": 1,
-        "order": 4,
         "showTitle": true,
         "className": "",
         "visible": "true",
@@ -663,9 +635,9 @@
         "z": "9b14d8fa4e4d8265",
         "group": "bc5eef628c603338",
         "order": 1,
-        "width": 0,
-        "height": 0,
-        "name": "Edit Display",
+        "width": "3",
+        "height": "1",
+        "name": "Edit Status Display",
         "label": "",
         "format": "{{msg.payload}}",
         "layout": "row-center",
@@ -677,7 +649,7 @@
         "className": "",
         "value": "payload",
         "valueType": "msg",
-        "x": 2610,
+        "x": 2630,
         "y": 220,
         "wires": []
     },
@@ -1281,8 +1253,8 @@
         "ui": "",
         "name": "ui-template",
         "order": 3,
-        "width": 0,
-        "height": 0,
+        "width": "0",
+        "height": "0",
         "head": "",
         "format": "<template>\n  <div class=\"wall-grid\">\n\n    <div\n      v-for=\"display in msg.payload.displays\"\n      :key=\"display.slot\"\n      class=\"display-card\"\n      :class=\"{ selected: String(display.slot) === String(msg.payload.selectedSlot) }\"\n      @click=\"selectDisplay(display.slot)\"\n    >\n\n      <div class=\"display-header\">\n        <div class=\"display-title\">\n          {{ msg.payload.wallName }} - Display {{ display.slot }}\n        </div>\n\n        <div class=\"display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n\n      <div\n        class=\"display-screen\"\n        :class=\"screenClass(display.layout)\"\n      >\n\n        <div\n          v-if=\"showWindow(display.layout, 1)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[0]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 2)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[1]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 3)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[2]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 4)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[3]) }}\n        </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  methods: {\n\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot)\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n\n      const l = String(layout);\n\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    },\n\n    channelLabel(value) {\n\n      const v = String(value);\n\n      if (\n        v === \"-1\" ||\n        v === \"\" ||\n        v === \"undefined\"\n      ) {\n        return \"Empty\";\n      }\n\n      return this.msg.payload.channelLabelMap?.[v] || v;\n    }\n  }\n}\n</script>\n\n<style>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));\n  gap: 16px;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: 0.15s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 10px;\n}\n\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.window {\n  background: #1f2937;\n  color: white;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n}\n</style>",
         "storeOutMessages": true,
@@ -1290,8 +1262,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 1250,
-        "y": 800,
+        "x": 1210,
+        "y": 820,
         "wires": [
             [
                 "5a09839690048525"
@@ -1327,11 +1299,11 @@
         "id": "aa3dcec58a029635",
         "type": "ui-dropdown",
         "z": "9b14d8fa4e4d8265",
-        "group": "e4640d07a8b6787b",
+        "group": "bc5eef628c603338",
         "name": "Preset Select",
         "label": "Select Preset",
         "tooltip": "",
-        "order": 1,
+        "order": 9,
         "width": "3",
         "height": "1",
         "passthru": false,
@@ -1363,10 +1335,10 @@
         "id": "33aaffc3e9b5e074",
         "type": "ui-text-input",
         "z": "9b14d8fa4e4d8265",
-        "group": "e4640d07a8b6787b",
+        "group": "bc5eef628c603338",
         "name": "Preset Name",
         "label": "Preset Name",
-        "order": 3,
+        "order": 11,
         "width": "3",
         "height": "1",
         "topic": "topic",
@@ -1396,10 +1368,10 @@
         "id": "a55b57f7e58ab71e",
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
-        "group": "e4640d07a8b6787b",
+        "group": "bc5eef628c603338",
         "name": "Preset Run",
         "label": "Run Preset",
-        "order": 2,
+        "order": 10,
         "width": "3",
         "height": "1",
         "emulateClick": false,
@@ -1423,8 +1395,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 230,
-        "y": 980,
+        "x": 330,
+        "y": 500,
         "wires": [
             [
                 "6efb865d3255eaef"
@@ -1436,15 +1408,15 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Build Preset Options",
-        "func": "const presets = flow.get(\"presets\") || {};\nconst options = Object.keys(presets)\n    .sort()\n    .map(name => ({\n        label: name,\n        value: name\n    }));\n\nmsg.ui_update = { options };\nreturn msg;",
+        "func": "const wallId = flow.get(\"selectedWallId\") || \"\";\nconst presets = flow.get(\"presets\") || {};\nconst wallPresets = presets[wallId] || {};\n\nconst options = Object.keys(wallPresets)\n    .sort()\n    .map(name => ({\n        label: name,\n        value: name\n    }));\n\nmsg.ui_update = {\n    options: [\n        { label: \"\", value: \"\" },\n        ...options\n    ]\n};\n\nmsg.payload = \"\";\nflow.set(\"selectedPreset\", \"\");\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 760,
-        "y": 1220,
+        "x": 800,
+        "y": 1280,
         "wires": [
             [
                 "aa3dcec58a029635"
@@ -1456,7 +1428,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Run Preset",
-        "func": "const selectedPreset = flow.get(\"selectedPreset\");\nconst presets = flow.get(\"presets\") || {};\n\nif (!selectedPreset || !presets[selectedPreset]) {\n    msg.payload = \"No preset selected\";\n    return msg;\n}\n\nconst preset = presets[selectedPreset];\n\n// deep copy so later edits do not modify the preset itself\nconst wallState = JSON.parse(JSON.stringify(preset));\n\nflow.set(\"wallState\", wallState);\n\nmsg.payload = `Loaded preset: ${selectedPreset}`;\nmsg.wallState = wallState;\nreturn msg;",
+        "func": "const wallId = flow.get(\"selectedWallId\") || \"\";\nconst selectedPreset = flow.get(\"selectedPreset\") || \"\";\n\nconst presets = flow.get(\"presets\") || {};\nconst wallPresets = presets[wallId] || {};\n\nif (!wallId || !selectedPreset || !wallPresets[selectedPreset]) {\n    msg.payload = \"No preset selected\";\n    return msg;\n}\n\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst preset = wallPresets[selectedPreset];\n\nfor (const presetDisplay of preset.displays || []) {\n    const display = wall.displays.find(d =>\n        Number(d.slot) === Number(presetDisplay.slot)\n    );\n\n    if (!display) continue;\n\n    display.layout = String(presetDisplay.layout || \"1\");\n\n    display.windows = Array.isArray(presetDisplay.windows)\n        ? presetDisplay.windows.map(v => String(v || \"-1\"))\n        : [\"-1\", \"-1\", \"-1\", \"-1\"];\n}\n\nflow.set(\"walls\", walls);\nconst firstDisplay = wall.displays?.[0];\nconst firstSlot = firstDisplay ? String(firstDisplay.slot) : \"\";\n\nflow.set(\"selectedSlot\", firstSlot);\n\nmsg.payload = firstSlot;\nmsg.wallId = wallId;\nmsg.wall = wall;\nmsg.preset = preset;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1464,10 +1436,10 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 980,
+        "y": 500,
         "wires": [
             [
-                "45e880a1702f75dd"
+                "8befe8d52eefedeb"
             ]
         ]
     },
@@ -1493,10 +1465,10 @@
         "id": "5702903ff351ccd1",
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
-        "group": "e4640d07a8b6787b",
+        "group": "bc5eef628c603338",
         "name": "Preset Save",
         "label": "Save Current",
-        "order": 4,
+        "order": 12,
         "width": "3",
         "height": "1",
         "emulateClick": false,
@@ -1550,7 +1522,7 @@
         "id": "5e122c01bf32a58c",
         "type": "inject",
         "z": "9b14d8fa4e4d8265",
-        "name": "Preset Load",
+        "name": "Preset Load 1",
         "props": [
             {
                 "p": "payload"
@@ -1562,7 +1534,7 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": true,
+        "once": false,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
@@ -1590,9 +1562,7 @@
         "x": 490,
         "y": 1220,
         "wires": [
-            [
-                "b249eaa9b9eea886"
-            ]
+            []
         ]
     },
     {
@@ -1600,7 +1570,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Save Preset",
-        "func": "const presetName = (flow.get(\"presetNameInput\") || \"\").trim();\nif (!presetName) {\n    msg.payload = \"Enter a preset name\";\n    return msg;\n}\n\nconst wallState = flow.get(\"wallState\") || {};\nconst presets = flow.get(\"presets\") || {};\n\n// deep copy current wall\npresets[presetName] = JSON.parse(JSON.stringify(wallState));\n\nflow.set(\"presets\", presets);\nflow.set(\"selectedPreset\", presetName);\n\nmsg.payload = `Saved preset: ${presetName}`;\nreturn msg;",
+        "func": "const presetName = (flow.get(\"presetNameInput\") || \"\").trim();\n\nif (!presetName) {\n    msg.payload = \"Enter a preset name\";\n    return msg;\n}\n\nconst walls = flow.get(\"walls\") || {};\nconst wallId = flow.get(\"selectedWallId\") || \"\";\nconst wall = walls[wallId];\n\nif (!wall) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst presets = flow.get(\"presets\") || {};\n\nif (!presets[wallId]) {\n    presets[wallId] = {};\n}\n\npresets[wallId][presetName] = {\n    wallName: wall.wallName,\n    displayCount: wall.displayCount,\n    displays: (wall.displays || []).map(d => ({\n        slot: d.slot,\n        layout: String(d.layout || \"1\"),\n        windows: Array.isArray(d.windows)\n            ? d.windows.map(v => String(v || \"-1\"))\n            : [\"-1\", \"-1\", \"-1\", \"-1\"]\n    }))\n};\n\nflow.set(\"presets\", presets);\nflow.set(\"selectedPreset\", presetName);\n\nmsg.payload = `Saved preset: ${presetName}`;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1611,7 +1581,8 @@
         "y": 1340,
         "wires": [
             [
-                "b249eaa9b9eea886"
+                "b249eaa9b9eea886",
+                "fcb7cb6cfa6ad1d9"
             ]
         ]
     },
@@ -1928,7 +1899,6 @@
             [
                 "28d0a5d5e5c90419",
                 "45e880a1702f75dd",
-                "d18d3b6e3c7561a3",
                 "87d634190085bb62"
             ],
             [
@@ -2430,23 +2400,6 @@
         ]
     },
     {
-        "id": "30f5ea10bb976dec",
-        "type": "debug",
-        "z": "9b14d8fa4e4d8265",
-        "name": "debug 1",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1000,
-        "y": 2460,
-        "wires": []
-    },
-    {
         "id": "1d25fb64d89a0b3f",
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
@@ -2525,22 +2478,6 @@
         ]
     },
     {
-        "id": "4cc70b9b83ccaf3b",
-        "type": "debug",
-        "z": "9b14d8fa4e4d8265",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 960,
-        "y": 2640,
-        "wires": []
-    },
-    {
         "id": "484223194205df7a",
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
@@ -2578,22 +2515,6 @@
                 "94e811c1402b49a0"
             ]
         ]
-    },
-    {
-        "id": "ad475d30f2160d65",
-        "type": "debug",
-        "z": "9b14d8fa4e4d8265",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 980,
-        "y": 2820,
-        "wires": []
     },
     {
         "id": "412892f1a9974505",
@@ -2659,11 +2580,12 @@
         "className": "",
         "typeIsComboBox": true,
         "msgTrigger": "onChange",
-        "x": 1020,
+        "x": 980,
         "y": 1340,
         "wires": [
             [
-                "92376c2d2bffa4cf"
+                "92376c2d2bffa4cf",
+                "64b7e0c9fd77b2d8"
             ]
         ]
     },
@@ -2679,32 +2601,18 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1280,
+        "x": 1260,
         "y": 1340,
         "wires": [
             [
                 "af77bad795fcf34c"
             ],
             [
-                "45e880a1702f75dd"
+                "b249eaa9b9eea886",
+                "61b0607a1a30c356",
+                "86abc84592d99e08"
             ]
         ]
-    },
-    {
-        "id": "f7d5e94a7428e54e",
-        "type": "debug",
-        "z": "9b14d8fa4e4d8265",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1320,
-        "y": 880,
-        "wires": []
     },
     {
         "id": "7d061da091ee2e07",
@@ -2813,45 +2721,6 @@
         ]
     },
     {
-        "id": "f1373d38b2235d6d",
-        "type": "ui-button",
-        "z": "9b14d8fa4e4d8265",
-        "group": "c74a3a80b0f9b946",
-        "name": "Export Wall Definitions",
-        "label": "Export Wall Definitions",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "emulateClick": false,
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "iconPosition": "left",
-        "payload": "",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "buttonColor": "",
-        "textColor": "",
-        "iconColor": "",
-        "enableClick": true,
-        "enablePointerdown": false,
-        "pointerdownPayload": "",
-        "pointerdownPayloadType": "str",
-        "enablePointerup": false,
-        "pointerupPayload": "",
-        "pointerupPayloadType": "str",
-        "x": 160,
-        "y": 2320,
-        "wires": [
-            [
-                "2d2ed029075c6eb5"
-            ]
-        ]
-    },
-    {
         "id": "0585fb9a5974d7c9",
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
@@ -2926,26 +2795,6 @@
         ]
     },
     {
-        "id": "2d2ed029075c6eb5",
-        "type": "function",
-        "z": "9b14d8fa4e4d8265",
-        "name": "Build Export JSON",
-        "func": "const exportData = {\n    version: 1,\n    exportedAt: new Date().toISOString(),\n    walls: flow.get(\"walls\") || {}\n};\n\nmsg.payload = {\n    download: true,\n    filename: \"monitor-wall-definitions.json\",\n    content: JSON.stringify(exportData, null, 2)\n};\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 390,
-        "y": 2320,
-        "wires": [
-            [
-                "b3e5f52731a3fb5d"
-            ]
-        ]
-    },
-    {
         "id": "fdb203d26c149245",
         "type": "function",
         "z": "9b14d8fa4e4d8265",
@@ -2964,7 +2813,6 @@
                 "45e880a1702f75dd"
             ],
             [
-                "a0f56a5f05291103",
                 "0273c7d0e4575429"
             ]
         ]
@@ -3001,9 +2849,7 @@
         "x": 590,
         "y": 2660,
         "wires": [
-            [
-                "4cc70b9b83ccaf3b"
-            ]
+            []
         ]
     },
     {
@@ -3014,9 +2860,7 @@
         "x": 590,
         "y": 2520,
         "wires": [
-            [
-                "30f5ea10bb976dec"
-            ]
+            []
         ]
     },
     {
@@ -3027,26 +2871,8 @@
         "x": 690,
         "y": 2860,
         "wires": [
-            [
-                "ad475d30f2160d65"
-            ]
+            []
         ]
-    },
-    {
-        "id": "d18d3b6e3c7561a3",
-        "type": "debug",
-        "z": "9b14d8fa4e4d8265",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 680,
-        "y": 1580,
-        "wires": []
     },
     {
         "id": "263685b55e6509d5",
@@ -3121,28 +2947,12 @@
         ]
     },
     {
-        "id": "a0f56a5f05291103",
-        "type": "debug",
-        "z": "9b14d8fa4e4d8265",
-        "name": "debug 9",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 680,
-        "y": 1020,
-        "wires": []
-    },
-    {
         "id": "0273c7d0e4575429",
         "type": "subflow:bb149e69a82c9cc5",
         "z": "9b14d8fa4e4d8265",
         "name": "",
         "x": 710,
-        "y": 960,
+        "y": 1140,
         "wires": [
             [
                 "5e3e561a59d57a97"
@@ -3168,8 +2978,7 @@
                 "af77bad795fcf34c"
             ],
             [
-                "a21dd1754bb0108c",
-                "7a074a5a6919ea95"
+                "a21dd1754bb0108c"
             ]
         ]
     },
@@ -3241,22 +3050,6 @@
         ]
     },
     {
-        "id": "7a074a5a6919ea95",
-        "type": "debug",
-        "z": "9b14d8fa4e4d8265",
-        "name": "debug 10",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1900,
-        "y": 880,
-        "wires": []
-    },
-    {
         "id": "5eb6a844ea77f344",
         "type": "delay",
         "z": "9b14d8fa4e4d8265",
@@ -3277,8 +3070,7 @@
         "y": 940,
         "wires": [
             [
-                "9b0328a877d58b50",
-                "f7d5e94a7428e54e"
+                "9b0328a877d58b50"
             ]
         ]
     },
@@ -3634,16 +3426,260 @@
                 "28d0a5d5e5c90419",
                 "87d634190085bb62"
             ],
+            []
+        ]
+    },
+    {
+        "id": "4a4a1b99ee540a6a",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "name": "Preset Delete",
+        "label": "Delete Preset",
+        "order": 14,
+        "width": "3",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 300,
+        "y": 1280,
+        "wires": [
             [
-                "a1aff4cc176c3689"
+                "0964ecfd05023141"
             ]
         ]
     },
     {
-        "id": "a1aff4cc176c3689",
+        "id": "0964ecfd05023141",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Delete Preset",
+        "func": "const wallId = flow.get(\"selectedWallId\") || \"\";\nconst selectedPreset = flow.get(\"selectedPreset\") || \"\";\nconst presets = flow.get(\"presets\") || {};\nconst wallPresets = presets[wallId] || {};\n\nif (!wallId || !selectedPreset || !wallPresets[selectedPreset]) {\n    return [\n        { payload: \"No preset selected\" },\n        null,\n        null\n    ];\n}\n\ndelete wallPresets[selectedPreset];\n\npresets[wallId] = wallPresets;\n\nflow.set(\"presets\", presets);\nflow.set(\"selectedPreset\", \"\");\nflow.set(\"presetNameInput\", \"\");\n\nreturn [\n    { payload: `Deleted preset: ${selectedPreset}` },\n    { payload: \"\" },\n    { payload: \"\" }\n];",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 1280,
+        "wires": [
+            [
+                "fcb7cb6cfa6ad1d9"
+            ],
+            [
+                "33aaffc3e9b5e074"
+            ],
+            [
+                "b249eaa9b9eea886"
+            ]
+        ]
+    },
+    {
+        "id": "e47002de7cae72ca",
+        "type": "ui-text",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "order": 8,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "label": "Presets",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": true,
+        "font": "Helvetica, sans-serif",
+        "fontSize": "20",
+        "color": "#000000",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 320,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "caf5281af3fe0e5b",
+        "type": "ui-template",
+        "z": "9b14d8fa4e4d8265",
+        "group": "c74a3a80b0f9b946",
+        "page": "",
+        "ui": "",
+        "name": "Export Wall Definition",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n    <div style=\"padding: 10px;\" class=\"d-flex justify-center\">\n        <!-- Styled Vuetify button -->\n        <v-btn \n            color=\"primary\" \n            prepend-icon=\"mdi-download\"\n            @click=\"requestAndDownload\"\n        >\n            Export Wall Definitions\n        </v-btn>\n    </div>\n</template>\n\n<script>\nexport default {\n    name: \"WallExporter\",\n    data() {\n        return {\n            // A strict gate tracker to confirm intentional human interaction\n            isExpectingDownload: false\n        }\n    },\n    watch: {\n        msg: {\n            handler(newMsg) {\n                // 1. Verify the data layout is what we want\n                if (newMsg?.topic !== \"wall-data-response\" || !newMsg?.payload) {\n                    return;\n                }\n\n                // 2. BLOCK if this is just a routine background page/tab reload message\n                if (!this.isExpectingDownload) {\n                    return;\n                }\n\n                // 3. Reset the intent tracker immediately to close the gate\n                this.isExpectingDownload = false;\n\n                // 4. Safe manual download execution\n                this.executeDownload(newMsg.payload);\n            },\n            deep: true\n        }\n    },\n    methods: {\n        requestAndDownload() {\n            // Open the gate only when the human clicks the button\n            this.isExpectingDownload = true;\n\n            // Fire the request payload up to the backend flow loop\n            this.send({\n                topic: \"get-wall-data\",\n                payload: true\n            });\n        },\n        executeDownload(wallsData) {\n            const exportData = {\n                version: 1,\n                exportedAt: new Date().toISOString(),\n                walls: wallsData || {}\n            };\n\n            const content = JSON.stringify(exportData, null, 2);\n            const blob = new Blob([content], { type: \"application/json\" });\n            const url = URL.createObjectURL(blob);\n            \n            const link = document.createElement(\"a\");\n            link.href = url;\n            link.download = \"monitor-wall-definitions.json\";\n            \n            document.body.appendChild(link);\n            link.click();\n            document.body.removeChild(link);\n            \n            URL.revokeObjectURL(url);\n        }\n    }\n}\n</script>\n",
+        "storeOutMessages": true,
+        "passthru": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 340,
+        "y": 2380,
+        "wires": [
+            [
+                "3157bca3487ee789"
+            ]
+        ]
+    },
+    {
+        "id": "3157bca3487ee789",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "function 1",
+        "func": "if (msg.topic === \"get-wall-data\") {\n    msg.topic = \"wall-data-response\";\n    msg.payload = flow.get(\"walls\") || {};\n    return msg;\n}\nreturn null; // Suppresses background replayed messages from firing\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 2380,
+        "wires": [
+            [
+                "caf5281af3fe0e5b"
+            ]
+        ]
+    },
+    {
+        "id": "fcb7cb6cfa6ad1d9",
+        "type": "ui-text",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "order": 13,
+        "width": "3",
+        "height": "1",
+        "name": "Preset Status Display",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "style": true,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 880,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "8befe8d52eefedeb",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Check Control Mode",
+        "func": "const mode = flow.get(\"controlMode\") || \"development\";\n\nif (mode === \"online\") {\n    return [null, msg];\n}\n\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 500,
+        "wires": [
+            [
+                "af77bad795fcf34c"
+            ],
+            [
+                "281056aba42c5b83"
+            ]
+        ]
+    },
+    {
+        "id": "281056aba42c5b83",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Preset Apply Queue",
+        "func": "const wall = msg.wall;\n\nif (!wall || !Array.isArray(wall.displays)) {\n    msg.payload = \"No wall displays to apply\";\n    return [null, msg];\n}\n\nmsg.payload = wall.displays\n    .filter(d => d.endpointId)\n    .map(d => ({\n        display: d,\n        endpointId: d.endpointId,\n        layout: d.layout,\n        windows: d.windows\n    }));\n\nreturn [msg, null];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1010,
+        "y": 540,
+        "wires": [
+            [
+                "154182d0953b8bfd"
+            ]
+        ]
+    },
+    {
+        "id": "154182d0953b8bfd",
+        "type": "split",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 1210,
+        "y": 540,
+        "wires": [
+            [
+                "ca8ed167ed86621b"
+            ]
+        ]
+    },
+    {
+        "id": "ca8ed167ed86621b",
+        "type": "subflow:bb149e69a82c9cc5",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "x": 1410,
+        "y": 540,
+        "wires": [
+            [
+                "f9c06660073027c3"
+            ]
+        ]
+    },
+    {
+        "id": "f9c06660073027c3",
+        "type": "subflow:ebf5ae94f113b0f9",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "x": 1610,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "64b7e0c9fd77b2d8",
         "type": "debug",
         "z": "9b14d8fa4e4d8265",
-        "name": "debug 11",
+        "name": "debug 1",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -3651,32 +3687,126 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 660,
-        "y": 2260,
+        "x": 1260,
+        "y": 1400,
         "wires": []
     },
     {
-        "id": "b3e5f52731a3fb5d",
-        "type": "ui-template",
+        "id": "61b0607a1a30c356",
+        "type": "debug",
         "z": "9b14d8fa4e4d8265",
-        "group": "",
-        "page": "",
-        "ui": "88c8fdd21ce1d881",
-        "name": "Download template",
-        "order": 0,
-        "width": 0,
-        "height": 0,
-        "head": "",
-        "format": "<template>\n    <div style=\"padding:10px;\">\n        <span style=\"font-size:0.9em;color:gray;\">\n            Ready to download wall definitions.\n        </span>\n    </div>\n</template>\n\n<script>\nexport default {\n    watch: {\n        msg: {\n            handler(newMsg) {\n\n                // Only download when explicitly requested\n                if (\n                    !newMsg?.payload?.download ||\n                    !newMsg?.payload?.content\n                ) {\n                    return;\n                }\n\n                this.executeDownload(\n                    newMsg.payload.content,\n                    newMsg.payload.filename || \"monitor-wall-definitions.json\"\n                );\n            },\n            deep: true,\n            immediate: false\n        }\n    },\n\n    methods: {\n\n        executeDownload(content, filename) {\n\n            // Create file blob\n            const blob = new Blob(\n                [content],\n                { type: \"application/json\" }\n            );\n\n            // Create temporary URL\n            const url = URL.createObjectURL(blob);\n\n            // Create hidden download link\n            const link = document.createElement(\"a\");\n            link.href = url;\n            link.download = filename;\n\n            document.body.appendChild(link);\n            link.click();\n            document.body.removeChild(link);\n\n            // Clean up\n            URL.revokeObjectURL(url);\n        }\n\n    }\n}\n</script>",
-        "storeOutMessages": true,
-        "passthru": true,
-        "resendOnRefresh": true,
-        "templateScope": "widget:ui",
-        "className": "",
-        "x": 690,
-        "y": 2320,
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1580,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "8acac7f0d90ef00c",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Wall Refresh Queue",
+        "func": "const walls = flow.get(\"walls\") || {};\nconst wallId = flow.get(\"selectedWallId\") || \"\";\nconst wall = walls[wallId];\n\nif (!wall || !Array.isArray(wall.displays)) {\n    msg.payload = \"No wall selected\";\n    return [null, msg];\n}\n\nconst jobs = wall.displays\n    .filter(d => d.endpointId)\n    .map(d => ({\n        wallId,\n        slot: d.slot,\n        endpointId: d.endpointId,\n        display: d\n    }));\n\nif (jobs.length === 0) {\n    msg.payload = \"Selected wall has no assigned endpoints\";\n    return [null, msg];\n}\n\nmsg.payload = jobs;\n\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1810,
+        "y": 1360,
         "wires": [
-            []
+            [
+                "1fec4b736c7965d5"
+            ],
+            [
+                "61ed209cebb12e0d"
+            ]
+        ]
+    },
+    {
+        "id": "1fec4b736c7965d5",
+        "type": "split",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 2050,
+        "y": 1360,
+        "wires": [
+            [
+                "cb46844476e8b0c9"
+            ]
+        ]
+    },
+    {
+        "id": "61ed209cebb12e0d",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2080,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "cb46844476e8b0c9",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Prepare Refresh Job",
+        "func": "const job = msg.payload;\n\nmsg.wallId = job.wallId;\nmsg.slot = job.slot;\nmsg.endpointId = job.endpointId;\nmsg.display = job.display;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2280,
+        "y": 1360,
+        "wires": [
+            [
+                "6f1b2ec378e79713"
+            ]
+        ]
+    },
+    {
+        "id": "86abc84592d99e08",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Check Control Mode",
+        "func": "const mode = flow.get(\"controlMode\") || \"development\";\n\nif (mode === \"online\") {\n    return [null, msg];\n}\n\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1560,
+        "y": 1340,
+        "wires": [
+            [
+                "45e880a1702f75dd"
+            ],
+            [
+                "8acac7f0d90ef00c"
+            ]
         ]
     }
 ]
