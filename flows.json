@@ -542,7 +542,8 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
         "x": 540,
@@ -1220,7 +1221,8 @@
         "y": 860,
         "wires": [
             [
-                "fdb203d26c149245"
+                "fdb203d26c149245",
+                "c979db273e03ade6"
             ]
         ]
     },
@@ -1435,11 +1437,13 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
+        "x": 490,
         "y": 500,
         "wires": [
             [
-                "8befe8d52eefedeb"
+                "8befe8d52eefedeb",
+                "45e880a1702f75dd",
+                "af77bad795fcf34c"
             ]
         ]
     },
@@ -1653,7 +1657,7 @@
         "method": "GET",
         "ret": "txt",
         "paytoqs": "ignore",
-        "url": "https://foxmatv.com/Endpoints 2026_05_10.csv",
+        "url": "https://foxmatv.com/Endpoints.csv",
         "tls": "",
         "persist": false,
         "proxy": "",
@@ -2584,8 +2588,7 @@
         "y": 1340,
         "wires": [
             [
-                "92376c2d2bffa4cf",
-                "64b7e0c9fd77b2d8"
+                "92376c2d2bffa4cf"
             ]
         ]
     },
@@ -2609,7 +2612,6 @@
             ],
             [
                 "b249eaa9b9eea886",
-                "61b0607a1a30c356",
                 "86abc84592d99e08"
             ]
         ]
@@ -3045,7 +3047,8 @@
         "y": 840,
         "wires": [
             [
-                "af77bad795fcf34c"
+                "af77bad795fcf34c",
+                "6234c090a2409727"
             ]
         ]
     },
@@ -3600,8 +3603,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 700,
-        "y": 500,
+        "x": 740,
+        "y": 460,
         "wires": [
             [
                 "af77bad795fcf34c"
@@ -3616,7 +3619,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Build Preset Apply Queue",
-        "func": "const wall = msg.wall;\n\nif (!wall || !Array.isArray(wall.displays)) {\n    msg.payload = \"No wall displays to apply\";\n    return [null, msg];\n}\n\nmsg.payload = wall.displays\n    .filter(d => d.endpointId)\n    .map(d => ({\n        display: d,\n        endpointId: d.endpointId,\n        layout: d.layout,\n        windows: d.windows\n    }));\n\nreturn [msg, null];",
+        "func": "const wall = msg.wall;\n\nif (!wall || !Array.isArray(wall.displays)) {\n    msg.payload = \"No wall displays to apply\";\n    return [null, msg];\n}\n\nmsg.payload = wall.displays\n    .filter(d => d.endpointId)\n    .map(d => ({\n        slot: d.slot,\n        display: d,\n        endpointId: d.endpointId,\n        layout: d.layout,\n        windows: d.windows\n    }));\n\nreturn [msg, null];",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3647,7 +3650,7 @@
         "y": 540,
         "wires": [
             [
-                "ca8ed167ed86621b"
+                "65afb0b80ef25288"
             ]
         ]
     },
@@ -3674,38 +3677,6 @@
         "wires": [
             []
         ]
-    },
-    {
-        "id": "64b7e0c9fd77b2d8",
-        "type": "debug",
-        "z": "9b14d8fa4e4d8265",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1260,
-        "y": 1400,
-        "wires": []
-    },
-    {
-        "id": "61b0607a1a30c356",
-        "type": "debug",
-        "z": "9b14d8fa4e4d8265",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1580,
-        "y": 1400,
-        "wires": []
     },
     {
         "id": "8acac7f0d90ef00c",
@@ -3808,5 +3779,58 @@
                 "8acac7f0d90ef00c"
             ]
         ]
+    },
+    {
+        "id": "c979db273e03ade6",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "65afb0b80ef25288",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Prepare Preset apply Job",
+        "func": "const job = msg.payload || {};\n\nmsg.display = job.display || {};\nmsg.endpointId = job.endpointId || msg.display.endpointId;\nmsg.layout = String(job.layout || msg.display.layout || \"1\");\nmsg.windows = Array.isArray(job.windows)\n    ? job.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nmsg.slot = msg.display.slot || job.slot || \"\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1430,
+        "y": 620,
+        "wires": [
+            [
+                "ca8ed167ed86621b"
+            ]
+        ]
+    },
+    {
+        "id": "6234c090a2409727",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3000,
+        "y": 920,
+        "wires": []
     }
 ]
