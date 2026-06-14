@@ -861,7 +861,7 @@
         "finalize": "",
         "libs": [],
         "x": 2130,
-        "y": 480,
+        "y": 460,
         "wires": [
             [
                 "87ef541174c4ed8d"
@@ -1327,7 +1327,8 @@
         "y": 1220,
         "wires": [
             [
-                "56108c34c3e82e43"
+                "56108c34c3e82e43",
+                "289c8f1899b61a86"
             ]
         ]
     },
@@ -1602,7 +1603,8 @@
         "y": 1480,
         "wires": [
             [
-                "71cb3505808773ec"
+                "71cb3505808773ec",
+                "c32785ae8a2ce542"
             ]
         ]
     },
@@ -1653,7 +1655,7 @@
         "method": "GET",
         "ret": "txt",
         "paytoqs": "ignore",
-        "url": "https://foxmatv.com/Endpoints 2026_05_10.csv",
+        "url": "https://foxmatv.com/Endpoints.csv",
         "tls": "",
         "persist": false,
         "proxy": "",
@@ -1898,8 +1900,8 @@
         "wires": [
             [
                 "28d0a5d5e5c90419",
-                "45e880a1702f75dd",
-                "87d634190085bb62"
+                "87d634190085bb62",
+                "45e880a1702f75dd"
             ],
             [
                 "adbc1d08bc749f31"
@@ -2110,7 +2112,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 150,
+        "x": 130,
         "y": 3280,
         "wires": [
             [
@@ -2647,7 +2649,7 @@
         "className": "",
         "typeIsComboBox": true,
         "msgTrigger": "onChange",
-        "x": 150,
+        "x": 130,
         "y": 3080,
         "wires": [
             [
@@ -2938,7 +2940,7 @@
         "type": "subflow:ebf5ae94f113b0f9",
         "z": "9b14d8fa4e4d8265",
         "name": "",
-        "x": 930,
+        "x": 950,
         "y": 940,
         "wires": [
             [
@@ -2975,7 +2977,8 @@
         "y": 820,
         "wires": [
             [
-                "af77bad795fcf34c"
+                "af77bad795fcf34c",
+                "5c57094b3885ae64"
             ],
             [
                 "a21dd1754bb0108c"
@@ -3424,7 +3427,8 @@
         "wires": [
             [
                 "28d0a5d5e5c90419",
-                "87d634190085bb62"
+                "87d634190085bb62",
+                "e91b54f9d9f51610"
             ],
             []
         ]
@@ -3808,5 +3812,99 @@
                 "8acac7f0d90ef00c"
             ]
         ]
+    },
+    {
+        "id": "b2c4049d56b4b624",
+        "type": "ui-template",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "page": "",
+        "ui": "",
+        "name": "Preset-template",
+        "order": 15,
+        "width": "0",
+        "height": "0",
+        "head": "",
+        "format": "<template>\n  <div class=\"wall-grid\">\n\n    <div\n      v-for=\"display in msg.payload.displays\"\n      :key=\"display.slot\"\n      class=\"display-card\"\n      :class=\"{ selected: String(display.slot) === String(msg.payload.selectedSlot) }\"\n      @click=\"selectDisplay(display.slot)\"\n    >\n\n      <div class=\"display-header\">\n        <div class=\"display-title\">\n          {{ msg.payload.wallName }} - Display {{ display.slot }}\n        </div>\n\n        <div class=\"display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n\n      <div\n        class=\"display-screen\"\n        :class=\"screenClass(display.layout)\"\n      >\n\n        <div\n          v-if=\"showWindow(display.layout, 1)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[0]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 2)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[1]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 3)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[2]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 4)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[3]) }}\n        </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  methods: {\n\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot)\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n\n      const l = String(layout);\n\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    },\n\n    channelLabel(value) {\n\n      const v = String(value);\n\n      if (\n        v === \"-1\" ||\n        v === \"\" ||\n        v === \"undefined\"\n      ) {\n        return \"Empty\";\n      }\n\n      return this.msg.payload.channelLabelMap?.[v] || v;\n    }\n  }\n}\n</script>\n\n<style>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));\n  gap: 16px;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: 0.15s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 10px;\n}\n\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.window {\n  background: #1f2937;\n  color: white;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n}\n</style>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1440,
+        "y": 1500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "289c8f1899b61a86",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Preset Preview",
+        "func": "const wallId = flow.get(\"selectedWallId\") || \"\";\nconst presetName = flow.get(\"selectedPreset\") || \"\";\n\nconst presets = flow.get(\"presets\") || {};\nconst preset = presets[wallId]?.[presetName];\n\nconst channelLabelMap = flow.get(\"channelLabelMap\") || {};\n\nif (!preset) {\n    msg.payload = {\n        wallName: \"No preset selected\",\n        displays: [],\n        selectedSlot: \"\",\n        channelLabelMap\n    };\n    return msg;\n}\n\nmsg.payload = {\n    wallName: `Preset: ${presetName}`,\n    displays: preset.displays || [],\n    selectedSlot: \"\",\n    channelLabelMap\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1200,
+        "y": 1500,
+        "wires": [
+            [
+                "b2c4049d56b4b624"
+            ]
+        ]
+    },
+    {
+        "id": "e91b54f9d9f51610",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 2280,
+        "wires": []
+    },
+    {
+        "id": "5c57094b3885ae64",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1960,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "c32785ae8a2ce542",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 980,
+        "y": 1460,
+        "wires": []
     }
 ]
