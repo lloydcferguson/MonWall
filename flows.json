@@ -650,7 +650,7 @@
         "className": "",
         "value": "payload",
         "valueType": "msg",
-        "x": 2630,
+        "x": 3110,
         "y": 220,
         "wires": []
     },
@@ -854,7 +854,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Load Display State",
-        "func": "const slot = Number(msg.payload);\n\nconst walls = flow.get(\"walls\") || {};\nconst wallId = flow.get(\"selectedWallId\") || \"\";\nconst wall = walls[wallId];\n\nif (!wall || !slot) {\n    msg.payload = \"No wall/display selected\";\n    return [msg, null, null, null, null, null, null];\n}\n\nconst display = wall.displays.find(d => Number(d.slot) === slot);\n\nif (!display) {\n    msg.payload = `Slot ${slot} not found`;\n    return [msg, null, null, null, null, null, null];\n}\n\nconst layout = String(display.layout || \"1\");\nconst windows = display.windows || [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nflow.set(\"selectedSlot\", slot);\nflow.set(\"editLayout\", layout);\nflow.set(\"editWindow1\", String(windows[0] || \"-1\"));\nflow.set(\"editWindow2\", String(windows[1] || \"-1\"));\nflow.set(\"editWindow3\", String(windows[2] || \"-1\"));\nflow.set(\"editWindow4\", String(windows[3] || \"-1\"));\n\nreturn [\n    { payload: `Editing ${wall.wallName} - Display ${slot}` },\n    { payload: layout },\n    { payload: String(windows[0] || \"-1\") },\n    { payload: String(windows[1] || \"-1\") },\n    { payload: String(windows[2] || \"-1\") },\n    { payload: String(windows[3] || \"-1\") },\n    { payload: \"refresh\" }\n];",
+        "func": "const slot = Number(msg.payload);\n\nconst walls = flow.get(\"walls\") || {};\nconst wallId = flow.get(\"selectedWallId\") || \"\";\nconst wall = walls[wallId];\n\nif (!wall || !slot) {\n    msg.payload = \"No wall/display selected\";\n    return [msg, null, null, null, null, null, null];\n}\n\nconst display = wall.displays.find(d => Number(d.slot) === slot);\n\nif (!display) {\n    msg.payload = `Slot ${slot} not found`;\n    return [msg, null, null, null, null, null, null];\n}\n\nconst layout = String(display.layout || \"1\");\nconst activeCount = Math.max(1, Math.min(4, Number(layout)));\n\nlet windows = Array.isArray(display.windows)\n    ? display.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nwhile (windows.length < 4) {\n    windows.push(\"-1\");\n}\n\nfor (let i = activeCount; i < 4; i++) {\n    windows[i] = \"-1\";\n}\n\ndisplay.windows = windows;\n\nflow.set(\"selectedSlot\", slot);\nflow.set(\"editLayout\", layout);\nflow.set(\"editWindow1\", String(windows[0] || \"-1\"));\nflow.set(\"editWindow2\", String(windows[1] || \"-1\"));\nflow.set(\"editWindow3\", String(windows[2] || \"-1\"));\nflow.set(\"editWindow4\", String(windows[3] || \"-1\"));\n\nreturn [\n    { payload: `Editing ${wall.wallName} - Display ${slot}` },\n    { payload: layout },\n    { payload: String(windows[0] || \"-1\") },\n    { payload: String(windows[1] || \"-1\") },\n    { payload: String(windows[2] || \"-1\") },\n    { payload: String(windows[3] || \"-1\") },\n    { payload: \"refresh\" }\n];",
         "outputs": 7,
         "timeout": 0,
         "noerr": 0,
@@ -1081,17 +1081,32 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Store Edit Layout",
-        "func": "flow.set(\"editLayout\", msg.payload);\nreturn null;",
-        "outputs": 1,
+        "func": "const layout = String(msg.payload || \"1\");\nconst activeCount = Math.max(1, Math.min(4, Number(layout)));\n\nflow.set(\"editLayout\", layout);\n\n// Set inactive windows to -1 in flow context\nfor (let i = activeCount + 1; i <= 4; i++) {\n    flow.set(`editWindow${i}`, \"-1\");\n}\n\n// Outputs:\n// 1 = Window 1 dropdown update\n// 2 = Window 2 dropdown update\n// 3 = Window 3 dropdown update\n// 4 = Window 4 dropdown update\n// 5 = optional debug/status\n\nconst outputs = [];\n\nfor (let i = 1; i <= 4; i++) {\n    const active = i <= activeCount;\n\n    outputs.push({\n        payload: active ? flow.get(`editWindow${i}`) || \"-1\" : \"-1\",\n        ui_update: {\n            enabled: active\n        }\n    });\n}\n\noutputs.push({\n    payload: `Layout changed to ${layout}`\n});\n\nreturn outputs;",
+        "outputs": 5,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2790,
-        "y": 280,
+        "x": 2210,
+        "y": 100,
         "wires": [
-            []
+            [
+                "bb9c4cda462b307f"
+            ],
+            [
+                "385ce5013bf1d3f9",
+                "57b71bc3690711d6"
+            ],
+            [
+                "5de081ef1fccc736"
+            ],
+            [
+                "7e8d7c035ef9eda1"
+            ],
+            [
+                "87ef541174c4ed8d"
+            ]
         ]
     },
     {
@@ -1106,7 +1121,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2800,
+        "x": 3080,
         "y": 340,
         "wires": [
             []
@@ -1124,7 +1139,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2800,
+        "x": 3080,
         "y": 380,
         "wires": [
             []
@@ -1142,7 +1157,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2800,
+        "x": 3080,
         "y": 420,
         "wires": [
             []
@@ -1160,7 +1175,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2800,
+        "x": 3080,
         "y": 460,
         "wires": [
             []
@@ -3027,7 +3042,7 @@
         "y": 840,
         "wires": [
             [
-                "b4d4baefe46fb8e5"
+                "4e7ef8438a5ae2ed"
             ]
         ]
     },
@@ -3043,7 +3058,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2730,
+        "x": 3030,
         "y": 840,
         "wires": [
             [
@@ -3082,7 +3097,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Build Refresh Endpoint Input",
-        "func": "const display = msg.display || {};\n\nconst endpointId =\n    msg.endpointId ||\n    display.endpointId;\n\nif (!endpointId) {\n    msg.payload = \"No endpointId for refresh\";\n    return [null, msg];\n}\n\nmsg.endpointId = endpointId;\n\nreturn [msg, null];",
+        "func": "const display = msg.display || {};\n\nconst endpointId =\n    msg.endpointId ||\n    display.endpointId;\n\nif (!endpointId) {\n    msg.payload = \"No endpointId for refresh\";\n    return null;\n}\n\nmsg.endpointId = endpointId;\n\nmsg.expected = {\n    layout: String(msg.layout || display.layout || \"1\"),\n    windows: Array.isArray(msg.windows)\n        ? msg.windows.map(v => String(v || \"-1\"))\n        : Array.isArray(display.windows)\n            ? display.windows.map(v => String(v || \"-1\"))\n            : [\"-1\", \"-1\", \"-1\", \"-1\"]\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3307,7 +3322,7 @@
         "height": 0,
         "topic": "topic",
         "topicType": "msg",
-        "mode": "text",
+        "mode": "password",
         "tooltip": "",
         "delay": 300,
         "passthru": true,
@@ -3829,8 +3844,104 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3000,
+        "x": 3220,
         "y": 920,
         "wires": []
+    },
+    {
+        "id": "ee27e27240dab5df",
+        "type": "delay",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2980,
+        "y": 960,
+        "wires": [
+            [
+                "6f1b2ec378e79713"
+            ]
+        ]
+    },
+    {
+        "id": "4e7ef8438a5ae2ed",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Check EP Matches Expected",
+        "func": "const actual = msg.payload || {};\nconst expected = msg.expected || msg.display || {};\n\nconst expectedLayout = String(expected.layout || \"1\");\nconst expectedWindows = Array.isArray(expected.windows)\n    ? expected.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nconst actualLayout = String(actual.layout || \"1\");\nconst actualWindows = Array.isArray(actual.windows)\n    ? actual.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nconst matches =\n    expectedLayout === actualLayout &&\n    expectedWindows.join(\",\") === actualWindows.join(\",\");\n\nmsg.retryCount = Number(msg.retryCount || 0);\n\nif (matches) {\n    msg.payload = actual;\n    return [msg, null];\n}\n\nif (msg.retryCount >= 5) {\n    node.warn({\n        message: \"Endpoint did not reach expected state\",\n        endpointId: msg.endpointId,\n        slot: msg.slot,\n        expectedLayout,\n        expectedWindows,\n        actualLayout,\n        actualWindows\n    });\n\n    msg.payload = actual;\n    return [msg, null];\n}\n\nmsg.retryCount += 1;\nreturn [null, msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2780,
+        "y": 1040,
+        "wires": [
+            [
+                "b4d4baefe46fb8e5"
+            ],
+            [
+                "ee27e27240dab5df"
+            ]
+        ]
+    },
+    {
+        "id": "57b71bc3690711d6",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3100,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "834d2a275a9f0265",
+        "type": "ui-text-input",
+        "z": "9b14d8fa4e4d8265",
+        "group": "",
+        "name": "",
+        "label": "text",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "topic": "topic",
+        "topicType": "msg",
+        "mode": "password",
+        "tooltip": "",
+        "delay": 300,
+        "passthru": true,
+        "sendOnDelay": false,
+        "sendOnBlur": true,
+        "sendOnEnter": true,
+        "className": "",
+        "clearable": false,
+        "sendOnClear": false,
+        "icon": "",
+        "iconPosition": "left",
+        "iconInnerPosition": "inside",
+        "x": 2630,
+        "y": 1160,
+        "wires": [
+            []
+        ]
     }
 ]
