@@ -8,6 +8,14 @@
         "env": []
     },
     {
+        "id": "78700831329855d4",
+        "type": "tab",
+        "label": "Mock EZTV Server",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "b61f7864f98644eb",
         "type": "subflow",
         "name": "EZTV Get Endpoint",
@@ -1653,7 +1661,7 @@
         "method": "GET",
         "ret": "txt",
         "paytoqs": "ignore",
-        "url": "https://foxmatv.com/Endpoints 2026_05_10.csv",
+        "url": "https://foxmatv.com/Endpoints.csv",
         "tls": "",
         "persist": false,
         "proxy": "",
@@ -1799,7 +1807,7 @@
         "topic": "topic",
         "topicType": "msg",
         "min": "1",
-        "max": "15",
+        "max": "20",
         "step": 1,
         "tooltip": "",
         "delay": 300,
@@ -3025,7 +3033,7 @@
         "y": 840,
         "wires": [
             [
-                "b4d4baefe46fb8e5"
+                "f2c36117745a964b"
             ]
         ]
     },
@@ -3041,7 +3049,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2730,
+        "x": 3010,
         "y": 840,
         "wires": [
             [
@@ -3079,7 +3087,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Build Refresh Endpoint Input",
-        "func": "const display = msg.display || {};\n\nconst endpointId =\n    msg.endpointId ||\n    display.endpointId;\n\nif (!endpointId) {\n    msg.payload = \"No endpointId for refresh\";\n    return [null, msg];\n}\n\nmsg.endpointId = endpointId;\n\nreturn [msg, null];",
+        "func": "const display = msg.display || {};\n\nconst endpointId =\n    msg.endpointId ||\n    display.endpointId;\n\nif (!endpointId) {\n    msg.payload = \"No endpointId for refresh\";\n    return null;\n}\n\nmsg.endpointId = endpointId;\n\nmsg.expected = {\n    layout: String(msg.layout || display.layout || \"1\"),\n    windows: Array.isArray(msg.windows)\n        ? msg.windows.map(v => String(v || \"-1\"))\n        : Array.isArray(display.windows)\n            ? display.windows.map(v => String(v || \"-1\"))\n            : [\"-1\", \"-1\", \"-1\", \"-1\"]\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3806,6 +3814,201 @@
             ],
             [
                 "8acac7f0d90ef00c"
+            ]
+        ]
+    },
+    {
+        "id": "f2c36117745a964b",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Check EP Matches Expected",
+        "func": "const actual = msg.payload || {};\nconst expected = msg.expected || msg.display || {};\n\nconst expectedLayout = String(expected.layout || \"1\");\nconst expectedWindows = Array.isArray(expected.windows)\n    ? expected.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nconst actualLayout = String(actual.layout || \"1\");\nconst actualWindows = Array.isArray(actual.windows)\n    ? actual.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nconst matches =\n    expectedLayout === actualLayout &&\n    expectedWindows.join(\",\") === actualWindows.join(\",\");\n\nmsg.retryCount = Number(msg.retryCount || 0);\n\nif (matches) {\n    msg.payload = actual;\n    return [msg, null];\n}\n\nif (msg.retryCount >= 5) {\n    node.warn({\n        message: \"Endpoint did not reach expected state\",\n        endpointId: msg.endpointId,\n        slot: msg.slot,\n        expectedLayout,\n        expectedWindows,\n        actualLayout,\n        actualWindows\n    });\n\n    msg.payload = actual;\n    return [msg, null];\n}\n\nmsg.retryCount += 1;\nreturn [null, msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2720,
+        "y": 840,
+        "wires": [
+            [
+                "b4d4baefe46fb8e5"
+            ],
+            [
+                "7de140c4e5c634d6"
+            ]
+        ]
+    },
+    {
+        "id": "7de140c4e5c634d6",
+        "type": "delay",
+        "z": "9b14d8fa4e4d8265",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2940,
+        "y": 920,
+        "wires": [
+            [
+                "6f1b2ec378e79713"
+            ]
+        ]
+    },
+    {
+        "id": "50345a669cecee5b",
+        "type": "http in",
+        "z": "78700831329855d4",
+        "name": "Login endpoint",
+        "url": "/mock-eztv/eztv/api/login/",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 240,
+        "y": 140,
+        "wires": [
+            [
+                "01fcaaab590e3ded"
+            ]
+        ]
+    },
+    {
+        "id": "7eca4d93c3a2a8a4",
+        "type": "http in",
+        "z": "78700831329855d4",
+        "name": "Apply Layout endpoint",
+        "url": "msg.statusCode = 200; msg.headers = {     \"Content-Type\": \"application/json\" };  msg.payload = {     tokenFixedLength: \"SIMULATED_EZTV_TOKEN\",     token: \"SIMULATED_EZTV_TOKEN\" };  return msg;",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 260,
+        "y": 180,
+        "wires": [
+            [
+                "d138915bc87cd6f5"
+            ]
+        ]
+    },
+    {
+        "id": "ccae5299a86b0140",
+        "type": "http in",
+        "z": "78700831329855d4",
+        "name": "Get Endpoint Status endpoint",
+        "url": "/mock-eztv/eztv/api/endpoints/:id",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 280,
+        "y": 220,
+        "wires": [
+            [
+                "4f56f7c705aac0c7"
+            ]
+        ]
+    },
+    {
+        "id": "01fcaaab590e3ded",
+        "type": "function",
+        "z": "78700831329855d4",
+        "name": "function 2",
+        "func": "msg.statusCode = 200;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nmsg.payload = {\n    tokenFixedLength: \"SIMULATED_EZTV_TOKEN\",\n    token: \"SIMULATED_EZTV_TOKEN\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 140,
+        "wires": [
+            [
+                "0e8bd0d85cd93f7b"
+            ]
+        ]
+    },
+    {
+        "id": "0e8bd0d85cd93f7b",
+        "type": "http response",
+        "z": "78700831329855d4",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 670,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "d138915bc87cd6f5",
+        "type": "function",
+        "z": "78700831329855d4",
+        "name": "function 3",
+        "func": "let body = msg.payload;\n\nif (typeof body === \"string\") {\n    body = JSON.parse(body);\n}\n\nconst target = body.actionTargets?.[0] || {};\nconst endpointId = target.id;\n\nconst params = body.actionParameters || [];\n\nfunction getParam(name, fallback = \"\") {\n    const p = params.find(x => x.name === name);\n    return p ? String(p.value) : fallback;\n}\n\nconst layout = getParam(\"Slots\", \"1\");\n\nconst windows = [\n    getParam(\"Channel1_ID\", \"-1\"),\n    getParam(\"Channel2_ID\", \"-1\"),\n    getParam(\"Channel3_ID\", \"-1\"),\n    getParam(\"Channel4_ID\", \"-1\")\n];\n\nlet simEndpoints = flow.get(\"simEndpoints\") || {};\n\nsimEndpoints[endpointId] = {\n    id: endpointId,\n    name: `Sim Endpoint ${endpointId}`,\n    description: `Simulated ${endpointId}`,\n    layout,\n    windows,\n    updatedAt: new Date().toISOString()\n};\n\nflow.set(\"simEndpoints\", simEndpoints);\n\nmsg.statusCode = 200;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nmsg.payload = {\n    activityId: `SIM-${Date.now()}`,\n    state: \"Completed\",\n    endpointId,\n    layout,\n    windows\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 180,
+        "wires": [
+            [
+                "4da818521ef5f6f1"
+            ]
+        ]
+    },
+    {
+        "id": "4da818521ef5f6f1",
+        "type": "http response",
+        "z": "78700831329855d4",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 670,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "2fb9d26357af8842",
+        "type": "http response",
+        "z": "78700831329855d4",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 670,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "4f56f7c705aac0c7",
+        "type": "function",
+        "z": "78700831329855d4",
+        "name": "function 4",
+        "func": "const endpointId = msg.req.params.id;\n\nlet simEndpoints = flow.get(\"simEndpoints\") || {};\n\nif (!simEndpoints[endpointId]) {\n    simEndpoints[endpointId] = {\n        id: endpointId,\n        name: `Sim Endpoint ${endpointId}`,\n        description: `Simulated ${endpointId}`,\n        layout: \"1\",\n        windows: [\"-1\", \"-1\", \"-1\", \"-1\"],\n        updatedAt: new Date().toISOString()\n    };\n    flow.set(\"simEndpoints\", simEndpoints);\n}\n\nconst ep = simEndpoints[endpointId];\n\nconst layoutCount = Number(ep.layout || 1);\n\nmsg.statusCode = 200;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nmsg.payload = {\n    id: ep.id,\n    name: ep.name,\n    description: ep.description,\n    multiViewChannels: ep.windows\n        .slice(0, layoutCount)\n        .filter(v => String(v) !== \"-1\")\n        .map(v => ({\n            number: Number(v)\n        })),\n    simulatedState: ep\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 220,
+        "wires": [
+            [
+                "2fb9d26357af8842"
             ]
         ]
     }
