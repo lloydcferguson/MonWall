@@ -124,10 +124,11 @@
         "acceptsClientConfig": [
             "ui-notification",
             "ui-control",
-            "ui-dropdown",
-            "ui-text",
             "ui-text-input",
-            "ui-template"
+            "ui-template",
+            "ui-number-input",
+            "ui-text",
+            "ui-dropdown"
         ],
         "showPathInSidebar": false,
         "headerContent": "page",
@@ -210,7 +211,7 @@
     {
         "id": "bc5eef628c603338",
         "type": "ui-group",
-        "name": "Edit Display",
+        "name": "Select Sources",
         "page": "2998d7d0a5101c7c",
         "width": "6",
         "height": "1",
@@ -260,7 +261,7 @@
     {
         "id": "9c62e76fc2e63680",
         "type": "ui-group",
-        "name": "Monitor Select",
+        "name": "Assign Endpoints",
         "page": "4091bce8e5b7d2b9",
         "width": 6,
         "height": 1,
@@ -654,8 +655,8 @@
         "className": "",
         "value": "payload",
         "valueType": "msg",
-        "x": 3110,
-        "y": 220,
+        "x": 2630,
+        "y": 500,
         "wires": []
     },
     {
@@ -669,7 +670,7 @@
         "order": 2,
         "width": "3",
         "height": "1",
-        "passthru": false,
+        "passthru": true,
         "multiple": false,
         "chips": false,
         "clearable": false,
@@ -702,7 +703,7 @@
         "typeIsComboBox": true,
         "msgTrigger": "onChange",
         "x": 2590,
-        "y": 280,
+        "y": 300,
         "wires": [
             [
                 "a744b9a456dfe144"
@@ -858,7 +859,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Load Display State",
-        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst slot = Number(msg.payload);\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst wallId = session.selectedWallId || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall || !slot) {\n    msg.payload = \"No wall/display selected\";\n    return [msg, null, null, null, null, null, null];\n}\n\nconst display = wall.displays.find(d => Number(d.slot) === slot);\n\nif (!display) {\n    msg.payload = `Slot ${slot} not found`;\n    return [msg, null, null, null, null, null, null];\n}\n\nconst layout = String(display.layout || \"1\");\nconst activeCount = Math.max(1, Math.min(4, Number(layout)));\n\nlet windows = Array.isArray(display.windows)\n    ? display.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nwhile (windows.length < 4) {\n    windows.push(\"-1\");\n}\n\nfor (let i = activeCount; i < 4; i++) {\n    windows[i] = \"-1\";\n}\n\ndisplay.windows = windows;\nflow.set(\"walls\", walls);\n\nsession.selectedSlot = slot;\nsession.editLayout = layout;\nsession.editWindow1 = String(windows[0] || \"-1\");\nsession.editWindow2 = String(windows[1] || \"-1\");\nsession.editWindow3 = String(windows[2] || \"-1\");\nsession.editWindow4 = String(windows[3] || \"-1\");\n\nsaveSession(clientId, sessions, session);\n\nreturn [\n    { payload: `Editing ${wall.wallName} - Display ${slot}`, _client: msg._client },\n    { payload: layout, _client: msg._client },\n    { payload: String(windows[0] || \"-1\"), _client: msg._client },\n    { payload: String(windows[1] || \"-1\"), _client: msg._client },\n    { payload: String(windows[2] || \"-1\"), _client: msg._client },\n    { payload: String(windows[3] || \"-1\"), _client: msg._client },\n    { payload: \"refresh\", _client: msg._client }\n];",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst slot = Number(msg.payload);\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst wallId = session.selectedWallId || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall || !slot) {\n    msg.payload = \"No wall/display selected\";\n    return [msg, null, null, null, null, null, null];\n}\n\nconst display = wall.displays.find(d => Number(d.slot) === slot);\n\nif (!display) {\n    msg.payload = `Slot ${slot} not found`;\n    return [msg, null, null, null, null, null, null];\n}\n\nconst layout = String(display.layout || \"1\");\nconst activeCount = Math.max(1, Math.min(4, Number(layout)));\n\nlet windows = Array.isArray(display.windows)\n    ? display.windows.map(v => String(v || \"-1\"))\n    : [\"-1\", \"-1\", \"-1\", \"-1\"];\n\nwhile (windows.length < 4) {\n    windows.push(\"-1\");\n}\n\nfor (let i = activeCount; i < 4; i++) {\n    windows[i] = \"-1\";\n}\n\ndisplay.windows = windows;\nflow.set(\"walls\", walls);\n\nsession.selectedSlot = slot;\nsession.editLayout = layout;\nsession.editWindow1 = String(windows[0] || \"-1\");\nsession.editWindow2 = String(windows[1] || \"-1\");\nsession.editWindow3 = String(windows[2] || \"-1\");\nsession.editWindow4 = String(windows[3] || \"-1\");\n\nsaveSession(clientId, sessions, session);\n\nreturn [\n    { payload: `Editing ${wall.wallName} - ${display.label} (Slot ${slot})`, _client: msg._client },\n    { payload: layout, _client: msg._client },\n    { payload: String(windows[0] || \"-1\"), _client: msg._client },\n    { payload: String(windows[1] || \"-1\"), _client: msg._client },\n    { payload: String(windows[2] || \"-1\"), _client: msg._client },\n    { payload: String(windows[3] || \"-1\"), _client: msg._client },\n    { payload: \"refresh\", _client: msg._client }\n];",
         "outputs": 7,
         "timeout": 0,
         "noerr": 0,
@@ -996,7 +997,7 @@
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
         "group": "8858bccd6c432f3b",
-        "name": "Manual Reload",
+        "name": "Reload Sources",
         "label": "Reload Sources",
         "order": 6,
         "width": "3",
@@ -1085,7 +1086,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Store Edit Layout",
-        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst layout = String(msg.payload || \"1\");\nconst activeCount = Math.max(1, Math.min(4, Number(layout)));\n\nsession.editLayout = layout;\n\n// Set inactive windows to -1 in session context\nfor (let i = activeCount + 1; i <= 4; i++) {\n    session[`editWindow${i}`] = \"-1\";\n}\n\nsaveSession(clientId, sessions, session);\n\nconst outputs = [];\n\nfor (let i = 1; i <= 4; i++) {\n    const active = i <= activeCount;\n\n    outputs.push({\n        payload: active ? session[`editWindow${i}`] || \"-1\" : \"-1\",\n        ui_update: {\n            enabled: active\n        },\n        _client: msg._client\n    });\n}\n\noutputs.push({\n    payload: `Layout changed to ${layout}`,\n    _client: msg._client\n});\n\nreturn outputs;",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst layout = String(msg.payload || \"1\");\nconst activeCount = Math.max(1, Math.min(4, Number(layout)));\n\nsession.editLayout = layout;\n\n// Set inactive windows to -1 in session context\nfor (let i = activeCount + 1; i <= 4; i++) {\n    session[`editWindow${i}`] = \"-1\";\n}\n\nsaveSession(clientId, sessions, session);\n\nconst outputs = [];\n\nfor (let i = 1; i <= 4; i++) {\n    const active = i <= activeCount;\n\n    outputs.push({\n        payload: active ? session[`editWindow${i}`] || \"-1\" : \"-1\",\n        enabled: active,\n        _client: msg._client\n    });\n}\n\noutputs.push({\n    payload: `Layout changed to ${layout}`,\n    _client: msg._client\n});\n\nreturn outputs;",
         "outputs": 5,
         "timeout": 0,
         "noerr": 0,
@@ -1099,8 +1100,7 @@
                 "bb9c4cda462b307f"
             ],
             [
-                "385ce5013bf1d3f9",
-                "57b71bc3690711d6"
+                "385ce5013bf1d3f9"
             ],
             [
                 "5de081ef1fccc736"
@@ -1108,9 +1108,7 @@
             [
                 "7e8d7c035ef9eda1"
             ],
-            [
-                "87ef541174c4ed8d"
-            ]
+            []
         ]
     },
     {
@@ -1277,7 +1275,7 @@
         "width": "0",
         "height": "0",
         "head": "",
-        "format": "<template>\n  <div class=\"wall-grid\">\n\n    <div\n      v-for=\"display in msg.payload.displays\"\n      :key=\"display.slot\"\n      class=\"display-card\"\n      :class=\"{ selected: String(display.slot) === String(msg.payload.selectedSlot) }\"\n      @click=\"selectDisplay(display.slot)\"\n    >\n\n      <div class=\"display-header\">\n        <div class=\"display-title\">\n          {{ msg.payload.wallName }} - Display {{ display.slot }}\n        </div>\n\n        <div class=\"display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n\n      <div\n        class=\"display-screen\"\n        :class=\"screenClass(display.layout)\"\n      >\n\n        <div\n          v-if=\"showWindow(display.layout, 1)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[0]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 2)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[1]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 3)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[2]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 4)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[3]) }}\n        </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  methods: {\n\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot),\n    _client: this.msg?._client\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n\n      const l = String(layout);\n\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    },\n\n    channelLabel(value) {\n\n      const v = String(value);\n\n      if (\n        v === \"-1\" ||\n        v === \"\" ||\n        v === \"undefined\"\n      ) {\n        return \"Empty\";\n      }\n\n      return this.msg.payload.channelLabelMap?.[v] || v;\n    }\n  }\n}\n</script>\n\n<style>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));\n  gap: 16px;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: 0.15s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 10px;\n}\n\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.window {\n  background: #1f2937;\n  color: white;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n}\n</style>",
+        "format": "<template>\n  <div class=\"wall-grid\">\n\n    <div\n      v-for=\"display in msg.payload.displays\"\n      :key=\"display.slot\"\n      class=\"display-card\"\n      :class=\"{ selected: String(display.slot) === String(msg.payload.selectedSlot) }\"\n      @click=\"selectDisplay(display.slot)\"\n    >\n\n      <div class=\"display-header\">\n        <div class=\"display-title\">\n          {{ msg.payload.wallName }} - {{ display.label }} (Slot {{ display.slot }})\n        </div>\n\n        <div class=\"display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n\n      <div\n        class=\"display-screen\"\n        :class=\"screenClass(display.layout)\"\n      >\n\n        <div\n          v-if=\"showWindow(display.layout, 1)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[0]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 2)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[1]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 3)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[2]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 4)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[3]) }}\n        </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  methods: {\n\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot),\n    _client: this.msg?._client\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n\n      const l = String(layout);\n\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    },\n\n    channelLabel(value) {\n\n      const v = String(value);\n\n      if (\n        v === \"-1\" ||\n        v === \"\" ||\n        v === \"undefined\"\n      ) {\n        return \"Empty\";\n      }\n\n      return this.msg.payload.channelLabelMap?.[v] || v;\n    }\n  }\n}\n</script>\n\n<style>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));\n  gap: 16px;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: 0.15s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 10px;\n}\n\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.window {\n  background: #1f2937;\n  color: white;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -1327,7 +1325,7 @@
         "order": 9,
         "width": "3",
         "height": "1",
-        "passthru": false,
+        "passthru": true,
         "multiple": false,
         "chips": false,
         "clearable": false,
@@ -1344,11 +1342,13 @@
         "className": "",
         "typeIsComboBox": true,
         "msgTrigger": "onChange",
-        "x": 970,
+        "x": 1050,
         "y": 1220,
         "wires": [
             [
-                "56108c34c3e82e43"
+                "56108c34c3e82e43",
+                "33aaffc3e9b5e074",
+                "528a609a503b6753"
             ]
         ]
     },
@@ -1377,8 +1377,8 @@
         "icon": "",
         "iconPosition": "left",
         "iconInnerPosition": "inside",
-        "x": 290,
-        "y": 1400,
+        "x": 950,
+        "y": 1080,
         "wires": [
             [
                 "b092d59b63c0c72e"
@@ -1429,15 +1429,15 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Build Preset Options",
-        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst wallId = session.selectedWallId || \"\";\nconst presets = flow.get(\"presets\") || {};\nconst wallPresets = presets[wallId] || {};\n\nconst options = Object.keys(wallPresets)\n    .sort()\n    .map(name => ({\n        label: name,\n        value: name\n    }));\n\nmsg.ui_update = {\n    options: [\n        { label: \"\", value: \"\" },\n        ...options\n    ]\n};\n\nmsg.payload = \"\";\nsession.selectedPreset = \"\";\nsaveSession(clientId, sessions, session);\n\nreturn msg;",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst wallId = session.selectedWallId || \"\";\nconst presets = flow.get(\"presets\") || {};\nconst wallPresets = presets[wallId] || {};\n\nconst presetOptions = Object.keys(wallPresets)\n    .sort()\n    .map(name => ({\n        label: name,\n        value: name\n    }));\n\nconst hasPresets = presetOptions.length > 0;\n\nmsg.ui_update = {\n    options: hasPresets\n        ? [\n            { label: \"Select Preset\", value: \"\" },\n            ...presetOptions\n        ]\n        : [\n            { label: \"No Presets\", value: \"\" }\n        ]\n};\n\nmsg.payload = \"\";\nsession.selectedPreset = \"\";\n\nsaveSession(clientId, sessions, session);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 800,
-        "y": 1280,
+        "x": 820,
+        "y": 1220,
         "wires": [
             [
                 "aa3dcec58a029635"
@@ -1478,8 +1478,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 1400,
+        "x": 1150,
+        "y": 1080,
         "wires": [
             []
         ]
@@ -1515,8 +1515,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 290,
-        "y": 1340,
+        "x": 310,
+        "y": 1000,
         "wires": [
             [
                 "f3b622047d77f180"
@@ -1528,64 +1528,19 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Store Selected Preset",
-        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nsession.selectedPreset = String(msg.payload || \"\");\n\nsaveSession(clientId, sessions, session);\n\nreturn null;",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nsession.selectedPreset = String(msg.payload || \"\");\n\nsaveSession(clientId, sessions, session);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1200,
-        "y": 1220,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "5e122c01bf32a58c",
-        "type": "inject",
-        "z": "9b14d8fa4e4d8265",
-        "name": "Preset Load 1",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 290,
+        "x": 1360,
         "y": 1220,
         "wires": [
             [
-                "0533be0fdb437ed7"
+                "e347df1b85554c75"
             ]
-        ]
-    },
-    {
-        "id": "0533be0fdb437ed7",
-        "type": "function",
-        "z": "9b14d8fa4e4d8265",
-        "name": "Load Preset",
-        "func": "const presets = {\n    \"News Wall\": {\n        \"Display 1\": { layout: \"4\", window1: \"2\", window2: \"13\", window3: \"-1\", window4: \"21\" },\n        \"Display 2\": { layout: \"1\", window1: \"104\", window2: \"-1\", window3: \"-1\", window4: \"-1\" },\n        \"Display 3\": { layout: \"2\", window1: \"13\", window2: \"21\", window3: \"-1\", window4: \"-1\" },\n        \"Display 4\": { layout: \"4\", window1: \"201\", window2: \"202\", window3: \"203\", window4: \"204\" },\n        \"Display 5\": { layout: \"1\", window1: \"300\", window2: \"-1\", window3: \"-1\", window4: \"-1\" },\n        \"Display 6\": { layout: \"2\", window1: \"401\", window2: \"402\", window3: \"-1\", window4: \"-1\" }\n    },\n    \"Sports Wall\": {\n        \"Display 1\": { layout: \"4\", window1: \"30\", window2: \"31\", window3: \"32\", window4: \"33\" },\n        \"Display 2\": { layout: \"1\", window1: \"40\", window2: \"-1\", window3: \"-1\", window4: \"-1\" },\n        \"Display 3\": { layout: \"2\", window1: \"41\", window2: \"42\", window3: \"-1\", window4: \"-1\" },\n        \"Display 4\": { layout: \"4\", window1: \"50\", window2: \"51\", window3: \"52\", window4: \"53\" },\n        \"Display 5\": { layout: \"1\", window1: \"60\", window2: \"-1\", window3: \"-1\", window4: \"-1\" },\n        \"Display 6\": { layout: \"2\", window1: \"70\", window2: \"71\", window3: \"-1\", window4: \"-1\" }\n    }\n};\n\nflow.set(\"presets\", presets);\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 490,
-        "y": 1220,
-        "wires": [
-            []
         ]
     },
     {
@@ -1601,7 +1556,7 @@
         "finalize": "",
         "libs": [],
         "x": 530,
-        "y": 1340,
+        "y": 1000,
         "wires": [
             [
                 "b249eaa9b9eea886",
@@ -1621,7 +1576,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 660,
+        "x": 760,
         "y": 1480,
         "wires": [
             [
@@ -1634,11 +1589,11 @@
         "type": "ui-button",
         "z": "9b14d8fa4e4d8265",
         "group": "8858bccd6c432f3b",
-        "name": "Manual Reload",
-        "label": "Reload Monitor Select",
+        "name": "Manual Endpoints",
+        "label": "Reload Endpoint Select",
         "order": 7,
-        "width": 0,
-        "height": 0,
+        "width": "3",
+        "height": "1",
         "emulateClick": false,
         "tooltip": "",
         "color": "",
@@ -1660,7 +1615,7 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 80,
+        "x": 90,
         "y": 1480,
         "wires": [
             [
@@ -1741,8 +1696,8 @@
         "icon": "",
         "iconPosition": "left",
         "iconInnerPosition": "inside",
-        "x": 260,
-        "y": 1940,
+        "x": 1580,
+        "y": 1720,
         "wires": [
             [
                 "c15d580d81c83932"
@@ -1756,7 +1711,7 @@
         "group": "649e961e5ac18723",
         "name": "Save Wall button",
         "label": "Save Wall",
-        "order": 6,
+        "order": 5,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -1780,8 +1735,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 270,
-        "y": 2080,
+        "x": 110,
+        "y": 1900,
         "wires": [
             [
                 "a43f48f7774aa15f"
@@ -1793,15 +1748,15 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Save Wall function",
-        "func": "let walls = flow.get(\"walls\") || {};\n\nlet configWallId = flow.get(\"configWallId\") || \"\";\nconst wallName = (flow.get(\"editWallName\") || \"\").trim();\nconst displayCount = Number(flow.get(\"editWallDisplayCount\") || 0);\n\nif (!wallName || displayCount < 1) {\n    msg.payload = \"Wall name and display count are required\";\n    return msg;\n}\n\nfunction makeWallId(name) {\n    return name\n        .toLowerCase()\n        .replace(/[^a-z0-9]+/g, \"-\")\n        .replace(/^-|-$/g, \"\");\n}\n\nfunction makeDisplay(slot) {\n    return {\n        slot,\n        label: `Display ${slot}`,\n        endpointId: \"\",\n        endpointLabel: \"Unassigned\",\n        endpointName: \"\",\n        endpointDescription: \"\",\n        endpointLocation: \"\",\n        layout: \"1\",\n        windows: [\"-1\", \"-1\", \"-1\", \"-1\"]\n    };\n}\n\nlet wall;\n\n// update existing config wall\nif (configWallId && walls[configWallId]) {\n    wall = walls[configWallId];\n    wall.wallName = wallName;\n\n    const oldCount = wall.displays.length;\n\n    if (displayCount > oldCount) {\n        for (let i = oldCount + 1; i <= displayCount; i++) {\n            wall.displays.push(makeDisplay(i));\n        }\n    } else if (displayCount < oldCount) {\n        wall.displays = wall.displays.slice(0, displayCount);\n    }\n\n    wall.displayCount = displayCount;\n\n    msg.payload = `Saved wall: ${wall.wallName}`;\n}\n\n// create new config wall\nelse {\n    const wallId = makeWallId(wallName);\n\n    if (walls[wallId]) {\n        msg.payload = \"A wall with that name already exists\";\n        return msg;\n    }\n\n    const displays = [];\n\n    for (let i = 1; i <= displayCount; i++) {\n        displays.push(makeDisplay(i));\n    }\n\n    wall = {\n        wallId,\n        wallName,\n        displayCount,\n        displays\n    };\n\n    walls[wallId] = wall;\n    configWallId = wallId;\n    flow.set(\"configWallId\", wallId);\n\n    msg.payload = `Added wall: ${wall.wallName}`;\n}\n\nflow.set(\"walls\", walls);\n\n// useful for downstream nodes\nmsg.wallId = configWallId;\nmsg.wall = wall;\n\nreturn msg;",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg); \n\nlet walls = flow.get(\"walls\") || {};\n\nlet configWallId = session.configWallId || \"\";\nconst wallName = (session.editWallName || \"\").trim();\nconst displayCount = Number(session.editWallDisplayCount || 0);\n\nif (!wallName || displayCount < 1) {\n    msg.payload = \"Wall name and display count are required\";\n    return msg;\n}\n\nfunction makeWallId(name) {\n    return name\n        .toLowerCase()\n        .replace(/[^a-z0-9]+/g, \"-\")\n        .replace(/^-|-$/g, \"\");\n}\n\nfunction makeDisplay(slot) {\n    return {\n        slot,\n        label: `Display ${slot}`,\n        endpointId: \"\",\n        endpointLabel: \"Unassigned\",\n        endpointName: \"\",\n        endpointDescription: \"\",\n        endpointLocation: \"\",\n        layout: \"1\",\n        windows: [\"-1\", \"-1\", \"-1\", \"-1\"]\n    };\n}\n\nlet wall;\n\n// update existing config wall\nif (configWallId && walls[configWallId]) {\n    wall = walls[configWallId];\n    wall.wallName = wallName;\n\n    const oldCount = wall.displays.length;\n\n    if (displayCount > oldCount) {\n        for (let i = oldCount + 1; i <= displayCount; i++) {\n            wall.displays.push(makeDisplay(i));\n        }\n    } else if (displayCount < oldCount) {\n        wall.displays = wall.displays.slice(0, displayCount);\n    }\n\n    wall.displayCount = displayCount;\n\n    msg.payload = `Saved wall: ${wall.wallName}`;\n}\n\n// create new config wall\nelse {\n    const wallId = makeWallId(wallName);\n\n    if (walls[wallId]) {\n        msg.payload = \"A wall with that name already exists\";\n        return msg;\n    }\n\n    const displays = [];\n\n    for (let i = 1; i <= displayCount; i++) {\n        displays.push(makeDisplay(i));\n    }\n\n    wall = {\n        wallId,\n        wallName,\n        displayCount,\n        displays\n    };\n\n    walls[wallId] = wall;\n    configWallId = wallId;\n    session.configWallId = wallId;\n    msg.payload = `Added wall: ${wall.wallName}`;\n}\n\nflow.set(\"walls\", walls);\nsaveSession(clientId, sessions, session);\n\n// useful for downstream nodes\nmsg.wallId = configWallId;\nmsg.wall = wall;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 2080,
+        "x": 350,
+        "y": 1900,
         "wires": [
             [
                 "28d0a5d5e5c90419",
@@ -1836,12 +1791,11 @@
         "iconPosition": "left",
         "iconInnerPosition": "inside",
         "spinner": "default",
-        "x": 270,
-        "y": 2020,
+        "x": 1630,
+        "y": 1820,
         "wires": [
             [
-                "d1e50132f17d4f1a",
-                "87d634190085bb62"
+                "d1e50132f17d4f1a"
             ]
         ]
     },
@@ -1850,15 +1804,15 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Store Wall Name",
-        "func": "flow.set(\"editWallName\", msg.payload);\nreturn null;",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n    if (!sessions[clientId]) sessions[clientId] = {};\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nsession.editWallName = String(msg.payload || \"\");\n\nsaveSession(clientId, sessions, session);\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 1940,
+        "x": 1850,
+        "y": 1720,
         "wires": [
             []
         ]
@@ -1868,15 +1822,15 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Store Display Count",
-        "func": "flow.set(\"editWallDisplayCount\", Number(msg.payload));\nreturn null;",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n    if (!sessions[clientId]) sessions[clientId] = {};\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nsession.editWallDisplayCount = Number(msg.payload || 1);\n\nsaveSession(clientId, sessions, session);\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
-        "y": 2020,
+        "x": 1880,
+        "y": 1820,
         "wires": [
             []
         ]
@@ -1886,15 +1840,15 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Build Wall Options function",
-        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst walls = flow.get(\"walls\") || {};\n\nconst configWallId = flow.get(\"configWallId\") || \"\";\nlet selectedWallId = session.selectedWallId || \"\";\n\nconst options = Object.values(walls)\n    .sort((a, b) => a.wallName.localeCompare(b.wallName))\n    .map(wall => ({\n        label: wall.wallName,\n        value: wall.wallId\n    }));\n\nconst validIds = new Set(options.map(o => o.value));\n\nif (selectedWallId && !validIds.has(selectedWallId)) {\n    selectedWallId = \"\";\n    session.selectedWallId = \"\";\n    session.selectedSlot = \"\";\n}\nsaveSession(clientId, sessions, session);\n\nconst safeOptions = [\n    { label: \"\", value: \"\" },\n    ...options\n];\n\nreturn [\n    {\n        ui_update: { options: safeOptions },\n        payload: validIds.has(configWallId) ? configWallId : \"\"\n    },\n    {\n        ui_update: { options: safeOptions },\n        payload: validIds.has(selectedWallId) ? selectedWallId : \"\"\n    }\n];",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst walls = flow.get(\"walls\") || {};\n\nconst configWallId = session.configWallId || \"\";\nlet selectedWallId = session.selectedWallId || \"\";\n\nconst options = Object.values(walls)\n    .sort((a, b) => a.wallName.localeCompare(b.wallName))\n    .map(wall => ({\n        label: wall.wallName,\n        value: wall.wallId\n    }));\n\nconst validIds = new Set(options.map(o => o.value));\n\nif (selectedWallId && !validIds.has(selectedWallId)) {\n    selectedWallId = \"\";\n    session.selectedWallId = \"\";\n    session.selectedSlot = \"\";\n}\n\nif (configWallId && !validIds.has(configWallId)) {\n    session.configWallId = \"\";\n    session.configSlot = \"\";\n    session.configEndpointId = \"\";\n}\n\nsaveSession(clientId, sessions, session);\n\nconst safeOptions = [\n    { label: \"\", value: \"\" },\n    ...options\n];\n\nreturn [\n    {\n        ui_update: { options: safeOptions },\n        payload: validIds.has(configWallId) ? configWallId : \"\",\n        _client: msg._client\n    },\n    {\n        ui_update: { options: safeOptions },\n        payload: validIds.has(selectedWallId) ? selectedWallId : \"\",\n        _client: msg._client\n    }\n];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 2080,
+        "x": 720,
+        "y": 1920,
         "wires": [
             [
                 "412892f1a9974505"
@@ -1909,7 +1863,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Delete Wall function",
-        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst wallId = flow.get(\"configWallId\") || \"\";\nlet walls = flow.get(\"walls\") || {};\n\nif (!wallId || !walls[wallId]) {\n    msg.payload = \"No config wall selected\";\n    return [msg, null, null];\n}\n\nconst deletedName = walls[wallId].wallName;\n\ndelete walls[wallId];\nflow.set(\"walls\", walls);\n\n// Remove presets associated with deleted wall\nlet presets = flow.get(\"presets\") || {};\nif (presets[wallId]) {\n    delete presets[wallId];\n    flow.set(\"presets\", presets);\n}\n\n// Clear Wall Management / config state\nflow.set(\"configWallId\", \"\");\nflow.set(\"editWallName\", \"\");\nflow.set(\"editWallDisplayCount\", 1);\nflow.set(\"configSlot\", \"\");\nflow.set(\"configEndpointId\", \"\");\n\n// Clear this user's Wall Control session if needed\nif (session.selectedWallId === wallId) {\n    session.selectedWallId = \"\";\n    session.selectedSlot = \"\";\n    session.selectedPreset = \"\";\n    session.presetNameInput = \"\";\n\n    session.editLayout = \"1\";\n    session.editWindow1 = \"-1\";\n    session.editWindow2 = \"-1\";\n    session.editWindow3 = \"-1\";\n    session.editWindow4 = \"-1\";\n}\n\nsaveSession(clientId, sessions, session);\n\nreturn [\n    { payload: `Deleted wall: ${deletedName}`, _client: msg._client },\n    { payload: \"\", _client: msg._client },\n    { payload: 1, _client: msg._client }\n];",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst wallId = session.configWallId || \"\";\nlet walls = flow.get(\"walls\") || {};\n\nif (!wallId || !walls[wallId]) {\n    msg.payload = \"No config wall selected\";\n    return [msg, null, null];\n}\n\nconst deletedName = walls[wallId].wallName;\n\ndelete walls[wallId];\nflow.set(\"walls\", walls);\n\n// Remove presets associated with deleted wall\nlet presets = flow.get(\"presets\") || {};\nif (presets[wallId]) {\n    delete presets[wallId];\n    flow.set(\"presets\", presets);\n}\n\n// Clear Wall Management / config state\nsession.configWallId = \"\";\nsession.editWallName = \"\";\nsession.editWallDisplayCount = 1;\nsession.configSlot = \"\";\nsession.configEndpointId = \"\";\n\n// Clear this user's Wall Control session if needed\nif (session.selectedWallId === wallId) {\n    session.selectedWallId = \"\";\n    session.selectedSlot = \"\";\n    session.selectedPreset = \"\";\n    session.presetNameInput = \"\";\n\n    session.editLayout = \"1\";\n    session.editWindow1 = \"-1\";\n    session.editWindow2 = \"-1\";\n    session.editWindow3 = \"-1\";\n    session.editWindow4 = \"-1\";\n}\n\nsaveSession(clientId, sessions, session);\n\nreturn [\n    { payload: `Deleted wall: ${deletedName}`, _client: msg._client },\n    { payload: \"\", _client: msg._client },\n    { payload: 1, _client: msg._client }\n];",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -1939,7 +1893,7 @@
         "group": "649e961e5ac18723",
         "name": "Delete Wall button",
         "label": "Delete Wall",
-        "order": 5,
+        "order": 6,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -1980,7 +1934,7 @@
         "width": 0,
         "height": 0,
         "name": "Status text",
-        "label": "text",
+        "label": "",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "style": false,
@@ -1991,8 +1945,8 @@
         "className": "",
         "value": "payload",
         "valueType": "msg",
-        "x": 1330,
-        "y": 2280,
+        "x": 2070,
+        "y": 1940,
         "wires": []
     },
     {
@@ -2000,15 +1954,15 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Load Config Wall function",
-        "func": "const wallId = msg.payload || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    flow.set(\"configWallId\", \"\");\n    flow.set(\"editWallName\", \"\");\n    flow.set(\"editWallDisplayCount\", 1);\n    flow.set(\"configSlot\", \"\");\n    flow.set(\"configEndpointId\", \"\");\n\n    return [\n        { payload: \"\" },\n        { payload: 1 },\n        { payload: \"No config wall selected\" },\n        { payload: \"\" }\n    ];\n}\n\nflow.set(\"configWallId\", wallId);\nflow.set(\"editWallName\", wall.wallName);\nflow.set(\"editWallDisplayCount\", wall.displayCount);\n\nconst firstDisplay = wall.displays?.[0];\nconst firstSlot = firstDisplay ? String(firstDisplay.slot) : \"\";\n\nflow.set(\"configSlot\", firstSlot);\nflow.set(\"configEndpointId\", firstDisplay?.endpointId || \"\");\n\nreturn [\n    { payload: wall.wallName },\n    { payload: wall.displayCount },\n    { payload: `Configuring wall: ${wall.wallName}` },\n    { payload: firstSlot }\n];",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\n\nconst wallId = msg.payload || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    session.configWallId = \"\";\n    session.editWallName = \"\";\n    session.editWallDisplayCount = 1;\n    session.configSlot = \"\";\n    session.configEndpointId = \"\";\n\n    saveSession(clientId, sessions, session);\n\n    return [\n        { payload: \"\", _client: msg._client },\n        { payload: 1, _client: msg._client },\n        { payload: \"No config wall selected\", _client: msg._client },\n        { payload: \"\", _client: msg._client }\n    ];\n}\n\nsession.configWallId = wallId;\nsession.editWallName = wall.wallName;\nsession.editWallDisplayCount = wall.displayCount;\n\nconst firstDisplay = wall.displays?.[0];\nconst firstSlot = firstDisplay ? String(firstDisplay.slot) : \"\";\n\nsession.configSlot = firstSlot;\nsession.configEndpointId = firstDisplay?.endpointId || \"\";\n\nsaveSession(clientId, sessions, session);\n\nreturn [\n    { payload: wall.wallName, _client: msg._client },\n    { payload: wall.displayCount, _client: msg._client },\n    { payload: `Configuring wall: ${wall.wallName}`, _client: msg._client },\n    { payload: firstSlot, _client: msg._client }\n];",
         "outputs": 4,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1470,
-        "y": 2080,
+        "x": 1330,
+        "y": 1920,
         "wires": [
             [
                 "adbc1d08bc749f31"
@@ -2055,8 +2009,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 140,
-        "y": 2180,
+        "x": 100,
+        "y": 1780,
         "wires": [
             [
                 "a962716c5562c725"
@@ -2068,15 +2022,15 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "New Wall function",
-        "func": "flow.set(\"configWallId\", \"\");\nflow.set(\"editWallName\", \"\");\nflow.set(\"editWallDisplayCount\", 1);\nflow.set(\"configSlot\", \"\");\nflow.set(\"configEndpointId\", \"\");\n\nreturn [\n    { payload: \"\" },\n    { payload: 1 },\n    { payload: \"New wall: enter a name and display count, then click Save Wall\" },\n    { payload: \"\" }\n];",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nsession.configWallId = \"\";\nsession.editWallName = \"\";\nsession.editWallDisplayCount = 1;\nsession.configSlot = \"\";\nsession.configEndpointId = \"\";\n\nsaveSession(clientId, sessions, session);\n\nreturn [\n    { payload: \"\", _client: msg._client },\n    { payload: 1, _client: msg._client },\n    { payload: \"New wall: enter a name and display count, then click Save Wall\", _client: msg._client },\n    { payload: \"\", _client: msg._client }\n];\n",
         "outputs": 4,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 410,
-        "y": 2180,
+        "x": 350,
+        "y": 1780,
         "wires": [
             [
                 "adbc1d08bc749f31"
@@ -2087,9 +2041,7 @@
             [
                 "e09f7a474d41fae0"
             ],
-            [
-                "87d634190085bb62"
-            ]
+            []
         ]
     },
     {
@@ -2097,7 +2049,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Initialize",
-        "func": "// initialize wall registry if missing\nlet walls = flow.get(\"walls\");\n\nif (!walls) {\n    walls = {};\n    flow.set(\"walls\", walls);\n}\n\n// initialize browser/user sessions\nif (!flow.get(\"sessions\")) {\n    flow.set(\"sessions\", {});\n}\n\n// wall edit form defaults\nif (flow.get(\"editWallName\") === undefined) {\n    flow.set(\"editWallName\", \"\");\n}\n\nif (flow.get(\"editWallDisplayCount\") === undefined) {\n    flow.set(\"editWallDisplayCount\", 6);\n}\n\n// optional future structures\nif (!flow.get(\"endpointOptions\")) {\n    flow.set(\"endpointOptions\", []);\n}\n\nif (!flow.get(\"endpointDetailsById\")) {\n    flow.set(\"endpointDetailsById\", {});\n}\n\nif (!flow.get(\"channelOptions\")) {\n    flow.set(\"channelOptions\", []);\n}\n\nif (!flow.get(\"channelLabelMap\")) {\n    flow.set(\"channelLabelMap\", {});\n}\n\nif (!flow.get(\"presets\")) {\n    flow.set(\"presets\", {});\n}\n\nif (!flow.get(\"controlMode\")) {\n    flow.set(\"controlMode\", \"development\");\n}\n\nmsg.payload = \"Wall controller initialized\";\n\nreturn msg;",
+        "func": "// initialize wall registry if missing\nlet walls = flow.get(\"walls\");\n\nif (!walls) {\n    walls = {};\n    flow.set(\"walls\", walls);\n}\n\n// initialize browser/user sessions\nif (!flow.get(\"sessions\")) {\n    flow.set(\"sessions\", {});\n}\n\n// optional future structures\nif (!flow.get(\"endpointOptions\")) {\n    flow.set(\"endpointOptions\", []);\n}\n\nif (!flow.get(\"endpointDetailsById\")) {\n    flow.set(\"endpointDetailsById\", {});\n}\n\nif (!flow.get(\"channelOptions\")) {\n    flow.set(\"channelOptions\", []);\n}\n\nif (!flow.get(\"channelLabelMap\")) {\n    flow.set(\"channelLabelMap\", {});\n}\n\nif (!flow.get(\"presets\")) {\n    flow.set(\"presets\", {});\n}\n\nif (!flow.get(\"controlMode\")) {\n    flow.set(\"controlMode\", \"development\");\n}\n\nmsg.payload = \"Wall controller initialized\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2208,8 +2160,8 @@
         "className": "",
         "typeIsComboBox": true,
         "msgTrigger": "onChange",
-        "x": 480,
-        "y": 1900,
+        "x": 1180,
+        "y": 1640,
         "wires": [
             [
                 "6824d4abf3bda03d"
@@ -2222,7 +2174,7 @@
         "z": "9b14d8fa4e4d8265",
         "group": "9c62e76fc2e63680",
         "name": "Endpoint dropdown",
-        "label": "Assign Display:",
+        "label": "Assigned Endpoint:",
         "tooltip": "",
         "order": 2,
         "width": 0,
@@ -2244,8 +2196,8 @@
         "className": "",
         "typeIsComboBox": true,
         "msgTrigger": "onChange",
-        "x": 1050,
-        "y": 1800,
+        "x": 1690,
+        "y": 1540,
         "wires": [
             [
                 "bc4cc4c367f1013f"
@@ -2259,7 +2211,7 @@
         "group": "9c62e76fc2e63680",
         "name": "Save Assignment button",
         "label": "Save Assignment",
-        "order": 3,
+        "order": 4,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -2283,8 +2235,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 1070,
-        "y": 1860,
+        "x": 1710,
+        "y": 1640,
         "wires": [
             [
                 "ad7a539b2ec284e5"
@@ -2296,7 +2248,7 @@
         "type": "ui-text",
         "z": "9b14d8fa4e4d8265",
         "group": "9c62e76fc2e63680",
-        "order": 4,
+        "order": 5,
         "width": 0,
         "height": 0,
         "name": "Assignmnet Summary text",
@@ -2311,8 +2263,8 @@
         "className": "",
         "value": "payload",
         "valueType": "msg",
-        "x": 1490,
-        "y": 1940,
+        "x": 1510,
+        "y": 2100,
         "wires": []
     },
     {
@@ -2320,15 +2272,15 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Build Display/Slot Options",
-        "func": "const walls = flow.get(\"walls\") || {};\nconst configWallId = flow.get(\"configWallId\") || \"\";\nconst wall = walls[configWallId];\n\nif (!wall || !Array.isArray(wall.displays) || wall.displays.length === 0) {\n    msg.ui_update = {\n        options: [{ label: \"No displays configured\", value: \"\" }]\n    };\n    msg.payload = \"\";\n    return msg;\n}\n\nconst options = wall.displays.map(d => ({\n    label: `${wall.wallName} - ${d.label}`,\n    value: String(d.slot)\n}));\n\nlet configSlot = String(flow.get(\"configSlot\") || \"\");\n\nif (!options.some(o => o.value === configSlot)) {\n    configSlot = options[0]?.value || \"\";\n    flow.set(\"configSlot\", configSlot);\n}\n\nmsg.ui_update = { options };\nmsg.payload = configSlot;\n\nreturn msg;",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\n\nconst walls = flow.get(\"walls\") || {};\nconst configWallId = session.configWallId || \"\";\nconst wall = walls[configWallId];\n\nif (!wall || !Array.isArray(wall.displays) || wall.displays.length === 0) {\n    msg.ui_update = {\n        options: [{ label: \"No displays configured\", value: \"\" }]\n    };\n    msg.payload = \"\";\n    return msg;\n}\n\nconst options = wall.displays.map(d => ({\n    label: `${wall.wallName} - ${d.label} (Slot ${d.slot})`,\n    value: String(d.slot)\n}));\n\nlet configSlot = String(session.configSlot || \"\");\n\nif (!options.some(o => o.value === configSlot)) {\n    configSlot = options[0]?.value || \"\";\n    session.configSlot = configSlot;\n\n    // keep endpoint selection in sync\n    session.configEndpointId = \"\";\n\n    saveSession(clientId, sessions, session);\n}\n\nmsg.ui_update = { options };\nmsg.payload = configSlot;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 170,
-        "y": 1880,
+        "x": 970,
+        "y": 1580,
         "wires": [
             [
                 "443c90a1b0988fb5",
@@ -2341,21 +2293,24 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Load Slot Assignment function",
-        "func": "const slot = Number(msg.payload);\nconst walls = flow.get(\"walls\") || {};\nconst configWallId = flow.get(\"configWallId\") || \"\";\nconst wall = walls[configWallId];\n\nif (!wall || !slot) {\n    flow.set(\"configSlot\", \"\");\n    flow.set(\"configEndpointId\", \"\");\n\n    return [\n        { payload: \"\" },\n        { payload: \"No display selected\" }\n    ];\n}\n\nconst display = wall.displays.find(d => d.slot === slot);\n\nif (!display) {\n    return [\n        { payload: \"\" },\n        { payload: `Display ${slot} not found` }\n    ];\n}\n\nflow.set(\"configSlot\", slot);\nflow.set(\"configEndpointId\", display.endpointId || \"\");\n\nreturn [\n    { payload: display.endpointId || \"\" },\n    { payload: `Editing ${display.label || `Display ${slot}`}` }\n];",
-        "outputs": 2,
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst slot = Number(msg.payload);\nconst walls = flow.get(\"walls\") || {};\nconst configWallId = session.configWallId || \"\";\nconst wall = walls[configWallId];\n\nif (!wall || !slot) {\n    session.configSlot = \"\";\n    session.configEndpointId = \"\";\n\n    saveSession(clientId, sessions, session);\n\n    return [\n        { payload: \"\", _client: msg._client },\n        { payload: \"No display selected\", _client: msg._client }\n    ];\n}\n\nconst display = wall.displays.find(d => Number(d.slot) === slot);\n\nif (!display) {\n    session.configSlot = \"\";\n    session.configEndpointId = \"\";\n\n    saveSession(clientId, sessions, session);\n\n    return [\n        { payload: \"\", _client: msg._client },\n        { payload: `Display ${slot} not found`, _client: msg._client }\n    ];\n}\n\nsession.configSlot = slot;\nsession.configEndpointId = display.endpointId || \"\";\n\nsaveSession(clientId, sessions, session);\n\nreturn [\n    { payload: display.endpointId || \"\", _client: msg._client },\n    { payload: `Editing ${display.label || `Display ${slot}`}`, _client: msg._client },\n    { payload: `${display.label || `Display ${slot}`}`, _client: msg._client }\n];",
+        "outputs": 3,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 750,
-        "y": 1860,
+        "x": 1350,
+        "y": 1580,
         "wires": [
             [
                 "71cb3505808773ec"
             ],
             [
                 "e09f7a474d41fae0"
+            ],
+            [
+                "9a44cdc0bc082530"
             ]
         ]
     },
@@ -2364,15 +2319,15 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Store Selected Endpoint",
-        "func": "flow.set(\"configEndpointId\", msg.payload || \"\");\nreturn null;",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n    if (!sessions[clientId]) sessions[clientId] = {};\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nsession.configEndpointId = String(msg.payload || \"\");\n\nsaveSession(clientId, sessions, session);\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1430,
-        "y": 1800,
+        "x": 1990,
+        "y": 1540,
         "wires": [
             []
         ]
@@ -2382,17 +2337,19 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Save Endpoint Assignment button",
-        "func": "const wallId = flow.get(\"configWallId\");\nconst slot = Number(flow.get(\"configSlot\"));\nconst selectedEndpointId = flow.get(\"configEndpointId\") || \"\";\n\nlet walls = flow.get(\"walls\") || {};\nconst endpointDetailsById = flow.get(\"endpointDetailsById\") || {};\n\nconst wall = walls[wallId];\n\nif (!wall) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst display = wall.displays.find(d => d.slot === slot);\n\nif (!display) {\n    msg.payload = \"No display selected\";\n    return msg;\n}\n\nif (!selectedEndpointId) {\n    display.endpointId = \"\";\n    display.endpointLabel = \"Unassigned\";\n    display.endpointName = \"\";\n    display.endpointDescription = \"\";\n    display.endpointLocation = \"\";\n} else {\n    const ep = endpointDetailsById[selectedEndpointId];\n\n    if (!ep) {\n        msg.payload = \"Selected endpoint not found\";\n        return msg;\n    }\n\n    display.endpointId = ep.id;\n    display.endpointLabel = ep.operatorLabel;\n    display.endpointName = ep.name;\n    display.endpointDescription = ep.description;\n    display.endpointLocation = ep.location;\n}\n\nflow.set(\"walls\", walls);\n\nmsg.payload = `Assigned ${display.endpointLabel} to ${wall.wallName} ${display.label}`;\nreturn msg;",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nconst wallId = session.configWallId;\nconst slot = Number(session.configSlot);\nconst selectedEndpointId = session.configEndpointId || \"\";\n\nlet walls = flow.get(\"walls\") || {};\nconst endpointDetailsById = flow.get(\"endpointDetailsById\") || {};\n\nconst wall = walls[wallId];\n\nif (!wall) {\n    msg.payload = \"No wall selected\";\n    return msg;\n}\n\nconst display = wall.displays.find(d => Number(d.slot) === slot); \n\nif (!display) {\n    msg.payload = \"No display selected\";\n    return msg;\n}\n\nif (!selectedEndpointId) {\n    display.endpointId = \"\";\n    display.endpointLabel = \"Unassigned\";\n    display.endpointName = \"\";\n    display.endpointDescription = \"\";\n    display.endpointLocation = \"\";\n} else {\n    const ep = endpointDetailsById[selectedEndpointId];\n\n    if (!ep) {\n        msg.payload = \"Selected endpoint not found\";\n        return msg;\n    }\n\n    display.endpointId = ep.id;\n    display.endpointLabel = ep.operatorLabel;\n    display.endpointName = ep.name;\n    display.endpointDescription = ep.description;\n    display.endpointLocation = ep.location;\n    display.label=session.editDisplayLabel\n}\n\nflow.set(\"walls\", walls);\n\nmsg.payload = `Assigned ${display.endpointLabel} to ${wall.wallName} ${display.label}`;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1460,
-        "y": 1860,
+        "x": 2020,
+        "y": 1640,
         "wires": [
-            []
+            [
+                "87d634190085bb62"
+            ]
         ]
     },
     {
@@ -2550,7 +2507,7 @@
         "order": 1,
         "width": 0,
         "height": 0,
-        "passthru": false,
+        "passthru": true,
         "multiple": false,
         "chips": false,
         "clearable": false,
@@ -2567,8 +2524,8 @@
         "className": "",
         "typeIsComboBox": true,
         "msgTrigger": "onChange",
-        "x": 1210,
-        "y": 2120,
+        "x": 1050,
+        "y": 1920,
         "wires": [
             [
                 "36a979d52758e07c"
@@ -2586,7 +2543,7 @@
         "order": 2,
         "width": 0,
         "height": 0,
-        "passthru": false,
+        "passthru": true,
         "multiple": false,
         "chips": false,
         "clearable": false,
@@ -2607,8 +2564,7 @@
         "y": 1340,
         "wires": [
             [
-                "92376c2d2bffa4cf",
-                "fb12323d2a09869e"
+                "92376c2d2bffa4cf"
             ]
         ]
     },
@@ -3067,8 +3023,7 @@
         "y": 840,
         "wires": [
             [
-                "af77bad795fcf34c",
-                "6234c090a2409727"
+                "af77bad795fcf34c"
             ]
         ]
     },
@@ -3435,7 +3390,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Parse Import JSON",
-        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\ntry {\n    let content;\n\n    if (Buffer.isBuffer(msg.payload)) {\n        content = msg.payload.toString();\n    } else {\n        content = String(msg.payload);\n    }\n\n    const imported = JSON.parse(content);\n\n    if (!imported.walls) {\n        throw new Error(\"No walls object found\");\n    }\n\n    flow.set(\"walls\", imported.walls);\n\n    // Clear selections so dropdowns rebuild cleanly\n    session.selectedWallId = \"\";\n    flow.set(\"configWallId\", \"\");\n    session.selectedSlot = \"\";\n    flow.set(\"configSlot\", \"\");\n    session.selectedPreset = \"\";\n    session.presetNameInput = \"\";\n\n    saveSession(clientId, sessions, session);\n\n    msg.payload =\n        `Imported ${Object.keys(imported.walls).length} walls`;\n\n    return [msg, null];\n\n} catch(err) {\n\n    return [\n        null,\n        {\n            payload: `Import failed: ${err.message}`,\n            _client: msg._client\n        }\n    ];\n}",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\ntry {\n    let content;\n\n    if (Buffer.isBuffer(msg.payload)) {\n        content = msg.payload.toString();\n    } else {\n        content = String(msg.payload);\n    }\n\n    const imported = JSON.parse(content);\n\n    if (!imported.walls) {\n        throw new Error(\"No walls object found\");\n    }\n\n    flow.set(\"walls\", imported.walls);\n\n    // Clear selections so dropdowns rebuild cleanly\n    session.selectedWallId = \"\";\n    session.configWallId = \"\";\n    session.selectedSlot = \"\";\n    session.configSlot = \"\";\n    session.configEndpointId = \"\";\n    session.selectedPreset = \"\";\n    session.presetNameInput = \"\";\n\n    saveSession(clientId, sessions, session);\n\n    msg.payload =\n        `Imported ${Object.keys(imported.walls).length} walls`;\n\n    return [msg, null];\n\n} catch(err) {\n\n    return [\n        null,\n        {\n            payload: `Import failed: ${err.message}`,\n            _client: msg._client\n        }\n    ];\n}",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -3483,8 +3438,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 300,
-        "y": 1280,
+        "x": 320,
+        "y": 1060,
         "wires": [
             [
                 "0964ecfd05023141"
@@ -3504,7 +3459,7 @@
         "finalize": "",
         "libs": [],
         "x": 520,
-        "y": 1280,
+        "y": 1060,
         "wires": [
             [
                 "fcb7cb6cfa6ad1d9"
@@ -3537,8 +3492,8 @@
         "className": "",
         "value": "payload",
         "valueType": "msg",
-        "x": 320,
-        "y": 1040,
+        "x": 280,
+        "y": 940,
         "wires": []
     },
     {
@@ -3607,8 +3562,8 @@
         "className": "",
         "value": "payload",
         "valueType": "msg",
-        "x": 880,
-        "y": 1160,
+        "x": 1480,
+        "y": 1040,
         "wires": []
     },
     {
@@ -3640,7 +3595,7 @@
         "z": "9b14d8fa4e4d8265",
         "name": "Build Preset Apply Queue",
         "func": "const wall = msg.wall;\n\nif (!wall || !Array.isArray(wall.displays)) {\n    msg.payload = \"No wall displays to apply\";\n    return [null, msg];\n}\n\nmsg.payload = wall.displays\n    .filter(d => d.endpointId)\n    .map(d => ({\n        slot: d.slot,\n        display: d,\n        endpointId: d.endpointId,\n        layout: d.layout,\n        windows: d.windows\n    }));\n\nreturn [msg, null];",
-        "outputs": 1,
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -3651,6 +3606,9 @@
         "wires": [
             [
                 "154182d0953b8bfd"
+            ],
+            [
+                "fcb7cb6cfa6ad1d9"
             ]
         ]
     },
@@ -3679,7 +3637,7 @@
         "type": "subflow:bb149e69a82c9cc5",
         "z": "9b14d8fa4e4d8265",
         "name": "",
-        "x": 1410,
+        "x": 1630,
         "y": 540,
         "wires": [
             [
@@ -3692,7 +3650,7 @@
         "type": "subflow:ebf5ae94f113b0f9",
         "z": "9b14d8fa4e4d8265",
         "name": "",
-        "x": 1610,
+        "x": 1830,
         "y": 540,
         "wires": [
             []
@@ -3793,8 +3751,7 @@
         "y": 1340,
         "wires": [
             [
-                "45e880a1702f75dd",
-                "e0b7a3649777b0a3"
+                "45e880a1702f75dd"
             ],
             [
                 "8acac7f0d90ef00c"
@@ -3830,29 +3787,13 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1430,
-        "y": 620,
+        "x": 1410,
+        "y": 540,
         "wires": [
             [
                 "ca8ed167ed86621b"
             ]
         ]
-    },
-    {
-        "id": "6234c090a2409727",
-        "type": "debug",
-        "z": "9b14d8fa4e4d8265",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 3220,
-        "y": 920,
-        "wires": []
     },
     {
         "id": "ee27e27240dab5df",
@@ -3903,54 +3844,226 @@
         ]
     },
     {
-        "id": "57b71bc3690711d6",
-        "type": "debug",
+        "id": "e65c0058342ccfdf",
+        "type": "function",
         "z": "9b14d8fa4e4d8265",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 3100,
-        "y": 280,
+        "name": "isPageView",
+        "func": "if (msg.topic === \"$pageview\") {\n    return msg;\n}\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 2080,
+        "wires": [
+            [
+                "28d0a5d5e5c90419",
+                "e05a9c9da063f89a",
+                "6cd2676d4c64082b"
+            ]
+        ]
+    },
+    {
+        "id": "1c7c5ca9a3230ada",
+        "type": "ui-event",
+        "z": "9b14d8fa4e4d8265",
+        "ui": "88c8fdd21ce1d881",
+        "name": "",
+        "x": 170,
+        "y": 2080,
+        "wires": [
+            [
+                "e65c0058342ccfdf"
+            ]
+        ]
+    },
+    {
+        "id": "e05a9c9da063f89a",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Reload Enpoint Options",
+        "func": "const options = flow.get(\"endpointOptions\");\nmsg.ui_update = { options };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 1520,
+        "wires": [
+            [
+                "71cb3505808773ec"
+            ]
+        ]
+    },
+    {
+        "id": "816f3835f67923bb",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Reload Channel Options",
+        "func": "const options = flow.get(\"channelOptions\");\nmsg.ui_update = { options };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2090,
+        "y": 320,
+        "wires": [
+            [
+                "bb9c4cda462b307f",
+                "385ce5013bf1d3f9",
+                "5de081ef1fccc736",
+                "7e8d7c035ef9eda1"
+            ]
+        ]
+    },
+    {
+        "id": "6cd2676d4c64082b",
+        "type": "link out",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Page Refresh Link",
+        "mode": "link",
+        "links": [
+            "b35f7f26528d39e2"
+        ],
+        "x": 685,
+        "y": 2080,
         "wires": []
     },
     {
-        "id": "fb12323d2a09869e",
-        "type": "debug",
+        "id": "b35f7f26528d39e2",
+        "type": "link in",
         "z": "9b14d8fa4e4d8265",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1300,
-        "y": 1440,
-        "wires": []
+        "name": "link in 1",
+        "links": [
+            "6cd2676d4c64082b"
+        ],
+        "x": 1855,
+        "y": 320,
+        "wires": [
+            [
+                "816f3835f67923bb"
+            ]
+        ]
     },
     {
-        "id": "e0b7a3649777b0a3",
-        "type": "debug",
+        "id": "9a44cdc0bc082530",
+        "type": "ui-text-input",
         "z": "9b14d8fa4e4d8265",
-        "name": "debug 9",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1760,
-        "y": 1180,
-        "wires": []
+        "group": "9c62e76fc2e63680",
+        "name": "",
+        "label": "Display Label",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "topic": "topic",
+        "topicType": "msg",
+        "mode": "text",
+        "tooltip": "",
+        "delay": 300,
+        "passthru": true,
+        "sendOnDelay": false,
+        "sendOnBlur": true,
+        "sendOnEnter": true,
+        "className": "",
+        "clearable": false,
+        "sendOnClear": false,
+        "icon": "",
+        "iconPosition": "left",
+        "iconInnerPosition": "inside",
+        "x": 1680,
+        "y": 1580,
+        "wires": [
+            [
+                "46a5ec03dfd848e9"
+            ]
+        ]
+    },
+    {
+        "id": "46a5ec03dfd848e9",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Edit Display Label",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n    if (!sessions[clientId]) sessions[clientId] = {};\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nsession.editDisplayLabel = String(msg.payload || \"\");\n\nsaveSession(clientId, sessions, session);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1990,
+        "y": 1580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "528a609a503b6753",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Preset Status",
+        "func": "if (!msg.payload) {\n    msg.payload = \"\";\n} else {\n    msg.payload = `Preset ${msg.payload} selected`;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1350,
+        "y": 1160,
+        "wires": [
+            [
+                "fcb7cb6cfa6ad1d9"
+            ]
+        ]
+    },
+    {
+        "id": "a92faa836478de87",
+        "type": "ui-template",
+        "z": "9b14d8fa4e4d8265",
+        "group": "bc5eef628c603338",
+        "page": "",
+        "ui": "",
+        "name": "ui-template",
+        "order": 15,
+        "width": "0",
+        "height": "0",
+        "head": "",
+        "format": "<template>\n  <div class=\"wall-grid\">\n\n    <div\n      v-for=\"display in msg.payload.displays\"\n      :key=\"display.slot\"\n      class=\"display-card\"\n      :class=\"{ selected: String(display.slot) === String(msg.payload.selectedSlot) }\"\n      @click=\"selectDisplay(display.slot)\"\n    >\n\n      <div class=\"display-header\">\n        <div class=\"display-title\">\n          {{ msg.payload.wallName }} - {{ display.label }} (Slot {{ display.slot }})\n        </div>\n\n        <div class=\"display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n\n      <div\n        class=\"display-screen\"\n        :class=\"screenClass(display.layout)\"\n      >\n\n        <div\n          v-if=\"showWindow(display.layout, 1)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[0]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 2)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[1]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 3)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[2]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 4)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[3]) }}\n        </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  methods: {\n\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot),\n    _client: this.msg?._client\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n\n      const l = String(layout);\n\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    },\n\n    channelLabel(value) {\n\n      const v = String(value);\n\n      if (\n        v === \"-1\" ||\n        v === \"\" ||\n        v === \"undefined\"\n      ) {\n        return \"Empty\";\n      }\n\n      return this.msg.payload.channelLabelMap?.[v] || v;\n    }\n  }\n}\n</script>\n\n<style>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));\n  gap: 16px;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: 0.15s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 10px;\n}\n\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.window {\n  background: #1f2937;\n  color: white;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n}\n</style>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1850,
+        "y": 1220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e347df1b85554c75",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Build Preset Preview",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nconst { session } = getSession(msg);\n\nconst wallId = session.selectedWallId || \"\";\nconst selectedPreset = session.selectedPreset || \"\";\n\nconst presets = flow.get(\"presets\") || {};\nconst wallPresets = presets[wallId] || {};\nconst preset = wallPresets[selectedPreset];\n\nconst channelLabelMap = flow.get(\"channelLabelMap\") || {};\n\nif (!wallId || !selectedPreset || !preset) {\n    msg.payload = {\n        wallName: \"No preset selected\",\n        displays: [],\n        selectedSlot: \"\",\n        channelLabelMap\n    };\n    return msg;\n}\n\nmsg.payload = {\n    wallName: `Preset: ${selectedPreset}`,\n    displays: preset.displays || [],\n    selectedSlot: \"\",\n    channelLabelMap\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1640,
+        "y": 1220,
+        "wires": [
+            [
+                "a92faa836478de87"
+            ]
+        ]
     }
 ]
