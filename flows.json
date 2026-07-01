@@ -199,8 +199,8 @@
         "type": "ui-group",
         "name": "Active Wall Selector",
         "page": "2998d7d0a5101c7c",
-        "width": "6",
-        "height": "1",
+        "width": "12",
+        "height": "2",
         "order": 1,
         "showTitle": true,
         "className": "",
@@ -213,8 +213,8 @@
         "type": "ui-group",
         "name": "Select Sources",
         "page": "2998d7d0a5101c7c",
-        "width": "6",
-        "height": "1",
+        "width": "12",
+        "height": "20",
         "order": 2,
         "showTitle": true,
         "className": "",
@@ -999,7 +999,7 @@
         "group": "8858bccd6c432f3b",
         "name": "Reload Sources",
         "label": "Reload Sources",
-        "order": 6,
+        "order": 7,
         "width": "3",
         "height": "1",
         "emulateClick": false,
@@ -1248,7 +1248,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Build Wall Preview",
-        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\n\nnode.warn({\n    clientId,\n    selectedWallId: session.selectedWallId,\n    selectedSlot: session.selectedSlot\n});\n\nconst selectedWallId = session.selectedWallId || \"\";\nconst selectedSlot = String(session.selectedSlot || \"\"); \nconst walls = flow.get(\"walls\") || {};\nconst channelLabelMap = flow.get(\"channelLabelMap\") || {};\n\nconst wall = walls[selectedWallId];\n\nif (!wall) {\n    msg.payload = {\n        wallName: \"No wall selected\",\n        displays: [],\n        selectedSlot: \"\",\n        channelLabelMap\n    };\n    return msg;\n}\n\nmsg.payload = {\n    wallName: wall.wallName,\n    displays: wall.displays || [],\n    selectedSlot,\n    channelLabelMap\n};\n\nreturn msg;",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\n\nnode.warn({\n    clientId,\n    selectedWallId: session.selectedWallId,\n    selectedSlot: session.selectedSlot\n});\n\nconst selectedWallId = session.selectedWallId || \"\";\nconst selectedSlot = String(session.selectedSlot || \"\"); \nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[selectedWallId];\nconst channelLabelMap = flow.get(\"channelLabelMap\") || {};\nconst wallTemplates = flow.get(\"wallTemplates\") || {};\nconst templateId = wall.templateId || \"default\";\nconst wallTemplate = wallTemplates[templateId] || null;\n\n\n\nif (!wall) {\n    msg.payload = {\n        wallName: \"No wall selected\",\n        displays: [],\n        selectedSlot: \"\",\n        channelLabelMap\n    };\n    return msg;\n}\n\nmsg.payload = {\n    wallName: wall.wallName,\n    displays: wall.displays || [],\n    selectedSlot,\n    channelLabelMap,\n    templateId,\n    wallTemplate\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1259,7 +1259,10 @@
         "y": 800,
         "wires": [
             [
-                "adeffbac5d818df8"
+                "adeffbac5d818df8",
+                "68f7f783b2214f0b",
+                "795dc10bf0f44f3f",
+                "3898e344cc113533"
             ]
         ]
     },
@@ -1267,22 +1270,23 @@
         "id": "adeffbac5d818df8",
         "type": "ui-template",
         "z": "9b14d8fa4e4d8265",
+        "d": true,
         "group": "a43da85b9c3d42f3",
         "page": "",
         "ui": "",
-        "name": "ui-template",
+        "name": "Physical Preview ui-template",
         "order": 3,
         "width": "0",
         "height": "0",
         "head": "",
-        "format": "<template>\n  <div class=\"wall-grid\">\n\n    <div\n      v-for=\"display in msg.payload.displays\"\n      :key=\"display.slot\"\n      class=\"display-card\"\n      :class=\"{ selected: String(display.slot) === String(msg.payload.selectedSlot) }\"\n      @click=\"selectDisplay(display.slot)\"\n    >\n\n      <div class=\"display-header\">\n        <div class=\"display-title\">\n          {{ msg.payload.wallName }} - {{ display.label }} (Slot {{ display.slot }})\n        </div>\n\n        <div class=\"display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n\n      <div\n        class=\"display-screen\"\n        :class=\"screenClass(display.layout)\"\n      >\n\n        <div\n          v-if=\"showWindow(display.layout, 1)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[0]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 2)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[1]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 3)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[2]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 4)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[3]) }}\n        </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  methods: {\n\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot),\n    _client: this.msg?._client\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n\n      const l = String(layout);\n\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    },\n\n    channelLabel(value) {\n\n      const v = String(value);\n\n      if (\n        v === \"-1\" ||\n        v === \"\" ||\n        v === \"undefined\"\n      ) {\n        return \"Empty\";\n      }\n\n      return this.msg.payload.channelLabelMap?.[v] || v;\n    }\n  }\n}\n</script>\n\n<style>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));\n  gap: 16px;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: 0.15s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 10px;\n}\n\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.window {\n  background: #1f2937;\n  color: white;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n}\n</style>",
+        "format": "<template>\n  <div class=\"monwall-physical-preview\">\n    <!-- Changed loop target to processedDisplays and style binding to display.computedStyle -->\n    <div v-for=\"display in processedDisplays\" :key=\"display.slot\" class=\"physical-display-card\"\n      :class=\"{ selected: String(display.slot) === String(msg?.payload?.selectedSlot) }\" :style=\"display.computedStyle\"\n      @click=\"selectDisplay(display.slot)\">\n      <div class=\"physical-display-screen\" :class=\"screenClass(display.layout)\">\n        <div v-if=\"showWindow(display.layout, 1)\" class=\"physical-window\">\n          {{ channelLabel(display.windows?.[0]) }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 2)\" class=\"physical-window\">\n          {{ channelLabel(display.windows?.[1]) }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 3)\" class=\"physical-window\">\n          {{ channelLabel(display.windows?.[2]) }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 4)\" class=\"physical-window\">\n          {{ channelLabel(display.windows?.[3]) }}\n        </div>\n      </div>\n\n      <div class=\"physical-display-header\">\n        <div class=\"physical-display-title\">\n          {{ msg?.payload?.wallName }} - {{ display.label }} (Slot {{ display.slot }})\n        </div>\n\n        <div class=\"physical-display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\n  export default {\n  // Step 1: Use computed to safely calculate styles without infinite loops\n  computed: {\n    processedDisplays() {\n      const displays = this.msg?.payload?.displays || [];\n      const template = this.msg?.payload?.wallTemplate;\n\n      if (!template) return [];\n\n      return displays.map(display => {\n        // Calculate position mapping\n        const pos = template.displays?.[String(display.slot)];\n        let style = {};\n\n        if (pos) {\n          style = {\n            left: `${(pos.x / template.width) * 100}%`,\n            top: `${(pos.y / template.height) * 100}%`,\n            width: `${(pos.w / template.width) * 100}%`,\n            height: `${(pos.h / template.height) * 100}%`\n          };\n        }\n\n        // Return combined object to the template\n        return {\n          ...display,\n          computedStyle: style\n        };\n      });\n    }\n  },\n  \n  methods: {\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot),\n        _client: this.msg?._client\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = { \"1\": \"Fullscreen\", \"2\": \"2-way\", \"3\": \"3-way\", \"4\": \"Quad\" };\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n      const l = String(layout);\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n      if (l === \"3\") return \"layout-3\";\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    },\n\n    channelLabel(value) {\n      const v = String(value);\n      if (v === \"-1\" || v === \"\" || v === \"undefined\") {\n        return \"Empty\";\n      }\n      return this.msg?.payload?.channelLabelMap?.[v] || v;\n    }\n  }\n}\n</script>\n\n<style>\n.monwall-physical-preview {\n  position: relative;\n  width: 100%;\n  aspect-ratio: 390.51 / 55.88;\n  background: #e5e7eb; /* Changed from #f3f4f6 to a true neutral bias gray */\n  border-radius: 3px;\n  overflow: hidden;\n}\n\n.physical-display-card {\n  position: absolute;\n  z-index: 1;\n  background: #ffffff; /* Changed from #050b14 */\n  border: 1px solid #d8dee9;\n  border-radius: 3px;\n  padding: 0;\n  box-sizing: border-box;\n  overflow: hidden;\n}\n\n\n.physical-display-card:hover {\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.physical-display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.physical-display-screen {\n  position: absolute;\n  inset: 0;\n /* background: #ffffff; */      /* Changed from #12385d (or use transparent) */\n  background: linear-gradient(\n    180deg,\n    #2d5f92 0%,\n    #173f5f 100%\n);\n  border-radius: 2px;\n  padding: 4px;\n  display: grid;\n  gap: 4px;\n  box-sizing: border-box;\n}\n\n.physical-display-screen.layout-1 {\n  grid-template-columns: 1fr;\n  grid-template-rows: 1fr;\n}\n\n\n.physical-display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n  grid-template-rows: 1fr 1fr 1fr 1fr;\n}\n\n.physical-display-screen.layout-2 .physical-window:nth-child(1) {\n  grid-column: 1;\n  grid-row: 2 / 4;\n}\n\n.physical-display-screen.layout-2 .physical-window:nth-child(2) {\n  grid-column: 2;\n  grid-row: 2 / 4;\n}\n\n.physical-display-screen.layout-3 {\n  grid-template-columns: 1fr 1fr;\n  grid-template-rows: 1fr 1fr;\n}\n\n.physical-display-screen.layout-3 .physical-window:nth-child(1) {\n  grid-column: 1;\n  grid-row: 1;\n}\n\n.physical-display-screen.layout-3 .physical-window:nth-child(2) {\n  grid-column: 2;\n  grid-row: 1;\n}\n\n.physical-display-screen.layout-3 .physical-window:nth-child(3) {\n  grid-column: 1;\n  grid-row: 2;\n  transform: translateX(50%);\n}\n\n.physical-display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n  grid-template-rows: 1fr 1fr;\n}\n\n.physical-window {\n  background: #1f2937;\n  color: white;\n  border-radius: 2px;\n  min-height: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 3px;\n  font-size: clamp(7px, 0.7vw, 11px);\n  line-height: 1.1;\n  overflow: hidden;\n  box-sizing: border-box;\n}\n\n.physical-display-header {\n  position: absolute;\n  top: 2px;\n  left: 4px;\n  right: 4px;\n  z-index: 3;\n  display: flex;\n  justify-content: space-between;\n  gap: 4px;\n  pointer-events: none;\n}\n\n.physical-display-title {\n  font-weight: 600 !important;\n  font-size: 9px !important;\n  line-height: 1.1 !important;\n  background: rgba(255,255,255,0.8);\n  padding: 1px 3px;\n  border-radius: 2px;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  max-width: 75%;\n}\n\n.physical-display-layout {\n  font-size: 8px !important;\n  line-height: 1.1 !important;\n  color: #444;\n  background: rgba(255,255,255,0.8);\n  padding: 1px 3px;\n  border-radius: 2px;\n  white-space: nowrap;\n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 1210,
-        "y": 820,
+        "x": 1300,
+        "y": 800,
         "wires": [
             [
                 "5a09839690048525"
@@ -1306,8 +1310,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 1420,
-        "y": 820,
+        "x": 1600,
+        "y": 740,
         "wires": [
             [
                 "bd49460092d6193f"
@@ -1591,7 +1595,7 @@
         "group": "8858bccd6c432f3b",
         "name": "Manual Endpoints",
         "label": "Reload Endpoint Select",
-        "order": 7,
+        "order": 8,
         "width": "3",
         "height": "1",
         "emulateClick": false,
@@ -1711,7 +1715,7 @@
         "group": "649e961e5ac18723",
         "name": "Save Wall button",
         "label": "Save Wall",
-        "order": 5,
+        "order": 6,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -1748,7 +1752,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Save Wall function",
-        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg); \n\nlet walls = flow.get(\"walls\") || {};\n\nlet configWallId = session.configWallId || \"\";\nconst wallName = (session.editWallName || \"\").trim();\nconst displayCount = Number(session.editWallDisplayCount || 0);\n\nif (!wallName || displayCount < 1) {\n    msg.payload = \"Wall name and display count are required\";\n    return msg;\n}\n\nfunction makeWallId(name) {\n    return name\n        .toLowerCase()\n        .replace(/[^a-z0-9]+/g, \"-\")\n        .replace(/^-|-$/g, \"\");\n}\n\nfunction makeDisplay(slot) {\n    return {\n        slot,\n        label: `Display ${slot}`,\n        endpointId: \"\",\n        endpointLabel: \"Unassigned\",\n        endpointName: \"\",\n        endpointDescription: \"\",\n        endpointLocation: \"\",\n        layout: \"1\",\n        windows: [\"-1\", \"-1\", \"-1\", \"-1\"]\n    };\n}\n\nlet wall;\n\n// update existing config wall\nif (configWallId && walls[configWallId]) {\n    wall = walls[configWallId];\n    wall.wallName = wallName;\n\n    const oldCount = wall.displays.length;\n\n    if (displayCount > oldCount) {\n        for (let i = oldCount + 1; i <= displayCount; i++) {\n            wall.displays.push(makeDisplay(i));\n        }\n    } else if (displayCount < oldCount) {\n        wall.displays = wall.displays.slice(0, displayCount);\n    }\n\n    wall.displayCount = displayCount;\n\n    msg.payload = `Saved wall: ${wall.wallName}`;\n}\n\n// create new config wall\nelse {\n    const wallId = makeWallId(wallName);\n\n    if (walls[wallId]) {\n        msg.payload = \"A wall with that name already exists\";\n        return msg;\n    }\n\n    const displays = [];\n\n    for (let i = 1; i <= displayCount; i++) {\n        displays.push(makeDisplay(i));\n    }\n\n    wall = {\n        wallId,\n        wallName,\n        displayCount,\n        displays\n    };\n\n    walls[wallId] = wall;\n    configWallId = wallId;\n    session.configWallId = wallId;\n    msg.payload = `Added wall: ${wall.wallName}`;\n}\n\nflow.set(\"walls\", walls);\nsaveSession(clientId, sessions, session);\n\n// useful for downstream nodes\nmsg.wallId = configWallId;\nmsg.wall = wall;\n\nreturn msg;",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg); \n\nlet walls = flow.get(\"walls\") || {};\n\nlet configWallId = session.configWallId || \"\";\nconst wallName = (session.editWallName || \"\").trim();\nconst displayCount = Number(session.editWallDisplayCount || 0);\n\nif (!wallName || displayCount < 1) {\n    msg.payload = \"Wall name and display count are required\";\n    return msg;\n}\n\nfunction makeWallId(name) {\n    return name\n        .toLowerCase()\n        .replace(/[^a-z0-9]+/g, \"-\")\n        .replace(/^-|-$/g, \"\");\n}\n\nfunction makeDisplay(slot) {\n    return {\n        slot,\n        label: `Display ${slot}`,\n        endpointId: \"\",\n        endpointLabel: \"Unassigned\",\n        endpointName: \"\",\n        endpointDescription: \"\",\n        endpointLocation: \"\",\n        layout: \"1\",\n        windows: [\"-1\", \"-1\", \"-1\", \"-1\"]\n    };\n}\n\nlet wall;\n\n// update existing config wall\nif (configWallId && walls[configWallId]) {\n    wall = walls[configWallId];\n    wall.wallName = wallName;\n    wall.templateId = session.editTemplateName;\n\n    const oldCount = wall.displays.length;\n\n    if (displayCount > oldCount) {\n        for (let i = oldCount + 1; i <= displayCount; i++) {\n            wall.displays.push(makeDisplay(i));\n        }\n    } else if (displayCount < oldCount) {\n        wall.displays = wall.displays.slice(0, displayCount);\n    }\n\n    wall.displayCount = displayCount;\n\n    msg.payload = `Saved wall: ${wall.wallName}`;\n}\n\n// create new config wall\nelse {\n    const wallId = makeWallId(wallName);\n\n    if (walls[wallId]) {\n        msg.payload = \"A wall with that name already exists\";\n        return msg;\n    }\n\n    const displays = [];\n\n    for (let i = 1; i <= displayCount; i++) {\n        displays.push(makeDisplay(i));\n    }\n\n    const templateId = session.editTemplateName\n\n    wall = {\n        wallId,\n        wallName,\n        displayCount,\n        templateId,\n        displays\n    };\n\n    walls[wallId] = wall;\n    configWallId = wallId;\n    session.configWallId = wallId;\n    msg.payload = `Added wall: ${wall.wallName}`;\n}\n\nflow.set(\"walls\", walls);\nsaveSession(clientId, sessions, session);\n\n// useful for downstream nodes\nmsg.wallId = configWallId;\nmsg.wall = wall;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1761,41 +1765,6 @@
             [
                 "28d0a5d5e5c90419",
                 "b249eaa9b9eea886"
-            ]
-        ]
-    },
-    {
-        "id": "110d865ac7e24137",
-        "type": "ui-number-input",
-        "z": "9b14d8fa4e4d8265",
-        "group": "649e961e5ac18723",
-        "name": "Display Count input",
-        "label": "Display Count:",
-        "order": 3,
-        "width": 0,
-        "height": 0,
-        "topic": "topic",
-        "topicType": "msg",
-        "min": "1",
-        "max": "15",
-        "step": 1,
-        "tooltip": "",
-        "delay": 300,
-        "passthru": false,
-        "sendOnDelay": true,
-        "sendOnBlur": true,
-        "sendOnEnter": true,
-        "className": "",
-        "clearable": false,
-        "icon": "",
-        "iconPosition": "left",
-        "iconInnerPosition": "inside",
-        "spinner": "default",
-        "x": 1630,
-        "y": 1820,
-        "wires": [
-            [
-                "d1e50132f17d4f1a"
             ]
         ]
     },
@@ -1893,7 +1862,7 @@
         "group": "649e961e5ac18723",
         "name": "Delete Wall button",
         "label": "Delete Wall",
-        "order": 6,
+        "order": 7,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -1930,7 +1899,7 @@
         "type": "ui-text",
         "z": "9b14d8fa4e4d8265",
         "group": "649e961e5ac18723",
-        "order": 7,
+        "order": 8,
         "width": 0,
         "height": 0,
         "name": "Status text",
@@ -1954,8 +1923,8 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "Load Config Wall function",
-        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\n\nconst wallId = msg.payload || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n\nif (!wall) {\n    session.configWallId = \"\";\n    session.editWallName = \"\";\n    session.editWallDisplayCount = 1;\n    session.configSlot = \"\";\n    session.configEndpointId = \"\";\n\n    saveSession(clientId, sessions, session);\n\n    return [\n        { payload: \"\", _client: msg._client },\n        { payload: 1, _client: msg._client },\n        { payload: \"No config wall selected\", _client: msg._client },\n        { payload: \"\", _client: msg._client }\n    ];\n}\n\nsession.configWallId = wallId;\nsession.editWallName = wall.wallName;\nsession.editWallDisplayCount = wall.displayCount;\n\nconst firstDisplay = wall.displays?.[0];\nconst firstSlot = firstDisplay ? String(firstDisplay.slot) : \"\";\n\nsession.configSlot = firstSlot;\nsession.configEndpointId = firstDisplay?.endpointId || \"\";\n\nsaveSession(clientId, sessions, session);\n\nreturn [\n    { payload: wall.wallName, _client: msg._client },\n    { payload: wall.displayCount, _client: msg._client },\n    { payload: `Configuring wall: ${wall.wallName}`, _client: msg._client },\n    { payload: firstSlot, _client: msg._client }\n];",
-        "outputs": 4,
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\n\nconst wallId = msg.payload || \"\";\nconst walls = flow.get(\"walls\") || {};\nconst wall = walls[wallId];\n//const templateId = wall.templateId || \"\";\n\nif (!wall) {\n    session.configWallId = \"\";\n    session.editWallName = \"\";\n    session.editWallDisplayCount = 1;\n    session.configSlot = \"\";\n    session.configEndpointId = \"\";\n    session.editTemplateName = \"\";\n\n    saveSession(clientId, sessions, session);\n\n    return [\n        { payload: \"\", _client: msg._client },\n        { payload: 1, _client: msg._client },\n        { payload: \"No config wall selected\", _client: msg._client },\n        { payload: \"\", _client: msg._client }\n    ];\n}\n\nsession.configWallId = wallId;\nsession.editWallName = wall.wallName;\nsession.editWallDisplayCount = wall.displayCount;\nsession.editTemplateName = wall.templateId || \"\";\n\nconst firstDisplay = wall.displays?.[0];\nconst firstSlot = firstDisplay ? String(firstDisplay.slot) : \"\";\n\nsession.configSlot = firstSlot;\nsession.configEndpointId = firstDisplay?.endpointId || \"\";\n\nsaveSession(clientId, sessions, session);\n\nreturn [\n    { payload: wall.wallName, _client: msg._client },\n    { payload: wall.displayCount, _client: msg._client },\n    { payload: `Configuring wall: ${wall.wallName}`, _client: msg._client },\n    { payload: firstSlot, _client: msg._client },\n    { payload: session.editTemplateName, _client: msg._client }\n];",
+        "outputs": 5,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -1975,6 +1944,9 @@
             ],
             [
                 "87d634190085bb62"
+            ],
+            [
+                "d8db6d40da9dd6a4"
             ]
         ]
     },
@@ -1985,7 +1957,7 @@
         "group": "649e961e5ac18723",
         "name": "New Wall button",
         "label": "New Wall",
-        "order": 4,
+        "order": 5,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -2022,7 +1994,7 @@
         "type": "function",
         "z": "9b14d8fa4e4d8265",
         "name": "New Wall function",
-        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nsession.configWallId = \"\";\nsession.editWallName = \"\";\nsession.editWallDisplayCount = 1;\nsession.configSlot = \"\";\nsession.configEndpointId = \"\";\n\nsaveSession(clientId, sessions, session);\n\nreturn [\n    { payload: \"\", _client: msg._client },\n    { payload: 1, _client: msg._client },\n    { payload: \"New wall: enter a name and display count, then click Save Wall\", _client: msg._client },\n    { payload: \"\", _client: msg._client }\n];\n",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n\n    if (!sessions[clientId]) {\n        sessions[clientId] = {};\n    }\n\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nsession.configWallId = \"\";\nsession.editWallName = \"\";\nsession.editWallDisplayCount = 1;\nsession.configSlot = \"\";\nsession.configEndpointId = \"\";\n\nsaveSession(clientId, sessions, session);\n\nreturn [\n    { payload: \"\", _client: msg._client },\n    { payload: 1, _client: msg._client },\n    { payload: \"Default\", _client: msg._client },\n    { payload: \"New wall: enter a name and display count, then click Save Wall\", _client: msg._client },\n    { payload: \"\", _client: msg._client }\n];\n",
         "outputs": 4,
         "timeout": 0,
         "noerr": 0,
@@ -2039,9 +2011,11 @@
                 "110d865ac7e24137"
             ],
             [
-                "e09f7a474d41fae0"
+                "d8db6d40da9dd6a4"
             ],
-            []
+            [
+                "e09f7a474d41fae0"
+            ]
         ]
     },
     {
@@ -2100,7 +2074,7 @@
         "group": "8858bccd6c432f3b",
         "name": "Initalize",
         "label": "Initialize",
-        "order": 11,
+        "order": 12,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -2386,7 +2360,7 @@
         "group": "8858bccd6c432f3b",
         "name": "Initalize Token",
         "label": "test token",
-        "order": 10,
+        "order": 11,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -2425,7 +2399,7 @@
         "group": "8858bccd6c432f3b",
         "name": "Initalize",
         "label": "test get endpoint",
-        "order": 9,
+        "order": 10,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -2464,7 +2438,7 @@
         "group": "8858bccd6c432f3b",
         "name": "Apply Test button",
         "label": "Apply Test",
-        "order": 8,
+        "order": 9,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -4034,7 +4008,7 @@
         "width": "0",
         "height": "0",
         "head": "",
-        "format": "<template>\n  <div class=\"wall-grid\">\n\n    <div\n      v-for=\"display in msg.payload.displays\"\n      :key=\"display.slot\"\n      class=\"display-card\"\n      :class=\"{ selected: String(display.slot) === String(msg.payload.selectedSlot) }\"\n      @click=\"selectDisplay(display.slot)\"\n    >\n\n      <div class=\"display-header\">\n        <div class=\"display-title\">\n          {{ msg.payload.wallName }} - {{ display.label }} (Slot {{ display.slot }})\n        </div>\n\n        <div class=\"display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n\n      <div\n        class=\"display-screen\"\n        :class=\"screenClass(display.layout)\"\n      >\n\n        <div\n          v-if=\"showWindow(display.layout, 1)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[0]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 2)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[1]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 3)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[2]) }}\n        </div>\n\n        <div\n          v-if=\"showWindow(display.layout, 4)\"\n          class=\"window\"\n        >\n          {{ channelLabel(display.windows?.[3]) }}\n        </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nexport default {\n  methods: {\n\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot),\n    _client: this.msg?._client\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n\n      const l = String(layout);\n\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    },\n\n    channelLabel(value) {\n\n      const v = String(value);\n\n      if (\n        v === \"-1\" ||\n        v === \"\" ||\n        v === \"undefined\"\n      ) {\n        return \"Empty\";\n      }\n\n      return this.msg.payload.channelLabelMap?.[v] || v;\n    }\n  }\n}\n</script>\n\n<style>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));\n  gap: 16px;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: 0.15s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 10px;\n}\n\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.window {\n  background: #1f2937;\n  color: white;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n}\n</style>",
+        "format": "<template>\n  <div class=\"wall-grid\">\n    <!-- Loop through your safe computed array -->\n    <div v-for=\"display in processedDisplays\" :key=\"display.slot\" class=\"display-card\"\n      :class=\"{ selected: String(display.slot) === String(msg?.payload?.selectedSlot) }\"\n      @click=\"selectDisplay(display.slot)\">\n\n      <div class=\"display-header\">\n        <div class=\"display-title\">\n          {{ msg?.payload?.wallName }} - {{ display.label }} (Slot {{ display.slot }})\n        </div>\n\n        <div class=\"display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n\n      <div class=\"display-screen\" :class=\"screenClass(display.layout)\">\n        <!-- Pull strings straight from computedWindows instead of running methods -->\n        <div v-if=\"showWindow(display.layout, 1)\" class=\"window\">\n          {{ display.computedWindows[0] || 'Empty' }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 2)\" class=\"window\">\n          {{ display.computedWindows[1] || 'Empty' }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 3)\" class=\"window\">\n          {{ display.computedWindows[2] || 'Empty' }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 4)\" class=\"window\">\n          {{ display.computedWindows[3] || 'Empty' }}\n        </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\n  export default {\n  // Step 1: Use a computed array to map channel labels safely before rendering\n  computed: {\n    processedDisplays() {\n      const displays = this.msg?.payload?.displays || [];\n      const labelMap = this.msg?.payload?.channelLabelMap || {};\n\n      return displays.map(display => {\n        // Safe inner mapping function to avoid global reactive side effects\n        const getLabel = (value) => {\n          const v = String(value);\n          if (v === \"-1\" || v === \"\" || v === \"undefined\") {\n            return \"Empty\";\n          }\n          return labelMap[v] || v;\n        };\n\n        // Pre-map the windows into displayable text formats\n        const computedWindows = (display.windows || []).map(win => getLabel(win));\n\n        return {\n          ...display,\n          computedWindows\n        };\n      });\n    }\n  },\n\n  methods: {\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot),\n        _client: this.msg?._client\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n      const l = String(layout);\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    }\n  }\n}\n</script>\n\n<style scoped>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));\n  gap: 16px;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: 0.15s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 10px;\n}\n\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.window {\n  background: #1f2937;\n  color: white;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -4063,6 +4037,219 @@
         "wires": [
             [
                 "a92faa836478de87"
+            ]
+        ]
+    },
+    {
+        "id": "9b277b0193118969",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Save Wall Template function",
+        "func": "const wallTemplates = {\n    \"dmc-12-physical\": {\n        width: 390.51,\n        height: 55.88,\n        displays: {\n            \"1\":  { name: \"MON 01\", x: 0,      y: 0,  w: 48.25, h: 27.88 },\n            \"2\":  { name: \"MON 02\", x: 0,      y: 28, w: 48.25, h: 27.88 },\n            \"3\":  { name: \"MON 03\", x: 48.25,  y: 0,  w: 74.63, h: 42.88 },\n            \"4\":  { name: \"MON 04\", x: 122.88, y: 0,  w: 48.25, h: 27.88 },\n            \"5\":  { name: \"MON 05\", x: 122.88, y: 28, w: 48.25, h: 27.88 },\n            \"6\":  { name: \"MON 06\", x: 171.13, y: 0,  w: 48.25, h: 27.88 },\n            \"7\":  { name: \"MON 07\", x: 171.13, y: 28, w: 48.25, h: 27.88 },\n            \"8\":  { name: \"MON 08\", x: 219.38, y: 0,  w: 74.63, h: 42.88 },\n            \"9\":  { name: \"MON 09\", x: 294.01, y: 0,  w: 48.25, h: 27.88 },\n            \"10\": { name: \"MON 10\", x: 294.01, y: 28, w: 48.25, h: 27.88 },\n            \"11\": { name: \"MON 11\", x: 342.26, y: 0,  w: 48.25, h: 27.88 },\n            \"12\": { name: \"MON 12\", x: 342.26, y: 28, w: 48.25, h: 27.88 }\n        }\n    }\n};\n\nflow.set(\"wallTemplates\", wallTemplates);",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 3880,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "014b3e1f3cb4270e",
+        "type": "ui-button",
+        "z": "9b14d8fa4e4d8265",
+        "group": "8858bccd6c432f3b",
+        "name": "Save Wall Template",
+        "label": "Save Wall Template",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 190,
+        "y": 3880,
+        "wires": [
+            [
+                "9b277b0193118969"
+            ]
+        ]
+    },
+    {
+        "id": "110d865ac7e24137",
+        "type": "ui-number-input",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Display Count input",
+        "label": "Display Count:",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "topic": "topic",
+        "topicType": "msg",
+        "min": "1",
+        "max": "15",
+        "step": 1,
+        "tooltip": "",
+        "delay": 300,
+        "passthru": false,
+        "sendOnDelay": true,
+        "sendOnBlur": true,
+        "sendOnEnter": true,
+        "className": "",
+        "clearable": false,
+        "icon": "",
+        "iconPosition": "left",
+        "iconInnerPosition": "inside",
+        "spinner": "default",
+        "x": 1630,
+        "y": 1820,
+        "wires": [
+            [
+                "d1e50132f17d4f1a"
+            ]
+        ]
+    },
+    {
+        "id": "d8db6d40da9dd6a4",
+        "type": "ui-text-input",
+        "z": "9b14d8fa4e4d8265",
+        "group": "649e961e5ac18723",
+        "name": "Wall Template input",
+        "label": "Wall Template:",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "topic": "topic",
+        "topicType": "msg",
+        "mode": "text",
+        "tooltip": "",
+        "delay": 300,
+        "passthru": false,
+        "sendOnDelay": false,
+        "sendOnBlur": true,
+        "sendOnEnter": true,
+        "className": "",
+        "clearable": false,
+        "sendOnClear": false,
+        "icon": "",
+        "iconPosition": "left",
+        "iconInnerPosition": "inside",
+        "x": 1630,
+        "y": 1860,
+        "wires": [
+            [
+                "98827a1de0f7d93d"
+            ]
+        ]
+    },
+    {
+        "id": "98827a1de0f7d93d",
+        "type": "function",
+        "z": "9b14d8fa4e4d8265",
+        "name": "Store Template Name",
+        "func": "function getSession(msg) {\n    const clientId = msg._client?.socketId || \"default\";\n    const sessions = flow.get(\"sessions\") || {};\n    if (!sessions[clientId]) sessions[clientId] = {};\n    return { clientId, sessions, session: sessions[clientId] };\n}\n\nfunction saveSession(clientId, sessions, session) {\n    sessions[clientId] = session;\n    flow.set(\"sessions\", sessions);\n}\n\nconst { clientId, sessions, session } = getSession(msg);\n\nsession.editTemplateName = String(msg.payload || \"\");\n\nsaveSession(clientId, sessions, session);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2020,
+        "y": 1860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "68f7f783b2214f0b",
+        "type": "debug",
+        "z": "9b14d8fa4e4d8265",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1380,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "795dc10bf0f44f3f",
+        "type": "ui-template",
+        "z": "9b14d8fa4e4d8265",
+        "d": true,
+        "group": "a43da85b9c3d42f3",
+        "page": "",
+        "ui": "",
+        "name": "Grid Render ui-template",
+        "order": 4,
+        "width": "0",
+        "height": "0",
+        "head": "",
+        "format": "<template>\n  <div class=\"monwall-grid-preview\">\n    <!-- Loop through your safe computed array -->\n    <div v-for=\"display in processedDisplays\" :key=\"display.slot\" class=\"grid-display-card\"\n      :class=\"{ grid-selected: String(display.slot) === String(msg?.payload?.selectedSlot) }\"\n      @click=\"selectDisplay(display.slot)\">\n\n      <div class=\"grid-display-header\">\n        <div class=\"grid-display-title\">\n          {{ msg?.payload?.wallName }} - {{ display.label }} (Slot {{ display.slot }})\n        </div>\n\n        <div class=\"grid-display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n\n      <div class=\"grid-display-screen\" :class=\"screenClass(display.layout)\">\n        <!-- Pull strings straight from computedWindows instead of running methods -->\n        <div v-if=\"showWindow(display.layout, 1)\" class=\"grid-window\">\n          {{ display.computedWindows[0] || 'Empty' }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 2)\" class=\"grid-window\">\n          {{ display.computedWindows[1] || 'Empty' }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 3)\" class=\"grid-window\">\n          {{ display.computedWindows[2] || 'Empty' }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 4)\" class=\"grid-window\">\n          {{ display.computedWindows[3] || 'Empty' }}\n        </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\n  export default {\n  // Step 1: Use a computed array to map channel labels safely before rendering\n  computed: {\n    processedDisplays() {\n      const displays = this.msg?.payload?.displays || [];\n      const labelMap = this.msg?.payload?.channelLabelMap || {};\n\n      return displays.map(display => {\n        // Safe inner mapping function to avoid global reactive side effects\n        const getLabel = (value) => {\n          const v = String(value);\n          if (v === \"-1\" || v === \"\" || v === \"undefined\") {\n            return \"Empty\";\n          }\n          return labelMap[v] || v;\n        };\n\n        // Pre-map the windows into displayable text formats\n        const computedWindows = (display.windows || []).map(win => getLabel(win));\n\n        return {\n          ...display,\n          computedWindows\n        };\n      });\n    }\n  },\n\n  methods: {\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot),\n        _client: this.msg?._client\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n      const l = String(layout);\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n\t  if (l === \"3\") return \"layout-3\";\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    }\n  }\n}\n</script>\n\n<style>\n.monwall-grid-preview {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));\n  gap: 16px;\n}\n\n.grid-display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: 0.15s ease;\n}\n\n.grid-display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.grid-display-card.grid-selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.grid-display-header {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 10px;\n}\n\n.grid-display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n\n.grid-display-layout {\n  font-size: 12px;\n  color: #666;\n}\n\n.grid-display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n\n.grid-display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n\n.grid-display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.grid-display-screen.layout-3 {\n  grid-template-columns: 1fr 1fr;\n  grid-template-rows: 1fr 1fr;\n}\n\n.grid-display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.grid-window {\n  background: #1f2937;\n  color: white;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n}\n</style>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1290,
+        "y": 860,
+        "wires": [
+            [
+                "5a09839690048525"
+            ]
+        ]
+    },
+    {
+        "id": "3898e344cc113533",
+        "type": "ui-template",
+        "z": "9b14d8fa4e4d8265",
+        "group": "a43da85b9c3d42f3",
+        "page": "",
+        "ui": "",
+        "name": "ui-template",
+        "order": 5,
+        "width": "0",
+        "height": "0",
+        "head": "",
+        "format": "<template>\n  <div class=\"wall-grid\">\n    <!-- Loop through your safe computed array -->\n    <div v-for=\"display in processedDisplays\" :key=\"display.slot\" class=\"display-card\"\n      :class=\"{ selected: String(display.slot) === String(msg?.payload?.selectedSlot) }\"\n      @click=\"selectDisplay(display.slot)\">\n\n      <div class=\"display-header\">\n        <div class=\"display-title\">\n          {{ msg?.payload?.wallName }} - {{ display.label }} (Slot {{ display.slot }})\n        </div>\n\n        <div class=\"display-layout\">\n          {{ layoutLabel(display.layout) }}\n        </div>\n      </div>\n\n      <div class=\"display-screen\" :class=\"screenClass(display.layout)\">\n        <!-- Pull strings straight from computedWindows instead of running methods -->\n        <div v-if=\"showWindow(display.layout, 1)\" class=\"window\">\n          {{ display.computedWindows[0] || 'Empty' }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 2)\" class=\"window\">\n          {{ display.computedWindows[1] || 'Empty' }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 3)\" class=\"window\">\n          {{ display.computedWindows[2] || 'Empty' }}\n        </div>\n\n        <div v-if=\"showWindow(display.layout, 4)\" class=\"window\">\n          {{ display.computedWindows[3] || 'Empty' }}\n        </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\n  export default {\n  // Step 1: Use a computed array to map channel labels safely before rendering\n  computed: {\n    processedDisplays() {\n      const displays = this.msg?.payload?.displays || [];\n      const labelMap = this.msg?.payload?.channelLabelMap || {};\n\n      return displays.map(display => {\n        // Safe inner mapping function to avoid global reactive side effects\n        const getLabel = (value) => {\n          const v = String(value);\n          if (v === \"-1\" || v === \"\" || v === \"undefined\") {\n            return \"Empty\";\n          }\n          return labelMap[v] || v;\n        };\n\n        // Pre-map the windows into displayable text formats\n        const computedWindows = (display.windows || []).map(win => getLabel(win));\n\n        return {\n          ...display,\n          computedWindows\n        };\n      });\n    }\n  },\n\n  methods: {\n    selectDisplay(slot) {\n      this.send({\n        payload: String(slot),\n        _client: this.msg?._client\n      });\n    },\n\n    layoutLabel(layout) {\n      const map = {\n        \"1\": \"Fullscreen\",\n        \"2\": \"2-way\",\n        \"3\": \"3-way\",\n        \"4\": \"Quad\"\n      };\n      return map[String(layout)] || `Layout ${layout}`;\n    },\n\n    screenClass(layout) {\n      const l = String(layout);\n      if (l === \"1\") return \"layout-1\";\n      if (l === \"2\") return \"layout-2\";\n      return \"layout-4\";\n    },\n\n    showWindow(layout, index) {\n      return index <= Number(layout);\n    }\n  }\n}\n</script>\n\n<style scoped>\n.wall-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));\n  gap: 16px;\n}\n\n.display-card {\n  background: #ffffff;\n  border: 1px solid #d8dee9;\n  border-radius: 12px;\n  padding: 12px;\n  box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n  cursor: pointer;\n  transition: 0.15s ease;\n}\n\n.display-card:hover {\n  transform: translateY(-2px);\n  box-shadow: 0 4px 10px rgba(0,0,0,0.12);\n}\n\n.display-card.selected {\n  border: 2px solid #2563eb;\n  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);\n}\n\n.display-header {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 10px;\n}\n\n.display-title {\n  font-weight: 600;\n  font-size: 14px;\n}\n\n.display-layout {\n  font-size: 12px;\n  color: #666;\n}\n\n.display-screen {\n  background: #111827;\n  border-radius: 10px;\n  min-height: 140px;\n  padding: 8px;\n  display: grid;\n  gap: 8px;\n}\n\n.display-screen.layout-1 {\n  grid-template-columns: 1fr;\n}\n\n.display-screen.layout-2 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.display-screen.layout-4 {\n  grid-template-columns: 1fr 1fr;\n}\n\n.window {\n  background: #1f2937;\n  color: white;\n  border-radius: 8px;\n  min-height: 54px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-align: center;\n  padding: 6px;\n  font-size: 12px;\n}\n</style>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1250,
+        "y": 900,
+        "wires": [
+            [
+                "5a09839690048525"
             ]
         ]
     }
